@@ -110,8 +110,8 @@ static void test_reverse() {
 }
 
 static void test_sort(void sort_fn(Node **)) {
-    #define VERIFY_SORT(...) \
-      { \
+    #define VERIFY_SORT(...)                 \
+      {                                      \
           Node *l1 = MAKE_LIST(__VA_ARGS__); \
           Node *l2 = MAKE_LIST(__VA_ARGS__); \
           list_selection_sort(&l1);          \

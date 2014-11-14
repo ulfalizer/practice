@@ -3,28 +3,17 @@
 
 #define INITIAL_BUF_LEN 16
 
-typedef struct Vector {
-    void **buf;
-    size_t buf_len;
-    size_t len;
-} Vector;
-
-Vector *vector_make() {
-    Vector *vector = malloc(sizeof(Vector));
-    if (vector == NULL)
-        err("malloc Vector");
+void vector_init(Vector *vector) {
     vector->buf = malloc(sizeof(void*)*INITIAL_BUF_LEN);
     if (vector->buf == NULL)
         err("malloc Vector buf");
 
     vector->buf_len = INITIAL_BUF_LEN;
     vector->len = 0;
-    return vector;
 }
 
 void vector_free(Vector *vector) {
     free(vector->buf);
-    free(vector);
 }
 
 size_t vector_len(Vector *vector) {

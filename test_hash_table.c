@@ -18,27 +18,28 @@ static void populate(Hash_table *hash_table) {
 }
 
 static void test_set_get_helper(bool keys_exist) {
-    #define VERIFY_SET_GET(key, val)                             \
-      {                                                          \
-          int v = 234;                                           \
-          if (!keys_exist) {                                     \
-              VERIFY(!hash_table_get(hash_table, key, &v));      \
-              VERIFY(v == 234);                                  \
-              VERIFY(!hash_table_set(hash_table, key, val, &v)); \
-              VERIFY(v == 234);                                  \
-          }                                                      \
-          VERIFY(hash_table_get(hash_table, key, &v));           \
-          VERIFY(v == val);                                      \
-          v = 234;                                               \
-          VERIFY(hash_table_set(hash_table, key, val + 1, &v));  \
-          VERIFY(v == val);                                      \
-          VERIFY(hash_table_get(hash_table, key, &v));           \
-          VERIFY(v == val + 1);                                  \
-          VERIFY(hash_table_get(hash_table, key, NULL));         \
+    #define VERIFY_SET_GET(key, val)                              \
+      {                                                           \
+          int v = 234;                                            \
+          if (!keys_exist) {                                      \
+              VERIFY(!hash_table_get(&hash_table, key, &v));      \
+              VERIFY(v == 234);                                   \
+              VERIFY(!hash_table_set(&hash_table, key, val, &v)); \
+              VERIFY(v == 234);                                   \
+          }                                                       \
+          VERIFY(hash_table_get(&hash_table, key, &v));           \
+          VERIFY(v == val);                                       \
+          v = 234;                                                \
+          VERIFY(hash_table_set(&hash_table, key, val + 1, &v));  \
+          VERIFY(v == val);                                       \
+          VERIFY(hash_table_get(&hash_table, key, &v));           \
+          VERIFY(v == val + 1);                                   \
+          VERIFY(hash_table_get(&hash_table, key, NULL));         \
       }
-    Hash_table *hash_table = hash_table_make();
+    Hash_table hash_table;
+    hash_table_init(&hash_table);
     if (keys_exist)
-        populate(hash_table);
+        populate(&hash_table);
     VERIFY_SET_GET("ten", 10);
     VERIFY_SET_GET("negative one", -1);
     VERIFY_SET_GET("nine", 9);
@@ -52,7 +53,7 @@ static void test_set_get_helper(bool keys_exist) {
     VERIFY_SET_GET("five", 5);
     VERIFY_SET_GET("four", 4);
     VERIFY_SET_GET("", 123);
-    hash_table_free(hash_table);
+    hash_table_free(&hash_table);
 
     #undef VERIFY_SET_GET
 }
@@ -63,27 +64,28 @@ static void test_set_get() {
 }
 
 static void test_remove() {
-    #define VERIFY_REMOVE_NOT_EXISTS(key)                  \
-      {                                                    \
-          int v = 234;                                     \
-          VERIFY(!hash_table_get(hash_table, key, &v));    \
-          VERIFY(!hash_table_remove(hash_table, key, &v)); \
-          VERIFY(!hash_table_get(hash_table, key, &v));    \
-          VERIFY(v == 234);                                \
+    #define VERIFY_REMOVE_NOT_EXISTS(key)                   \
+      {                                                     \
+          int v = 234;                                      \
+          VERIFY(!hash_table_get(&hash_table, key, &v));    \
+          VERIFY(!hash_table_remove(&hash_table, key, &v)); \
+          VERIFY(!hash_table_get(&hash_table, key, &v));    \
+          VERIFY(v == 234);                                 \
       }
 
-    #define VERIFY_REMOVE_EXISTS(key)                        \
-      {                                                      \
-          int v1, v2;                                        \
-          VERIFY(hash_table_get(hash_table, key, &v1));      \
-          VERIFY(hash_table_remove(hash_table, key, &v2));   \
-          VERIFY(!hash_table_get(hash_table, key, NULL));    \
-          VERIFY(!hash_table_remove(hash_table, key, NULL)); \
-          VERIFY(v1 == v2);                                  \
+    #define VERIFY_REMOVE_EXISTS(key)                         \
+      {                                                       \
+          int v1, v2;                                         \
+          VERIFY(hash_table_get(&hash_table, key, &v1));      \
+          VERIFY(hash_table_remove(&hash_table, key, &v2));   \
+          VERIFY(!hash_table_get(&hash_table, key, NULL));    \
+          VERIFY(!hash_table_remove(&hash_table, key, NULL)); \
+          VERIFY(v1 == v2);                                   \
       }
 
-    Hash_table *hash_table = hash_table_make();
-    populate(hash_table);
+    Hash_table hash_table;
+    hash_table_init(&hash_table);
+    populate(&hash_table);
     VERIFY_REMOVE_NOT_EXISTS("foo");
     VERIFY_REMOVE_NOT_EXISTS("on");
     VERIFY_REMOVE_NOT_EXISTS("tw");
@@ -102,10 +104,10 @@ static void test_remove() {
     VERIFY_REMOVE_EXISTS("");
 
     // The case where the key exists and val is NULL
-    hash_table_set(hash_table, "foo", 3, NULL);
-    VERIFY(hash_table_remove(hash_table, "foo", NULL));
+    hash_table_set(&hash_table, "foo", 3, NULL);
+    VERIFY(hash_table_remove(&hash_table, "foo", NULL));
 
-    hash_table_free(hash_table);
+    hash_table_free(&hash_table);
 
     #undef VERIFY_REMOVE_NOT_EXISTS
     #undef VERIFY_REMOVE_EXISTS

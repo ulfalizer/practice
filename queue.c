@@ -4,16 +4,7 @@
 // Keep the length as a power of two to speed up wrapping
 #define INITIAL_BUF_LEN 16
 
-typedef struct Queue {
-    void **buf;
-    size_t buf_len;
-    size_t start, end;
-} Queue;
-
-Queue *queue_make() {
-    Queue *queue = malloc(sizeof(Queue));
-    if (queue == NULL)
-        err("malloc Queue");
+void queue_init(Queue *queue) {
     queue->buf = malloc(sizeof(void*)*INITIAL_BUF_LEN);
     if (queue->buf == NULL)
         err("malloc Queue buf");
@@ -21,12 +12,10 @@ Queue *queue_make() {
     queue->start = 0;
     queue->end = 0;
     queue->buf_len = INITIAL_BUF_LEN;
-    return queue;
 }
 
 void queue_free(Queue *queue) {
     free(queue->buf);
-    free(queue);
 }
 
 size_t queue_len(Queue *queue) {

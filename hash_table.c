@@ -1,18 +1,6 @@
 #include "common.h"
 #include "hash_table.h"
 
-#define HASH_N_BUCKETS 5
-
-typedef struct List_node {
-    struct List_node *next;
-    const char *key;
-    int val;
-} List_node;
-
-typedef struct Hash_table {
-    List_node *buckets[HASH_N_BUCKETS];
-} Hash_table;
-
 static size_t hash(const char *s) {
     // djb2 algorithm
     unsigned long hash = 5381;
@@ -21,28 +9,23 @@ static size_t hash(const char *s) {
     return hash % HASH_N_BUCKETS;
 }
 
-Hash_table *hash_table_make() {
-    Hash_table *hash_table = malloc(sizeof(Hash_table));
-    if (hash_table == NULL)
-        err("malloc Hash_table");
+void hash_table_init(Hash_table *hash_table) {
     for (size_t i = 0; i < HASH_N_BUCKETS; ++i)
         hash_table->buckets[i] = NULL;
-    return hash_table;
 }
 
 void hash_table_free(Hash_table *hash_table) {
     for (size_t i = 0; i < HASH_N_BUCKETS; ++i) {
-        List_node *next;
-        for (List_node *node = hash_table->buckets[i]; node; node = next) {
+        Hash_node *next;
+        for (Hash_node *node = hash_table->buckets[i]; node; node = next) {
             next = node->next;
             free(node);
         }
     }
-    free(hash_table);
 }
 
 bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_val) {
-    List_node *new, **node;
+    Hash_node *new, **node;
     for (node = hash_table->buckets + hash(key); *node; node = &(*node)->next) {
         if (strcmp(key, (*node)->key) == 0) {
             if (old_val != NULL)
@@ -51,9 +34,9 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
             return true;
         }
     }
-    new = malloc(sizeof(List_node));
+    new = malloc(sizeof(Hash_node));
     if (new == NULL)
-        err("malloc List_node");
+        err("malloc Hash_node");
     new->next = *node;
     new->key = key;
     new->val = val;
@@ -62,7 +45,7 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
 }
 
 bool hash_table_get(Hash_table *hash_table, const char *key, int *val) {
-    for (List_node *node = hash_table->buckets[hash(key)];
+    for (Hash_node *node = hash_table->buckets[hash(key)];
       node;
       node = node->next)
         if (strcmp(key, node->key) == 0) {
@@ -74,13 +57,13 @@ bool hash_table_get(Hash_table *hash_table, const char *key, int *val) {
 }
 
 bool hash_table_remove(Hash_table *hash_table, const char *key, int *val) {
-    for (List_node **node = hash_table->buckets + hash(key);
+    for (Hash_node **node = hash_table->buckets + hash(key);
       *node;
       node = &(*node)->next)
         if (strcmp(key, (*node)->key) == 0) {
             if (val != NULL)
                 *val = (*node)->val;
-            List_node *tmp = *node;
+            Hash_node *tmp = *node;
             *node = (*node)->next;
             free(tmp);
             return true;
@@ -91,7 +74,7 @@ bool hash_table_remove(Hash_table *hash_table, const char *key, int *val) {
 void hash_table_print(Hash_table *hash_table) {
     for (size_t i = 0; i < HASH_N_BUCKETS; ++i) {
         printf("%zu:", i);
-        for (List_node *node = hash_table->buckets[i]; node; node = node->next)
+        for (Hash_node *node = hash_table->buckets[i]; node; node = node->next)
             printf(" [ \"%s\" %d ]", node->key, node->val);
         putchar('\n');
     }

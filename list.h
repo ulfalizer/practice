@@ -1,3 +1,5 @@
+// TODO: Clean up to hide list representation
+
 typedef struct Node {
     struct Node *next;
     int val;

@@ -1,14 +1,14 @@
-// TODO: Make dynamic
-#define HASH_N_BUCKETS 5
-
 typedef struct Hash_node {
     struct Hash_node *next;
-    const char *key;
+    char *key;
     int val;
 } Hash_node;
 
 typedef struct Hash_table {
-    Hash_node *buckets[HASH_N_BUCKETS];
+    Hash_node **buckets;
+    size_t n_buckets;
+    size_t max_load;
+    size_t n_elements;
 } Hash_table;
 
 void hash_table_init(Hash_table *hash_table);

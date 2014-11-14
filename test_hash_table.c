@@ -113,7 +113,29 @@ static void test_remove() {
     #undef VERIFY_REMOVE_EXISTS
 }
 
+static const char *gen_key(int i) {
+    static char buf[32];
+    sprintf(buf, "%d", i);
+    return buf;
+}
+
+static void test_resize() {
+    Hash_table hash_table;
+
+    hash_table_init(&hash_table);
+    for (int i = 0; i < 512; ++i) {
+        for (int j = 0; j < i; ++j) {
+            int n;
+            hash_table_get(&hash_table, gen_key(j), &n);
+            VERIFY(n == j);
+        }
+        hash_table_set(&hash_table, gen_key(i), i, NULL);
+    }
+    hash_table_free(&hash_table);
+}
+
 void test_hash_table() {
     test_set_get();
     test_remove();
+    test_resize();
 }

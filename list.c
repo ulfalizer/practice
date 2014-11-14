@@ -83,13 +83,6 @@ void list_reverse(Node **node) {
     *node = prev;
 }
 
-static void list_insert(Node **sorted, Node *node) {
-    Node **cur;
-    for (cur = sorted; *cur && (*cur)->val < node->val; cur = &(*cur)->next);
-    node->next = *cur;
-    *cur = node;
-}
-
 static Node *extract_min(Node **node) {
     Node **min = node, *res;
     for (; *node; node = &(*node)->next)
@@ -107,6 +100,13 @@ void list_selection_sort(Node **node) {
         min->next = *node;
         *node = min;
     }
+}
+
+static void list_insert(Node **sorted, Node *node) {
+    Node **cur;
+    for (cur = sorted; *cur && (*cur)->val < node->val; cur = &(*cur)->next);
+    node->next = *cur;
+    *cur = node;
 }
 
 // Most efficient when the reverse of the list is almost sorted. Not stable.

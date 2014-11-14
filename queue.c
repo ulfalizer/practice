@@ -2,11 +2,11 @@
 #include "queue.h"
 
 // Keep the length as a power of two to speed up wrapping
-#define INITIAL_LEN 16
+#define INITIAL_BUF_LEN 16
 
 typedef struct Queue {
-    void **storage;
-    size_t len;
+    void **buf;
+    size_t buf_len;
     size_t start, end;
 } Queue;
 
@@ -14,61 +14,61 @@ Queue *queue_make() {
     Queue *queue = malloc(sizeof(Queue));
     if (queue == NULL)
         err("malloc Queue");
-    queue->storage = malloc(sizeof(void*)*INITIAL_LEN);
-    if (queue->storage == NULL)
-        err("malloc Queue storage");
+    queue->buf = malloc(sizeof(void*)*INITIAL_BUF_LEN);
+    if (queue->buf == NULL)
+        err("malloc Queue buf");
 
     queue->start = 0;
     queue->end = 0;
-    queue->len = INITIAL_LEN;
+    queue->buf_len = INITIAL_BUF_LEN;
     return queue;
 }
 
 void queue_free(Queue *queue) {
-    free(queue->storage);
+    free(queue->buf);
     free(queue);
 }
 
 size_t queue_len(Queue *queue) {
-    return (queue->end + queue->len - queue->start) & (queue->len - 1);
+    return (queue->end + queue->buf_len - queue->start) & (queue->buf_len - 1);
 }
 
 static void grow_and_add(Queue *queue, void *val) {
-    void **new_storage;
+    void **new_buf;
 
-    new_storage = malloc(2*sizeof(void*)*queue->len);
+    new_buf = malloc(2*sizeof(void*)*queue->buf_len);
     // Copy the old contents to the beginning of the new buffer
-    if (new_storage == NULL)
-        err("malloc Queue grow storage");
+    if (new_buf == NULL)
+        err("malloc Queue grow buf");
     if (queue->end < queue->start) {
-        memcpy(new_storage,
-          queue->storage + queue->start,
-          sizeof(void*)*(queue->len - queue->start));
-        memcpy(new_storage + queue->len - queue->start,
-          queue->storage,
+        memcpy(new_buf,
+          queue->buf + queue->start,
+          sizeof(void*)*(queue->buf_len - queue->start));
+        memcpy(new_buf + queue->buf_len - queue->start,
+          queue->buf,
           sizeof(void*)*queue->end);
     }
     else
-        memcpy(new_storage,
-          queue->storage + queue->start,
+        memcpy(new_buf,
+          queue->buf + queue->start,
           sizeof(void*)*(queue->end - queue->start));
     // Write the new element after the old contents
-    new_storage[queue->len - 1] = val;
+    new_buf[queue->buf_len - 1] = val;
     // Free the old buffer
-    free(queue->storage);
+    free(queue->buf);
 
-    queue->storage = new_storage;
+    queue->buf = new_buf;
     queue->start = 0;
-    queue->end = queue->len;
-    queue->len *= 2;
+    queue->end = queue->buf_len;
+    queue->buf_len *= 2;
 }
 
 void queue_add(Queue *queue, void *val) {
-    size_t new_end = (queue->end + 1) & (queue->len - 1);
+    size_t new_end = (queue->end + 1) & (queue->buf_len - 1);
     if (new_end == queue->start)
         grow_and_add(queue, val);
     else {
-        queue->storage[queue->end] = val;
+        queue->buf[queue->end] = val;
         queue->end = new_end;
     }
 }
@@ -77,7 +77,7 @@ void *queue_remove(Queue *queue) {
     void *res;
     if (queue->start == queue->end)
         fail("removing from empty queue");
-    res = queue->storage[queue->start];
-    queue->start = (queue->start + 1) & (queue->len - 1);
+    res = queue->buf[queue->start];
+    queue->start = (queue->start + 1) & (queue->buf_len - 1);
     return res;
 }

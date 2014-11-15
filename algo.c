@@ -71,3 +71,15 @@ void print_num(int num, int base) {
         buf[--i] = '-';
     puts(buf + i);
 }
+
+// Reverses the digits in 'num' when interpreted in base 'base'. Preserves
+// sign.
+int rev_num(int num, int base) {
+    int res = 0;
+
+    while (num != 0) {
+        res = base*res + num%base;
+        num /= base;
+    }
+    return res;
+}

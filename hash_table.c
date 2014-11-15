@@ -91,7 +91,6 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
     new_node->val = val;
     *bucket = new_node;
 
-    ++hash_table->n_elements;
     return false;
 }
 

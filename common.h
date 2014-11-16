@@ -24,12 +24,12 @@ char *estrdup(const char *s, const char *desc);
 #define max(a, b)         \
   ({ typeof(a) _a = a;    \
      typeof(b) _b = b;    \
-     _a > _b ? _a : _b })
+     _a > _b ? _a : _b; })
 
 #define min(a, b)         \
   ({ typeof(a) _a = a;    \
      typeof(b) _b = b;    \
-     _a < _b ? _a : _b })
+     _a < _b ? _a : _b; })
 
 #define STRINGIFY(x) STRINGIFY_(x)
 #define STRINGIFY_(x) #x

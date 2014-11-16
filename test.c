@@ -6,6 +6,7 @@ void test_list();
 void test_min_heap();
 void test_queue();
 void test_sort();
+void test_tree();
 void test_vector();
 
 int main() {
@@ -15,6 +16,7 @@ int main() {
     test_min_heap();
     test_queue();
     test_sort();
+    test_tree();
     test_vector();
     puts("all tests passed");
 }

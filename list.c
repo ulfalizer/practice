@@ -1,3 +1,5 @@
+// Unidirectional linked list
+
 #include "common.h"
 #include "list.h"
 

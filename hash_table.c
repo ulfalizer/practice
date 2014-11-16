@@ -1,3 +1,5 @@
+// A dynamically-resized hash table using separate chaining
+
 #include "common.h"
 #include "hash_table.h"
 

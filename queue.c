@@ -1,3 +1,5 @@
+// A dynamically-resized queue implemented in a circular buffer
+
 #include "common.h"
 #include "queue.h"
 

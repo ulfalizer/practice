@@ -1,3 +1,5 @@
+// A min-heap implementing a priority queue
+
 #include "common.h"
 #include "min_heap.h"
 

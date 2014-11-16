@@ -1,3 +1,5 @@
+// Misc. functions and algorithms
+
 #include "common.h"
 #include "algo.h"
 

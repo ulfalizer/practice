@@ -1,3 +1,5 @@
+// Binary tree stuff
+
 #include "common.h"
 #include "queue.h"
 #include "tree.h"

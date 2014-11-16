@@ -1,3 +1,5 @@
+// Various sorting algorithms
+
 #include "common.h"
 #include "sort.h"
 

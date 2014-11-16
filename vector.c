@@ -1,3 +1,5 @@
+// A dynamically-resized array implementation
+
 #include "common.h"
 #include "vector.h"
 

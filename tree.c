@@ -104,15 +104,17 @@ void tree_print(Tree_node *root) {
     for (unsigned level = 0; level < depth; ++level) {
         for (size_t i = 0; i < (1 << level); ++i) {
             Tree_node *node = queue_remove(&queue);
-            // Use the depth of the tree to calculate the needed spacing.
-            unsigned spaces = 1 << (depth - level);
+            // Use the depth of the tree to calculate the needed spacing. The
+            // spacing before the first element of the level is half the
+            // spacing before the remaining elements.
+            unsigned spacing = 1 << (depth - level - (i == 0));
             if (node == NULL) {
-                print_n_spaces(i == 0 ? spaces/2 : spaces);
+                print_n_spaces(spacing);
                 queue_add(&queue, NULL);
                 queue_add(&queue, NULL);
             }
             else {
-                printf("%*d", i == 0 ? spaces/2 : spaces, node->val);
+                printf("%*d", spacing, node->val);
                 queue_add(&queue, node->left);
                 queue_add(&queue, node->right);
             }

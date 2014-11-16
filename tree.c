@@ -93,24 +93,19 @@ static void print_n_spaces(int n) {
 // Debugging helper that prints a tree. The format is similar to the input
 // format in the tree_make() example (but without commas).
 void tree_print(Tree_node *root) {
-    unsigned depth;
+    unsigned depth = tree_depth(root);
     Queue queue;
-    unsigned spaces;
 
     queue_init(&queue);
     queue_add(&queue, root);
-    depth = tree_depth(root);
-    // Use the depth of the tree to calculate the needed spacing.
-    spaces = 1 << depth;
     // Step through the tree level-by-level. For each of the 2^n node positions
     // at level n, print either the value at that position or just spaces if no
     // node exists.
-    for (size_t i = 0; i < depth; ++i) {
-        size_t level_len;
-
-        level_len = queue_len(&queue);
-        for (size_t i = 0; i < level_len; ++i) {
+    for (unsigned level = 0; level < depth; ++level) {
+        for (size_t i = 0; i < (1 << level); ++i) {
             Tree_node *node = queue_remove(&queue);
+            // Use the depth of the tree to calculate the needed spacing.
+            unsigned spaces = 1 << (depth - level);
             if (node == NULL) {
                 print_n_spaces(i == 0 ? spaces/2 : spaces);
                 queue_add(&queue, NULL);
@@ -123,8 +118,6 @@ void tree_print(Tree_node *root) {
             }
         }
         putchar('\n');
-
-        spaces /= 2;
     }
     queue_free(&queue);
 }

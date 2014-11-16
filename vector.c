@@ -18,14 +18,9 @@ size_t vector_len(Vector *vector) {
 }
 
 static void grow(Vector *vector) {
-    void **new_buf;
-
-    new_buf = emalloc(2*sizeof(void*)*vector->buf_len, "grow vector");
-    memcpy(new_buf, vector->buf, sizeof(void*)*vector->buf_len);
-    free(vector->buf);
-
-    vector->buf = new_buf;
     vector->buf_len *= 2;
+    vector->buf =
+      erealloc(vector->buf, sizeof(void*)*vector->buf_len, "vector grow");
 }
 
 void vector_add(Vector *vector, void *val) {

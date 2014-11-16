@@ -45,8 +45,8 @@ bool binsearch(int find, int *nums, size_t len) {
 
 // Prints 'num' in 'base'. Supports negative numbers and bases up to 36.
 void print_num(int num, int base) {
-    // Enough space to hold the digits of INT_MIN in binary plus a terminating
-    // null
+    // Enough space to hold the digits of INT_MIN in binary plus a minus sign
+    // and a terminating null
     #define MAX_SIZE (1 + CHAR_BIT*sizeof(num) + 1)
     static const char digits[] =
       { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -70,6 +70,7 @@ void print_num(int num, int base) {
     if (negative)
         buf[--i] = '-';
     puts(buf + i);
+    #undef MAX_SIZE
 }
 
 // Reverses the digits in 'num' when interpreted in base 'base'. Preserves

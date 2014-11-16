@@ -68,9 +68,7 @@ static void mergesort_rec(int *nums, size_t n, int *scratch) {
 }
 
 void mergesort(int *nums, size_t n) {
-    int *scratch = malloc(sizeof(int)*n);
-    if (scratch == NULL)
-        err("malloc mergesort scratch");
+    int *scratch = emalloc(sizeof(int)*n, "mergesort scratch");
     mergesort_rec(nums, n, scratch);
     free(scratch);
 }

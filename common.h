@@ -15,6 +15,10 @@ void fail(char const *format, ...)
 
 int *parse_int_args(int argc, char *argv[]);
 
+void *emalloc(size_t size, const char *desc);
+void *erealloc(void *ptr, size_t size, const char *desc);
+char *estrdup(const char *s, const char *desc);
+
 #define swap(a, b) do { typeof(a) tmp = a; a = b; b = tmp; } while(0)
 
 #define max(a, b)         \

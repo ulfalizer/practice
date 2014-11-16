@@ -4,10 +4,7 @@
 #define INITIAL_BUF_LEN 16
 
 void vector_init(Vector *vector) {
-    vector->buf = malloc(sizeof(void*)*INITIAL_BUF_LEN);
-    if (vector->buf == NULL)
-        err("malloc Vector buf");
-
+    vector->buf = emalloc(sizeof(void*)*INITIAL_BUF_LEN, "vector init");
     vector->buf_len = INITIAL_BUF_LEN;
     vector->len = 0;
 }
@@ -23,7 +20,7 @@ size_t vector_len(Vector *vector) {
 static void grow(Vector *vector) {
     void **new_buf;
 
-    new_buf = malloc(2*sizeof(void*)*vector->buf_len);
+    new_buf = emalloc(2*sizeof(void*)*vector->buf_len, "grow vector");
     memcpy(new_buf, vector->buf, sizeof(void*)*vector->buf_len);
     free(vector->buf);
 

@@ -17,7 +17,8 @@ static unsigned long hash(const char *s) {
 }
 
 void hash_table_init(Hash_table *hash_table) {
-    hash_table->buckets = malloc(sizeof(Hash_node*)*INITIAL_BUCKETS);
+    hash_table->buckets =
+      emalloc(sizeof(Hash_node*)*INITIAL_BUCKETS, "hash init");
     for (size_t i = 0; i < INITIAL_BUCKETS; ++i)
         hash_table->buckets[i] = NULL;
     hash_table->n_buckets = INITIAL_BUCKETS;
@@ -40,7 +41,7 @@ void hash_table_free(Hash_table *hash_table) {
 static void resize(Hash_table *hash_table, size_t new_size) {
     Hash_node **new_buckets;
 
-    new_buckets = malloc(sizeof(Hash_node*)*new_size);
+    new_buckets = emalloc(sizeof(Hash_node*)*new_size, "hash resize");
     for (size_t i = 0; i < new_size; ++i)
         new_buckets[i] = NULL;
     for (size_t i = 0; i < hash_table->n_buckets; ++i) {
@@ -81,13 +82,9 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
         bucket = hash_table->buckets + hash(key) % hash_table->n_buckets;
     }
 
-    new_node = malloc(sizeof(Hash_node));
-    if (new_node == NULL)
-        err("malloc Hash_node");
+    new_node = emalloc(sizeof(Hash_node), "hash set, node");
     new_node->next = *bucket;
-    new_node->key = strdup(key);
-    if (new_node->key == NULL)
-        err("strdup hash key");
+    new_node->key = estrdup(key, "hash set, key");
     new_node->val = val;
     *bucket = new_node;
 

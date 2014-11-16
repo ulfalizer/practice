@@ -2,9 +2,7 @@
 #include "list.h"
 
 void list_add(Node **node, int val) {
-    Node *new_node = malloc(sizeof(Node));
-    if (new_node == NULL)
-        err("malloc new_node");
+    Node *new_node = emalloc(sizeof(Node), "list add");
     new_node->next = *node;
     new_node->val = val;
     *node = new_node;

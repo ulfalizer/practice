@@ -5,10 +5,7 @@
 #define INITIAL_BUF_LEN 16
 
 void queue_init(Queue *queue) {
-    queue->buf = malloc(sizeof(void*)*INITIAL_BUF_LEN);
-    if (queue->buf == NULL)
-        err("malloc Queue buf");
-
+    queue->buf = emalloc(sizeof(void*)*INITIAL_BUF_LEN, "queue init");
     queue->start = 0;
     queue->end = 0;
     queue->buf_len = INITIAL_BUF_LEN;
@@ -25,10 +22,8 @@ size_t queue_len(Queue *queue) {
 static void grow_and_add(Queue *queue, void *val) {
     void **new_buf;
 
-    new_buf = malloc(2*sizeof(void*)*queue->buf_len);
+    new_buf = emalloc(2*sizeof(void*)*queue->buf_len, "queue grow");
     // Copy the old contents to the beginning of the new buffer
-    if (new_buf == NULL)
-        err("malloc Queue grow buf");
     if (queue->end < queue->start) {
         memcpy(new_buf,
           queue->buf + queue->start,

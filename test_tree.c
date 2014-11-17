@@ -33,7 +33,7 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
   while(0);
 
 // Helper for specifying the lack of a node with tree_make()
-static int _ = INT_MIN;
+static int _ = 0xDEAD;
 
 static void test_dfs() {
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_dfs);
@@ -111,7 +111,85 @@ static void test_bfs() {
     TRAVERSE_TEST_RES(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 }
 
+#undef TRAVERSE_TEST_TREE
+#undef TRAVERSE_TEST_RES
+
+static void test_valid_bin_search_tree() {
+    #define VERIFY_BIN_SEARCH_TREE(valid, ...)          \
+      {                                                 \
+          Tree_node *tree = MAKE_TREE(__VA_ARGS__);     \
+          VERIFY(valid == valid_bin_search_tree(tree)); \
+          tree_free(tree);                              \
+      }
+
+    VERIFY_BIN_SEARCH_TREE(true);
+    VERIFY_BIN_SEARCH_TREE(true,
+      1);
+    VERIFY_BIN_SEARCH_TREE(true,
+       2,
+      1);
+    VERIFY_BIN_SEARCH_TREE(true,
+      1,
+     _,2);
+    VERIFY_BIN_SEARCH_TREE(true,
+      2,
+     1,3);
+    VERIFY_BIN_SEARCH_TREE(true,
+         3,
+       1,  5,
+      _,_,4,_);
+    VERIFY_BIN_SEARCH_TREE(true,
+         3,
+       1,  5,
+      _,2);
+    VERIFY_BIN_SEARCH_TREE(true,
+             1,
+      INT_MIN);
+    VERIFY_BIN_SEARCH_TREE(true,
+             1,
+            _,INT_MAX);
+    VERIFY_BIN_SEARCH_TREE(true,
+             1,
+      INT_MIN,INT_MAX);
+    VERIFY_BIN_SEARCH_TREE(true,
+          INT_MIN,
+            _,1);
+    VERIFY_BIN_SEARCH_TREE(true,
+          INT_MAX,
+            1);
+
+    VERIFY_BIN_SEARCH_TREE(false,
+       1,
+      2);
+    VERIFY_BIN_SEARCH_TREE(false,
+      2,
+     _,1);
+    VERIFY_BIN_SEARCH_TREE(false,
+      2,
+     2,3);
+    VERIFY_BIN_SEARCH_TREE(false,
+      2,
+     1,2);
+    VERIFY_BIN_SEARCH_TREE(false,
+         3,
+       1,  5,
+      _,_,2,_);
+    VERIFY_BIN_SEARCH_TREE(false,
+         3,
+       1,  5,
+      _,4);
+    VERIFY_BIN_SEARCH_TREE(false,
+       INT_MIN,
+      INT_MIN);
+    VERIFY_BIN_SEARCH_TREE(false,
+     INT_MAX,
+       _,INT_MAX);
+
+    #undef VERIFY_BIN_SEARCH_TREE
+}
+
 void test_tree() {
     test_dfs();
     test_bfs();
+    test_valid_bin_search_tree();
 }

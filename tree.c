@@ -5,11 +5,11 @@
 #include "tree.h"
 #include "vector.h"
 
-// Builds a tree out of the variable argument list (with 'len' entries).
-// INT_MIN specifies the lack of a node. The last level does not need to be
-// fully specified.
+// Builds a tree out of the variable argument list (with 'len' entries). 0xDEAD
+// specifies the lack of a node. The last level does not need to be fully
+// specified.
 //
-// Usage example assuming _ == INT_MIN:
+// Usage example assuming _ == 0xDEAD:
 //
 // tree_make(15,
 //          2,
@@ -29,7 +29,7 @@ Tree_node *tree_make(size_t len, ...) {
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i) {
         int node_val = va_arg(ap, int);
-        if (node_val == INT_MIN)
+        if (node_val == 0xDEAD)
             nodes[i] = NULL;
         else {
             nodes[i] = emalloc(sizeof(Tree_node), "make tree, node");
@@ -86,6 +86,29 @@ unsigned tree_depth(Tree_node *root) {
     if (root == NULL)
         return 0;
     return 1 + max(tree_depth(root->left), tree_depth(root->right));
+}
+
+// Slightly convoluted to be able to handle INT_MIN and INT_MAX. The possible
+// sets of valid numbers are
+// [], [INT_MIN], [INT_MIN, INT_MIN+1], ..., [INT_MIN, ..., INT_MAX],
+// which is one more than the number of representable values. NULL indicates
+// "anything goes".
+static bool valid_bin_search_tree_rec(Tree_node *root, int *max, int *min) {
+    if (root == NULL)
+        return true;
+    if (max != NULL && root->key >= *max)
+        return false;
+    if (min != NULL && root->key <= *min)
+        return false;
+    return valid_bin_search_tree_rec(root->left, &root->key, min) &&
+      valid_bin_search_tree_rec(root->right, max, &root->key);
+}
+
+bool valid_bin_search_tree(Tree_node *root) {
+    if (root == NULL)
+        return true;
+    return valid_bin_search_tree_rec(root->left, &root->key, NULL) &&
+      valid_bin_search_tree_rec(root->right, NULL, &root->key);
 }
 
 static void print_n_spaces(int n) {

@@ -11,4 +11,5 @@ void tree_free(Tree_node *root);
 void tree_nodes_to_vector_dfs(Tree_node *root, Vector *vector);
 void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector);
 unsigned tree_depth(Tree_node *root);
+bool valid_bin_search_tree(Tree_node *root);
 void tree_print(Tree_node *root);

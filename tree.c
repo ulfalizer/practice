@@ -82,12 +82,6 @@ void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector) {
     }
 }
 
-unsigned tree_depth(Tree_node *root) {
-    if (root == NULL)
-        return 0;
-    return 1 + max(tree_depth(root->left), tree_depth(root->right));
-}
-
 // Slightly convoluted to be able to handle INT_MIN and INT_MAX. The possible
 // sets of valid numbers are
 // [], [INT_MIN], [INT_MIN, INT_MIN+1], ..., [INT_MIN, ..., INT_MAX],
@@ -113,6 +107,12 @@ bool valid_bin_search_tree(Tree_node *root) {
 
 static void print_n_spaces(int n) {
     printf("%*s", n, "");
+}
+
+unsigned tree_depth(Tree_node *root) {
+    if (root == NULL)
+        return 0;
+    return 1 + max(tree_depth(root->left), tree_depth(root->right));
 }
 
 // Debugging helper that prints a tree. The format is similar to the input

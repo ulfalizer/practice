@@ -11,4 +11,4 @@ void min_heap_init(Min_heap *heap);
 void min_heap_free(Min_heap *heap);
 size_t min_heap_len(Min_heap *heap);
 void min_heap_add(Min_heap *heap, int val);
-int min_heap_get(Min_heap *heap);
+int min_heap_remove(Min_heap *heap);

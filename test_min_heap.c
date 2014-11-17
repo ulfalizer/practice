@@ -11,11 +11,11 @@ void test_min_heap() {
     min_heap_add(&heap, 73);
     min_heap_add(&heap, 7);
     VERIFY(min_heap_len(&heap) == 5);
-    VERIFY(min_heap_get(&heap) == 1);
-    VERIFY(min_heap_get(&heap) == 2);
-    VERIFY(min_heap_get(&heap) == 7);
-    VERIFY(min_heap_get(&heap) == 8);
-    VERIFY(min_heap_get(&heap) == 73);
+    VERIFY(min_heap_remove(&heap) == 1);
+    VERIFY(min_heap_remove(&heap) == 2);
+    VERIFY(min_heap_remove(&heap) == 7);
+    VERIFY(min_heap_remove(&heap) == 8);
+    VERIFY(min_heap_remove(&heap) == 73);
     VERIFY(min_heap_len(&heap) == 0);
     min_heap_free(&heap);
 }

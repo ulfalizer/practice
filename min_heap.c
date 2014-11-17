@@ -31,7 +31,7 @@ void min_heap_add(Min_heap *heap, int val) {
     ++heap->len;
 }
 
-int min_heap_get(Min_heap *heap) {
+int min_heap_remove(Min_heap *heap) {
     size_t i;
     int res, val;
     if (heap->len == 0)

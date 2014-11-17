@@ -3,30 +3,43 @@
 #include "common.h"
 #include "list.h"
 
-void list_add(Node **node, int val) {
-    Node *new_node = emalloc(sizeof(Node), "list add");
-    new_node->next = *node;
-    new_node->val = val;
-    *node = new_node;
+void list_init(List *list) {
+    list->start = NULL;
 }
 
-Node *list_make(size_t len, ...) {
+void list_free(List *list) {
+    Node *next;
+    for (Node *node = list->start; node; node = next) {
+        next = node->next;
+        free(node);
+    }
+}
+
+void list_make(List *list, size_t len, ...) {
     va_list ap;
-    void list_reverse(Node **node);
-    Node *node = NULL;
+    void list_add(List *list, int val);
+    void list_reverse(List *list);
+    list_init(list);
 
     va_start(ap, len);
     while (len--)
-        list_add(&node, va_arg(ap, int));
+        list_add(list, va_arg(ap, int));
     va_end(ap);
-    list_reverse(&node);
-    return node;
+    list_reverse(list);
 }
 
-bool list_equals(Node *node, size_t len, ...) {
+void list_add(List *list, int val) {
+    Node *new_node = emalloc(sizeof(Node), "list add");
+    new_node->next = list->start;
+    new_node->val = val;
+    list->start = new_node;
+}
+
+bool list_equals(List *list, size_t len, ...) {
     va_list ap;
+    Node *node;
     va_start(ap, len);
-    for (; node && len > 0; node = node->next, --len)
+    for (node = list->start; node && len > 0; node = node->next, --len)
         if (node->val != va_arg(ap, int)) {
             va_end(ap);
             return false;
@@ -35,26 +48,28 @@ bool list_equals(Node *node, size_t len, ...) {
     return node == NULL && len == 0;
 }
 
-bool lists_equal(Node *l1, Node *l2) {
-    for (;; l1 = l1->next, l2 = l2->next) {
-        if (l1 == NULL)
-            return l2 == NULL;
-        if (l2 == NULL)
-            return l1 == NULL;
-        if (l1->val != l2->val)
+bool lists_equal(List *l1, List *l2) {
+    for (Node *n1 = l1->start, *n2 = l2->start;;
+      n1 = n1->next, n2 = n2->next) {
+        if (n1 == NULL)
+            return n2 == NULL;
+        if (n2 == NULL)
+            return n1 == NULL;
+        if (n1->val != n2->val)
             return false;
     }
 }
 
-bool list_is_sorted(Node* node) {
-    for (int prev = INT_MIN; node; prev = node->val, node = node->next)
+bool list_is_sorted(List* list) {
+    int prev = INT_MIN;
+    for (Node *node = list->start; node; prev = node->val, node = node->next)
         if (prev > node->val)
             return false;
     return true;
 }
 
-void list_remove(Node **node, int val) {
-    for (Node **cur = node; *cur; cur = &(*cur)->next)
+void list_remove(List *list, int val) {
+    for (Node **cur = &list->start; *cur; cur = &(*cur)->next)
         if ((*cur)->val == val) {
             Node *tmp = *cur;
             *cur = (*cur)->next;
@@ -63,8 +78,8 @@ void list_remove(Node **node, int val) {
         }
 }
 
-void list_remove_all(Node **node, int val) {
-    for (Node **cur = node; *cur;)
+void list_remove_all(List *list, int val) {
+    for (Node **cur = &list->start; *cur;)
         if ((*cur)->val == val) {
             Node *tmp = *cur;
             *cur = (*cur)->next;
@@ -74,13 +89,13 @@ void list_remove_all(Node **node, int val) {
             cur = &(*cur)->next;
 }
 
-void list_reverse(Node **node) {
+void list_reverse(List *list) {
     Node *next, *prev = NULL;
-    for (Node *cur = *node; cur; prev = cur, cur = next) {
+    for (Node *cur = list->start; cur; prev = cur, cur = next) {
         next = cur->next;
         cur->next = prev;
     }
-    *node = prev;
+    list->start = prev;
 }
 
 static Node *extract_min(Node **node) {
@@ -94,8 +109,8 @@ static Node *extract_min(Node **node) {
 }
 
 // Assumed correct and used to test other sorting algorithms.
-void list_selection_sort(Node **node) {
-    for (; *node; node = &(*node)->next) {
+void list_selection_sort(List *list) {
+    for (Node **node = &list->start; *node; node = &(*node)->next) {
         Node *min = extract_min(node);
         min->next = *node;
         *node = min;
@@ -110,20 +125,20 @@ static void list_insert(Node **sorted, Node *node) {
 }
 
 // Most efficient when the reverse of the list is almost sorted. Not stable.
-void list_insertion_sort(Node **node) {
+void list_insertion_sort(List *list) {
     Node *cur;
-    if (*node == NULL)
+    if (list->start == NULL)
         return;
-    cur = (*node)->next;
-    (*node)->next = NULL;
+    cur = list->start->next;
+    list->start->next = NULL;
     while (cur) {
         Node *next = cur->next;
-        list_insert(node, cur);
+        list_insert(&list->start, cur);
         cur = next;
     }
 }
 
-void list_merge(Node **first, Node *second) {
+static void merge(Node **first, Node *second) {
     for (Node **cur = first;; cur = &(*cur)->next) {
         if (*cur == NULL) {
             *cur = second;
@@ -136,7 +151,7 @@ void list_merge(Node **first, Node *second) {
     }
 }
 
-Node *list_split(Node *node) {
+static Node *split(Node *node) {
     Node *speedy = node;
     if (node == NULL)
         return NULL;
@@ -152,28 +167,25 @@ Node *list_split(Node *node) {
     return tmp;
 }
 
-void list_mergesort(Node **node) {
-    Node *other = list_split(*node);
+static void mergesort_rec(Node **node) {
+    Node *other = split(*node);
     if (other == NULL)
         return;
-    list_mergesort(node);
-    list_mergesort(&other);
-    list_merge(node, other);
+    mergesort_rec(node);
+    mergesort_rec(&other);
+    merge(node, other);
 }
 
-void list_print(Node *node) {
-    if (node) {
-        printf("%d", node->val);
-        for (node = node->next; node; node = node->next)
+void list_mergesort(List *list) {
+    mergesort_rec(&list->start);
+}
+
+void list_print(List *list) {
+    // Avoid printing an extra space after the last element
+    if (list->start) {
+        printf("%d", list->start->val);
+        for (Node *node = list->start->next; node; node = node->next)
             printf(" %d", node->val);
     }
     putchar('\n');
-}
-
-void list_free(Node *node) {
-    Node *next;
-    for (; node; node = next) {
-        next = node->next;
-        free(node);
-    }
 }

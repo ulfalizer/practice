@@ -182,8 +182,8 @@ static void test_valid_bin_search_tree() {
        INT_MIN,
       INT_MIN);
     VERIFY_BIN_SEARCH_TREE(false,
-     INT_MAX,
-       _,INT_MAX);
+      INT_MAX,
+        _,INT_MAX);
 
     #undef VERIFY_BIN_SEARCH_TREE
 }

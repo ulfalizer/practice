@@ -10,7 +10,7 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
     VERIFY(vector_len(v) == len);
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i)
-        VERIFY(((Tree_node*)vector_get(v, i))->val == va_arg(ap, int));
+        VERIFY(((Tree_node*)vector_get(v, i))->key == va_arg(ap, int));
     va_end(ap);
 }
 

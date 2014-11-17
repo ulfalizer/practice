@@ -33,7 +33,7 @@ Tree_node *tree_make(size_t len, ...) {
             nodes[i] = NULL;
         else {
             nodes[i] = emalloc(sizeof(Tree_node), "make tree, node");
-            nodes[i]->val = node_val;
+            nodes[i]->key = node_val;
             nodes[i]->left = nodes[i]->right = NULL;
             if (i != 0) {
                 size_t parent = (i - 1)/2;
@@ -116,7 +116,7 @@ void tree_print(Tree_node *root) {
                 queue_add(&queue, NULL);
             }
             else {
-                printf("%*d", spacing, node->val);
+                printf("%*d", spacing, node->key);
                 queue_add(&queue, node->left);
                 queue_add(&queue, node->right);
             }

@@ -2,8 +2,142 @@
 #include "tree.h"
 #include "vector.h"
 
+// Helper for specifying the lack of a node with tree_make()
+static int _ = 0xDEAD;
+
 #define MAKE_TREE(...) \
   tree_make(N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
+
+// Tests both tree_equals() and trees_equal()
+static void test_equals() {
+    // Specifies the tree to use for the tests
+    #define TEST_EQUALS_TREE(...)                           \
+      do {                                                  \
+          Tree_node *tree = MAKE_TREE(__VA_ARGS__), *tree2
+    // Verifies that the tree equals (equals == true) or does not equal the
+    // given tree
+    #define TEST_EQUALS(equals, ...)                                \
+          /* Test tree_equals() */                                  \
+          VERIFY(equals ==                                          \
+            tree_equals(tree, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)); \
+          /* Test trees_equal() */                                  \
+          tree2 = MAKE_TREE(__VA_ARGS__);                           \
+          VERIFY(equals == trees_equal(tree, tree2));               \
+          tree_free(tree2)
+    // Ends the test
+    #define TEST_EQUALS_END \
+          tree_free(tree);  \
+      }                     \
+      while (0)
+
+    // Empty tree
+    TEST_EQUALS_TREE();
+    TEST_EQUALS(true);
+    TEST_EQUALS(true, _);
+    TEST_EQUALS(true, _, _);
+    TEST_EQUALS(false, 1);
+    TEST_EQUALS(false, 1, _);
+    TEST_EQUALS(false, 1, _,_);
+    TEST_EQUALS_END;
+
+    // One-element tree
+    TEST_EQUALS_TREE(1);
+    TEST_EQUALS(true, 1);
+    TEST_EQUALS(true, 1, _);
+    TEST_EQUALS(true, 1, _,_);
+    TEST_EQUALS(false);
+    TEST_EQUALS(false, 2);
+    TEST_EQUALS(false, 2, _);
+    TEST_EQUALS(false,
+       1,
+      1);
+    TEST_EQUALS(false,
+       1,
+      _,1);
+    TEST_EQUALS_END;
+
+    // Two-element tree
+    TEST_EQUALS_TREE(
+       1,
+      2);
+    TEST_EQUALS(true,
+       1,
+      2);
+    TEST_EQUALS(true,
+       1,
+      2,_);
+    TEST_EQUALS(true,
+         1,
+       2,  _,
+      _);
+    TEST_EQUALS(false);
+    TEST_EQUALS(false, 1);
+    TEST_EQUALS(false,
+       1,
+      1);
+    TEST_EQUALS(false,
+       2,
+      2);
+    TEST_EQUALS(false,
+       1,
+      _,2);
+    TEST_EQUALS_END;
+
+    // Three-element tree
+    TEST_EQUALS_TREE(
+       1,
+      2,3);
+    TEST_EQUALS(true,
+       1,
+      2,3);
+    TEST_EQUALS(true,
+         1,
+       2,  3,
+      _);
+    TEST_EQUALS(false,
+       1,
+      _,3);
+    TEST_EQUALS(false,
+       1,
+      2,_);
+    TEST_EQUALS(false,
+       1,
+      2,1);
+    TEST_EQUALS_END;
+
+    // Complex tree
+    TEST_EQUALS_TREE(
+             0,
+         1,      2,
+       3,  4,  _,  5,
+      _,6,_,7,_,_,8,9);
+    TEST_EQUALS(true,
+             0,
+         1,      2,
+       3,  4,  _,  5,
+      _,6,_,7,_,_,8,9);
+    TEST_EQUALS(false,
+             0,
+         1,      2,
+       3,  4,  _,  5,
+      _,6,1,7,_,_,8,9);
+    TEST_EQUALS(false,
+             0,
+         1,      2,
+       3,  4,  _,  5,
+      _,6,_,7,_,_,8,_);
+    TEST_EQUALS(false,
+                     0,
+             1,              2,
+         3,      4,      _,      5,
+       _,  6,  _,  7,  _,  _,  8,  9,
+      _,_,0);
+    TEST_EQUALS_END;
+
+    #undef TEST_EQUALS_TREE
+    #undef TEST_EQUALS
+    #undef TEST_EQUALS_END
+}
 
 static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
     va_list ap;
@@ -24,16 +158,13 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
                                                 \
       vector_init(&v);                          \
       tree = MAKE_TREE(__VA_ARGS__);            \
-      fn(tree, &v);
+      fn(tree, &v)
 #define TRAVERSE_TEST_RES(...)                \
       VERIFY_VECTOR_EQUALS(v, ##__VA_ARGS__); \
       vector_free(&v);                        \
       tree_free(tree);                        \
   }                                           \
-  while(0);
-
-// Helper for specifying the lack of a node with tree_make()
-static int _ = 0xDEAD;
+  while (0)
 
 static void test_dfs() {
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_dfs);
@@ -129,11 +260,11 @@ static void test_valid_bin_search_tree() {
        2,
       1);
     VERIFY_BIN_SEARCH_TREE(true,
-      1,
-     _,2);
+       1,
+      _,2);
     VERIFY_BIN_SEARCH_TREE(true,
-      2,
-     1,3);
+       2,
+      1,3);
     VERIFY_BIN_SEARCH_TREE(true,
          3,
        1,  5,
@@ -146,30 +277,30 @@ static void test_valid_bin_search_tree() {
              1,
       INT_MIN);
     VERIFY_BIN_SEARCH_TREE(true,
-             1,
-            _,INT_MAX);
+       1,
+      _,INT_MAX);
     VERIFY_BIN_SEARCH_TREE(true,
              1,
       INT_MIN,INT_MAX);
     VERIFY_BIN_SEARCH_TREE(true,
-          INT_MIN,
-            _,1);
+      INT_MIN,
+        _,1);
     VERIFY_BIN_SEARCH_TREE(true,
-          INT_MAX,
-            1);
+      INT_MAX,
+        1);
 
     VERIFY_BIN_SEARCH_TREE(false,
        1,
       2);
     VERIFY_BIN_SEARCH_TREE(false,
-      2,
-     _,1);
+       2,
+      _,1);
     VERIFY_BIN_SEARCH_TREE(false,
-      2,
-     2,3);
+       2,
+      2,3);
     VERIFY_BIN_SEARCH_TREE(false,
-      2,
-     1,2);
+       2,
+      1,2);
     VERIFY_BIN_SEARCH_TREE(false,
          3,
        1,  5,
@@ -189,6 +320,7 @@ static void test_valid_bin_search_tree() {
 }
 
 void test_tree() {
+    test_equals();
     test_dfs();
     test_bfs();
     test_valid_bin_search_tree();

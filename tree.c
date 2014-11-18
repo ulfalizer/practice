@@ -29,21 +29,23 @@ Tree_node *tree_make(size_t len, ...) {
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i) {
         int node_val = va_arg(ap, int);
-        if (node_val == 0xDEAD)
+        if (node_val == 0xDEAD) {
+            // Makes e.g. tree_make(1, 0xDEAD) work too for creating an empty
+            // tree, and means we crash reliably for malformed trees.
             nodes[i] = NULL;
-        else {
-            nodes[i] = emalloc(sizeof(Tree_node), "make tree, node");
-            nodes[i]->key = node_val;
-            nodes[i]->left = nodes[i]->right = NULL;
-            if (i != 0) {
-                size_t parent = (i - 1)/2;
-                if (nodes[parent] == NULL)
-                    fail("%s: some nodes lack parents", __func__);
-                if (i % 2 == 1)
-                    nodes[parent]->left = nodes[i];
-                else
-                    nodes[parent]->right = nodes[i];
-            }
+            continue;
+        }
+        nodes[i] = emalloc(sizeof(Tree_node), "make tree, node");
+        nodes[i]->key = node_val;
+        nodes[i]->left = nodes[i]->right = NULL;
+        // Is this the root node?
+        if (i != 0) {
+            // Nope, so point the correct child pointer in the parent to it.
+            size_t parent = (i - 1)/2;
+            if (i % 2 == 1)
+                nodes[parent]->left = nodes[i];
+            else
+                nodes[parent]->right = nodes[i];
         }
     }
     va_end(ap);
@@ -58,6 +60,69 @@ void tree_free(Tree_node *root) {
     tree_free(root->left);
     tree_free(root->right);
     free(root);
+}
+
+unsigned tree_depth(Tree_node *root) {
+    if (root == NULL)
+        return 0;
+    return 1 + max(tree_depth(root->left), tree_depth(root->right));
+}
+
+// Return true if the tree matches the variable argument list. The format is
+// the same as for tree_make(). Supports extra trailing 0xDEAD entries in the
+// variable argument list, which is intuitive.
+bool tree_equals(Tree_node *root, size_t len, ...) {
+    va_list ap;
+    // Number of yet-to-be-expanded nodes. Zero means we've reached the end of
+    // the tree.
+    size_t n_nodes_left;
+    Vector vector;
+
+    // Do a breadth-first expansion with NULL for empty node positions. For
+    // each node position, compare against the next argument.
+    //
+    // Simple, but wasteful if the tree is sparse.
+
+    vector_init(&vector);
+    vector_add(&vector, root);
+    n_nodes_left = (root != NULL);
+    va_start(ap, len);
+    for (size_t i = 0; len > 0; ++i, --len) {
+        Tree_node *node = vector_get(&vector, i);
+        if (node == NULL) {
+            if (va_arg(ap, int) != 0xDEAD)
+                goto not_equal;
+            vector_add(&vector, NULL);
+            vector_add(&vector, NULL);
+        }
+        else {
+            if (node->key != va_arg(ap, int))
+                goto not_equal;
+            vector_add(&vector, node->left);
+            vector_add(&vector, node->right);
+            n_nodes_left =
+              n_nodes_left - 1 + (node->left != NULL) + (node->right != NULL);
+        }
+    }
+    va_end(ap);
+    vector_free(&vector);
+    return n_nodes_left == 0;
+
+not_equal:
+    va_end(ap);
+    vector_free(&vector);
+    return false;
+}
+
+// Bit silly not to implement tree_equals() in terms of this, but just for fun.
+bool trees_equal(Tree_node *r1, Tree_node *r2) {
+    if (r1 == NULL)
+        return r2 == NULL;
+    if (r2 == NULL)
+        return r1 == NULL;
+    return (r1->key == r2->key) &&
+      trees_equal(r1->left, r2->left) &&
+      trees_equal(r1->right, r2->right);
 }
 
 // Adds all tree nodes in-order into the vector.
@@ -107,12 +172,6 @@ bool valid_bin_search_tree(Tree_node *root) {
 
 static void print_n_spaces(int n) {
     printf("%*s", n, "");
-}
-
-unsigned tree_depth(Tree_node *root) {
-    if (root == NULL)
-        return 0;
-    return 1 + max(tree_depth(root->left), tree_depth(root->right));
 }
 
 // Debugging helper that prints a tree. The format is similar to the input

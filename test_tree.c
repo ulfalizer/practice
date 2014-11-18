@@ -139,6 +139,57 @@ static void test_equals() {
     #undef TEST_EQUALS_END
 }
 
+static void test_rotations() {
+    #define TEST_ROTATION_TREE(...)                \
+      do {                                         \
+          Tree_node *tree = MAKE_TREE(__VA_ARGS__)
+    #define TEST_ROTATION_RESULT(fn, ...)                                \
+          fn(&tree);                                                     \
+          VERIFY(tree_equals(tree, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)); \
+          tree_free(tree);                                               \
+      }                                                                  \
+      while (0)
+
+    // Right rotation
+
+    TEST_ROTATION_TREE(
+       2,
+      1);
+    TEST_ROTATION_RESULT(tree_rot_right,
+       1,
+      _,2);
+
+    TEST_ROTATION_TREE(
+         5,
+       3,  6,
+      2,4);
+    TEST_ROTATION_RESULT(tree_rot_right,
+         3,
+       2,  5,
+      _,_,4,6);
+
+    // Left rotation
+
+    TEST_ROTATION_TREE(
+       1,
+      _,2);
+    TEST_ROTATION_RESULT(tree_rot_left,
+       2,
+      1);
+
+    TEST_ROTATION_TREE(
+         3,
+       2,  5,
+      _,_,4,6);
+    TEST_ROTATION_RESULT(tree_rot_left,
+         5,
+       3,  6,
+      2,4);
+
+    #undef TEST_ROTATION_TREE
+    #undef TEST_ROTATION_RESULT
+}
+
 static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
     va_list ap;
     VERIFY(vector_len(v) == len);
@@ -321,6 +372,7 @@ static void test_valid_bin_search_tree() {
 
 void test_tree() {
     test_equals();
+    test_rotations();
     test_dfs();
     test_bfs();
     test_valid_bin_search_tree();

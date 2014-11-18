@@ -9,6 +9,8 @@ typedef struct Tree_node {
 Tree_node *tree_make(size_t len, ...);
 void tree_free(Tree_node *root);
 unsigned tree_depth(Tree_node *root);
+void tree_rot_right(Tree_node **root);
+void tree_rot_left(Tree_node **root);
 bool tree_equals(Tree_node *root, size_t len, ...);
 bool trees_equal(Tree_node *r1, Tree_node *r2);
 void tree_nodes_to_vector_dfs(Tree_node *root, Vector *vector);

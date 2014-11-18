@@ -68,6 +68,20 @@ unsigned tree_depth(Tree_node *root) {
     return 1 + max(tree_depth(root->left), tree_depth(root->right));
 }
 
+void tree_rot_right(Tree_node **root) {
+    Tree_node *left = (*root)->left;
+    (*root)->left = left->right;
+    left->right = *root;
+    *root = left;
+}
+
+void tree_rot_left(Tree_node **root) {
+    Tree_node *right = (*root)->right;
+    (*root)->right = right->left;
+    right->left = *root;
+    *root = right;
+}
+
 // Return true if the tree matches the variable argument list. The format is
 // the same as for tree_make(). Supports extra trailing 0xDEAD entries in the
 // variable argument list, which is intuitive.

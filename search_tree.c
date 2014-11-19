@@ -74,7 +74,7 @@ static void remove_(Tree_node **node) {
     }
 }
 
-bool search_tree_remove(Search_tree *tree, int key, int *oldval) {
+bool search_tree_remove(Search_tree *tree, int key, int *val) {
     Tree_node **cur = &tree->root;
     while (*cur)
         if (key < (*cur)->key)
@@ -82,8 +82,8 @@ bool search_tree_remove(Search_tree *tree, int key, int *oldval) {
         else if (key > (*cur)->key)
             cur = &(*cur)->right;
         else {
-            if (oldval != NULL)
-                *oldval = (*cur)->val;
+            if (val != NULL)
+                *val = (*cur)->val;
             remove_(cur);
             return true;
         }

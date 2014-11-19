@@ -1,5 +1,3 @@
-// A dynamically-resized hash table using separate chaining
-
 #include "common.h"
 #include "hash_table.h"
 
@@ -11,7 +9,7 @@
 #define GROWTH_FACTOR 2
 
 static unsigned long hash(const char *s) {
-    // djb2 algorithm
+    // djb2 algorithm.
     unsigned long hash = 5381;
     while (*s)
         hash = ((hash << 5) + hash) + (unsigned char)*s++;
@@ -40,17 +38,21 @@ void hash_table_free(Hash_table *hash_table) {
     free(hash_table->buckets);
 }
 
+// Resizes the hash table (changes the number of buckets).
 static void resize(Hash_table *hash_table, size_t new_size) {
     Hash_node **new_buckets;
 
+    // Allocate new set of initially empty buckets.
     new_buckets = emalloc(sizeof(Hash_node*)*new_size, "hash resize");
     for (size_t i = 0; i < new_size; ++i)
         new_buckets[i] = NULL;
+    // Rehash keys.
     for (size_t i = 0; i < hash_table->n_buckets; ++i) {
         Hash_node *next;
         for (Hash_node *node = hash_table->buckets[i]; node; node = next) {
             unsigned long new_index;
 
+            // Move node to new bucket.
             next = node->next;
             new_index = hash(node->key) % new_size;
             node->next = new_buckets[new_index];
@@ -60,6 +62,7 @@ static void resize(Hash_table *hash_table, size_t new_size) {
 
     free(hash_table->buckets);
     hash_table->buckets = new_buckets;
+    // Calculate new maximum load from the new size.
     hash_table->max_load = MAX_LOAD*new_size;
     hash_table->n_buckets = new_size;
 }
@@ -72,6 +75,7 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
     // Is there already a node with the key?
     for (Hash_node **node = bucket; *node; node = &(*node)->next) {
         if (strcmp(key, (*node)->key) == 0) {
+            // Yes, so just replace its value.
             if (old_val != NULL)
                 *old_val = (*node)->val;
             (*node)->val = val;
@@ -79,6 +83,8 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
         }
     }
 
+    // We need to allocate a new node. Check if we exceed the max load for the
+    // current number of buckets and grow the table if so.
     if (++hash_table->n_elements > hash_table->max_load) {
         resize(hash_table, GROWTH_FACTOR*hash_table->n_buckets);
         bucket = hash_table->buckets + hash(key) % hash_table->n_buckets;
@@ -98,7 +104,7 @@ bool hash_table_get(Hash_table *hash_table, const char *key, int *val) {
       node;
       node = node->next)
         if (strcmp(key, node->key) == 0) {
-            if (val !=  NULL)
+            if (val != NULL)
                 *val = node->val;
             return true;
         }
@@ -110,12 +116,17 @@ bool hash_table_remove(Hash_table *hash_table, const char *key, int *val) {
       *node;
       node = &(*node)->next)
         if (strcmp(key, (*node)->key) == 0) {
+            Hash_node *tmp;
+
             if (val != NULL)
                 *val = (*node)->val;
-            Hash_node *tmp = *node;
+
+            // Remove node.
+            tmp = *node;
             *node = (*node)->next;
             free(tmp->key);
             free(tmp);
+
             --hash_table->n_elements;
             return true;
         }

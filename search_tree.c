@@ -1,5 +1,3 @@
-// Non-self-balancing binary search tree
-
 #include "common.h"
 #include "search_tree.h"
 #include "tree.h"
@@ -10,10 +8,6 @@ void search_tree_init(Search_tree *tree) {
 
 void search_tree_free(Search_tree *tree) {
     tree_free(tree->root);
-}
-
-void search_tree_print(Search_tree *tree) {
-    tree_print(tree->root);
 }
 
 bool search_tree_set(Search_tree *tree, int key, int val, int *oldval) {
@@ -60,7 +54,7 @@ static Tree_node *unlink_max(Tree_node **cur) {
     return res;
 }
 
-// Avoid collision with remove() from stdio
+// Avoid collision with remove() from stdio.
 static void remove_(Tree_node **node) {
     if ((*node)->left == NULL) {
         Tree_node *tmp = *node;
@@ -96,7 +90,10 @@ bool search_tree_remove(Search_tree *tree, int key, int *oldval) {
     return false;
 }
 
-// Test helper
 bool search_tree_valid(Search_tree *tree) {
     return valid_bin_search_tree(tree->root);
+}
+
+void search_tree_print(Search_tree *tree) {
+    tree_print(tree->root);
 }

@@ -12,7 +12,7 @@
   VERIFY(!list_equals(&list, N_ARGS(__VA_ARGS__), ##__VA_ARGS__))
 
 static void test_add() {
-    // Also tests list_equals()
+    // Also tests list_equals().
     List list;
     list_init(&list);
 

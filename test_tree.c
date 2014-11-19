@@ -2,35 +2,35 @@
 #include "tree.h"
 #include "vector.h"
 
-// Helper for specifying the lack of a node with tree_make()
+// Helper for specifying the lack of a node with tree_make().
 static int _ = 0xDEAD;
 
 #define MAKE_TREE(...) \
   tree_make(N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
-// Tests both tree_equals() and trees_equal()
+// Tests both tree_equals() and trees_equal().
 static void test_equals() {
-    // Specifies the tree to use for the tests
-    #define TEST_EQUALS_TREE(...)                           \
-      do {                                                  \
+    // Specifies the tree to use for the tests.
+    #define TEST_EQUALS_TREE(...)                          \
+      do {                                                 \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__), *tree2
     // Verifies that the tree equals (equals == true) or does not equal the
-    // given tree
+    // given tree.
     #define TEST_EQUALS(equals, ...)                                \
-          /* Test tree_equals() */                                  \
+          /* Test tree_equals(). */                                 \
           VERIFY(equals ==                                          \
             tree_equals(tree, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)); \
-          /* Test trees_equal() */                                  \
+          /* Test trees_equal(). */                                 \
           tree2 = MAKE_TREE(__VA_ARGS__);                           \
           VERIFY(equals == trees_equal(tree, tree2));               \
           tree_free(tree2)
-    // Ends the test
+    // Ends the test.
     #define TEST_EQUALS_END \
           tree_free(tree);  \
       }                     \
       while (0)
 
-    // Empty tree
+    // Empty tree.
     TEST_EQUALS_TREE();
     TEST_EQUALS(true);
     TEST_EQUALS(true, _);
@@ -40,7 +40,7 @@ static void test_equals() {
     TEST_EQUALS(false, 1, _,_);
     TEST_EQUALS_END;
 
-    // One-element tree
+    // One-element tree.
     TEST_EQUALS_TREE(1);
     TEST_EQUALS(true, 1);
     TEST_EQUALS(true, 1, _);
@@ -56,7 +56,7 @@ static void test_equals() {
       _,1);
     TEST_EQUALS_END;
 
-    // Two-element tree
+    // Two-element tree.
     TEST_EQUALS_TREE(
        1,
       2);
@@ -83,7 +83,7 @@ static void test_equals() {
       _,2);
     TEST_EQUALS_END;
 
-    // Three-element tree
+    // Three-element tree.
     TEST_EQUALS_TREE(
        1,
       2,3);
@@ -105,7 +105,7 @@ static void test_equals() {
       2,1);
     TEST_EQUALS_END;
 
-    // Complex tree
+    // Complex tree.
     TEST_EQUALS_TREE(
              0,
          1,      2,
@@ -150,7 +150,7 @@ static void test_rotations() {
       }                                                                  \
       while (0)
 
-    // Right rotation
+    // Right rotation.
 
     TEST_ROTATION_TREE(
        2,
@@ -168,7 +168,7 @@ static void test_rotations() {
        2,  5,
       _,_,4,6);
 
-    // Left rotation
+    // Left rotation.
 
     TEST_ROTATION_TREE(
        1,

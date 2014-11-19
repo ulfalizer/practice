@@ -1,9 +1,7 @@
-// A dynamically-resized queue implemented in a circular buffer
-
 #include "common.h"
 #include "queue.h"
 
-// Keep the length as a power of two to speed up wrapping
+// Keep the length as a power of two to speed up wrapping.
 #define INITIAL_BUF_LEN 16
 
 void queue_init(Queue *queue) {
@@ -25,7 +23,7 @@ static void grow_and_add(Queue *queue, void *val) {
     void **new_buf;
 
     new_buf = emalloc(2*sizeof(void*)*queue->buf_len, "queue grow");
-    // Copy the old contents to the beginning of the new buffer
+    // Copy the old contents to the beginning of the new buffer.
     if (queue->end < queue->start) {
         memcpy(new_buf,
           queue->buf + queue->start,
@@ -38,9 +36,9 @@ static void grow_and_add(Queue *queue, void *val) {
         memcpy(new_buf,
           queue->buf + queue->start,
           sizeof(void*)*(queue->end - queue->start));
-    // Write the new element after the old contents
+    // Write the new element after the old contents.
     new_buf[queue->buf_len - 1] = val;
-    // Free the old buffer
+    // Free the old buffer.
     free(queue->buf);
 
     queue->buf = new_buf;
@@ -51,6 +49,7 @@ static void grow_and_add(Queue *queue, void *val) {
 
 void queue_add(Queue *queue, void *val) {
     size_t new_end = (queue->end + 1) & (queue->buf_len - 1);
+    // Buffer full?
     if (new_end == queue->start)
         grow_and_add(queue, val);
     else {

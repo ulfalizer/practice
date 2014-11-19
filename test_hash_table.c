@@ -103,7 +103,7 @@ static void test_remove() {
     VERIFY_REMOVE_EXISTS("ten");
     VERIFY_REMOVE_EXISTS("");
 
-    // The case where the key exists and val is NULL
+    // The case where the key exists and val is NULL.
     hash_table_set(&hash_table, "foo", 3, NULL);
     VERIFY(hash_table_remove(&hash_table, "foo", NULL));
 

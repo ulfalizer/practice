@@ -1,5 +1,3 @@
-// Unidirectional linked list
-
 #include "common.h"
 #include "list.h"
 
@@ -181,7 +179,7 @@ void list_mergesort(List *list) {
 }
 
 void list_print(List *list) {
-    // Avoid printing an extra space after the last element
+    // Avoid printing an extra space after the last element.
     if (list->start) {
         printf("%d", list->start->val);
         for (Node *node = list->start->next; node; node = node->next)

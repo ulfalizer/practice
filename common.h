@@ -1,3 +1,5 @@
+// Common system headers, helper functions, and macros.
+
 #include <errno.h>
 #include <inttypes.h>
 #include <limits.h>
@@ -7,14 +9,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-void err(char const *format, ...)
-  __attribute__((format(printf, 1, 2), noreturn));
-
+// Exits unsuccessfully with a message.
 void fail(char const *format, ...)
   __attribute__((format(printf, 1, 2), noreturn));
 
+// Exits unsuccessfully with errno and a message.
+void err(char const *format, ...)
+  __attribute__((format(printf, 1, 2), noreturn));
+
+// Returns a list of integers parsed from 'argv'. Caller frees list.
 int *parse_int_args(int argc, char *argv[]);
 
+// Checked allocation functions.
 void *emalloc(size_t size, const char *desc);
 void *erealloc(void *ptr, size_t size, const char *desc);
 char *estrdup(const char *s, const char *desc);
@@ -31,6 +37,7 @@ char *estrdup(const char *s, const char *desc);
      typeof(b) _b = b;    \
      _a < _b ? _a : _b; })
 
+// Returns its argument as a string literal.
 #define STRINGIFY(x) STRINGIFY_(x)
 #define STRINGIFY_(x) #x
 
@@ -38,6 +45,8 @@ char *estrdup(const char *s, const char *desc);
   if (!(cond))                                                        \
       fail(__FILE__":"STRINGIFY(__LINE__)": "#cond" should be true");
 
+// Returns the number of arguments in the variable argument list. Supports zero
+// arguments via a GCC extension.
 #define N_ARGS(...) N_ARGS_HELPER(dummy, ##__VA_ARGS__, \
   29, 28, 27, 26, 25, 24, 23, 22, 21, 20,               \
   19, 18, 17, 16, 15, 14, 13, 12, 11, 10,               \

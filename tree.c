@@ -1,21 +1,8 @@
-// Binary tree stuff
-
 #include "common.h"
 #include "queue.h"
 #include "tree.h"
 #include "vector.h"
 
-// Builds a tree out of the variable argument list (with 'len' entries). 0xDEAD
-// specifies the lack of a node. The last level does not need to be fully
-// specified.
-//
-// Usage example assuming _ == 0xDEAD:
-//
-// tree_make(15,
-//          2,
-//      1,      5,
-//    8,  9,  _,  9,
-//   _,4,_,6,_,_,3,2)
 Tree_node *tree_make(size_t len, ...) {
     va_list ap;
     Tree_node **nodes, *res;
@@ -82,9 +69,6 @@ void tree_rot_left(Tree_node **root) {
     *root = right;
 }
 
-// Return true if the tree matches the variable argument list. The format is
-// the same as for tree_make(). Supports extra trailing 0xDEAD entries in the
-// variable argument list, which is intuitive.
 bool tree_equals(Tree_node *root, size_t len, ...) {
     va_list ap;
     // Number of yet-to-be-expanded nodes. Zero means we've reached the end of
@@ -106,6 +90,7 @@ bool tree_equals(Tree_node *root, size_t len, ...) {
         if (node == NULL) {
             if (va_arg(ap, int) != 0xDEAD)
                 goto not_equal;
+            // Expand the non-existing node to its two non-existing children.
             vector_add(&vector, NULL);
             vector_add(&vector, NULL);
         }
@@ -139,7 +124,6 @@ bool trees_equal(Tree_node *r1, Tree_node *r2) {
       trees_equal(r1->right, r2->right);
 }
 
-// Adds all tree nodes in-order into the vector.
 void tree_nodes_to_vector_dfs(Tree_node *node, Vector *vector) {
     if (node == NULL)
         return;
@@ -148,7 +132,6 @@ void tree_nodes_to_vector_dfs(Tree_node *node, Vector *vector) {
     tree_nodes_to_vector_dfs(node->right, vector);
 }
 
-// Adds all tree nodes level-order into the vector.
 void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector) {
     if (root != NULL)
         vector_add(vector, root);
@@ -188,8 +171,6 @@ static void print_n_spaces(int n) {
     printf("%*s", n, "");
 }
 
-// Debugging helper that prints a tree. The format is similar to the input
-// format in the tree_make() example (but without commas).
 void tree_print(Tree_node *root) {
     unsigned depth = tree_depth(root);
     Queue queue;

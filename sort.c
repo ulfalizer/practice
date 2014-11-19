@@ -1,5 +1,3 @@
-// Various sorting algorithms
-
 #include "common.h"
 #include "sort.h"
 
@@ -54,7 +52,7 @@ static void mergesort_rec(int *nums, size_t n, int *scratch) {
     mergesort_rec(nums, mid, scratch);
     mergesort_rec(nums + mid, n - mid, scratch);
 
-    // Merge
+    // Merge.
     for (size_t i = 0;; ++i) {
         if (i1 == mid) {
             memcpy(scratch + i, nums + i2, sizeof(int)*(n - i2));
@@ -80,7 +78,7 @@ void quicksort(int *nums, size_t n) {
     if (n <= 1)
         return;
 
-    // Partition using the last element as the pivot
+    // Partition using the last element as the pivot.
     store_i = 0;
     for (size_t i = 0; i < n - 1; ++i)
         if (nums[i] < nums[n - 1]) {

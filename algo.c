@@ -1,5 +1,3 @@
-// Misc. functions and algorithms
-
 #include "common.h"
 #include "algo.h"
 
@@ -31,10 +29,10 @@ void print_perms(char *s) {
 }
 
 bool binsearch(int find, int *nums, size_t len) {
-    // The search range is [left,right[
+    // The search range is [left,right[.
     size_t left = 0, middle, right = len;
     while (left != right) {
-        middle = left + (right - left)/2; // Overflow safe
+        middle = left + (right - left)/2; // Overflow safe.
         if (nums[middle] > find)
             right = middle;
         else if (nums[middle] < find)
@@ -45,10 +43,9 @@ bool binsearch(int find, int *nums, size_t len) {
     return false;
 }
 
-// Prints 'num' in 'base'. Supports negative numbers and bases up to 36.
 void print_num(int num, int base) {
     // Enough space to hold the digits of INT_MIN in binary plus a minus sign
-    // and a terminating null
+    // and a terminating null.
     #define MAX_SIZE (1 + CHAR_BIT*sizeof(num) + 1)
     static const char digits[] =
       { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -64,7 +61,7 @@ void print_num(int num, int base) {
     i = MAX_SIZE - 1;
     do {
         // Handles negative numbers in a way that supports INT_MIN (which has
-        // no representable inverse)
+        // no representable inverse).
         buf[--i] = digits[abs(num%base)];
         num /= base;
     }
@@ -75,8 +72,6 @@ void print_num(int num, int base) {
     #undef MAX_SIZE
 }
 
-// Reverses the digits in 'num' when interpreted in base 'base'. Preserves
-// sign.
 int rev_num(int num, int base) {
     int res = 0;
 

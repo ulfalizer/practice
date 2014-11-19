@@ -1,5 +1,3 @@
-// Common helper functions
-
 #include "common.h"
 
 static void common_fail(bool print_errno, char const *format, va_list ap)

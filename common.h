@@ -1,8 +1,11 @@
 // Common system headers, helper functions, and macros.
 
+#include <ctype.h>
 #include <errno.h>
 #include <inttypes.h>
 #include <limits.h>
+#include <math.h>
+#include <setjmp.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>

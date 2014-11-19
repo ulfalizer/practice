@@ -6,7 +6,7 @@ h_files := algo.h common.h hash_table.h list.h min_heap.h queue.h \
 	search_tree.h sort.h tree.h vector.h
 
 test: $(c_files) $(h_files)
-	gcc -std=gnu11 -g -Wall -o $@ $(c_files)
+	gcc -std=gnu11 -Og -g -Wall -o $@ $(c_files)
 
 .PHONY: clean
 clean:

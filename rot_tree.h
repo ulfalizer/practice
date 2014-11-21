@@ -13,8 +13,8 @@ void rot_tree_free(Rot_tree *tree);
 // value and returns true. Otherwise, returns false and does not modify
 // 'old_val'.
 bool rot_tree_set(Rot_tree *tree, int key, int val, int *oldval);
-// If 'key' exists, sets 'val' to its value and returns true. Otherwise,
-// returns false and does not modify 'val'.
+// If 'key' exists, sets 'val' to its value (if 'val' is not NULL) and returns
+// true. Otherwise, returns false and does not modify 'val'.
 bool rot_tree_get(Rot_tree *tree, int key, int *val);
 // If 'key' exists, sets 'val' to its value and then removes it and returns
 // true. Otherwise, returns false and does not modify 'val'.

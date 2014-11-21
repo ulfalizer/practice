@@ -23,8 +23,8 @@ void hash_table_free(Hash_table *hash_table);
 //
 // The key is copied and so is safe to modify after calling this function.
 bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_val);
-// If 'key' exists, sets 'val' to its value and returns true. Otherwise,
-// returns false and does not modify 'val'.
+// If 'key' exists, sets 'val' to its value (if 'val' is not NULL) and returns
+// true. Otherwise, returns false and does not modify 'val'.
 bool hash_table_get(Hash_table *hash_table, const char *key, int *val);
 // If 'key' exists, sets 'val' to its value and then removes it and returns
 // true. Otherwise, returns false and does not modify 'val'.

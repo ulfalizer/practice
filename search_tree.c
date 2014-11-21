@@ -23,10 +23,7 @@ bool search_tree_set(Search_tree *tree, int key, int val, int *oldval) {
             (*cur)->val = val;
             return true;
         }
-    *cur = emalloc(sizeof(Tree_node), "search tree add");
-    (*cur)->left = (*cur)->right = NULL;
-    (*cur)->key = key;
-    (*cur)->val = val;
+    *cur = create_node(key, val);
     return false;
 }
 
@@ -45,35 +42,6 @@ bool search_tree_get(Search_tree *tree, int key, int *val) {
     return false;
 }
 
-static Tree_node *unlink_max(Tree_node **cur) {
-    Tree_node *res;
-    while ((*cur)->right != NULL)
-        cur = &(*cur)->right;
-    res = *cur;
-    *cur = (*cur)->left;
-    return res;
-}
-
-// Avoid collision with remove() from stdio.
-static void remove_(Tree_node **node) {
-    if ((*node)->left == NULL) {
-        Tree_node *tmp = *node;
-        *node = (*node)->right;
-        free(tmp);
-    }
-    else if ((*node)->right == NULL) {
-        Tree_node *tmp = *node;
-        *node = (*node)->left;
-        free(tmp);
-    }
-    else {
-        Tree_node *max = unlink_max(&(*node)->left);
-        (*node)->key = max->key;
-        (*node)->val = max->val;
-        free(max);
-    }
-}
-
 bool search_tree_remove(Search_tree *tree, int key, int *val) {
     Tree_node **cur = &tree->root;
     while (*cur)
@@ -84,7 +52,7 @@ bool search_tree_remove(Search_tree *tree, int key, int *val) {
         else {
             if (val != NULL)
                 *val = (*cur)->val;
-            remove_(cur);
+            tree_remove(cur);
             return true;
         }
     return false;

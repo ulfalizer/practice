@@ -21,11 +21,18 @@ typedef struct Tree_node {
 //   _,4,_,6,_,_,3,2)
 Tree_node *tree_make(size_t len, ...);
 void tree_free(Tree_node *root);
+// Returns a new tree with copies of all nodes.
+Tree_node *tree_copy(Tree_node *root);
+// Creates a new tree node with no children.
+Tree_node *create_node(int key, int val);
 // Returns the number of levels in the tree -- zero for an empty tree, one
 // for a tree with one node, etc.
 unsigned tree_depth(Tree_node *root);
 void tree_rot_right(Tree_node **root);
 void tree_rot_left(Tree_node **root);
+// Performs a binary search tree removal of 'node'. Replaces with predecessor
+// if the node has a left child.
+void tree_remove(Tree_node **node);
 // Return true if the tree matches the variable argument list. The format is
 // the same as for tree_make(). Supports extra trailing 0xDEAD entries in the
 // variable argument list, which is intuitive.

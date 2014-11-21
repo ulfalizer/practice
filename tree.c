@@ -49,6 +49,27 @@ void tree_free(Tree_node *root) {
     free(root);
 }
 
+Tree_node *tree_copy(Tree_node *root) {
+    Tree_node *copy;
+    if (root == NULL)
+        return NULL;
+
+    copy = emalloc(sizeof(Tree_node), "copy tree");
+    copy->key = root->key;
+    copy->val = root->val;
+    copy->left = tree_copy(root->left);
+    copy->right = tree_copy(root->right);
+    return copy;
+}
+
+Tree_node *create_node(int key, int val) {
+    Tree_node *node = emalloc(sizeof(Tree_node), "create tree node");
+    node->left = node->right = NULL;
+    node->key = key;
+    node->val = val;
+    return node;
+}
+
 unsigned tree_depth(Tree_node *root) {
     if (root == NULL)
         return 0;
@@ -67,6 +88,33 @@ void tree_rot_left(Tree_node **root) {
     (*root)->right = right->left;
     right->left = *root;
     *root = right;
+}
+
+static Tree_node *unlink_max(Tree_node **cur) {
+    Tree_node *res;
+    while ((*cur)->right != NULL)
+        cur = &(*cur)->right;
+    res = *cur;
+    *cur = (*cur)->left;
+    return res;
+}
+
+void tree_remove(Tree_node **node) {
+    Tree_node *rem;
+    if ((*node)->left == NULL) {
+        rem = *node;
+        *node = (*node)->right;
+    }
+    else if ((*node)->right == NULL) {
+        rem = *node;
+        *node = (*node)->left;
+    }
+    else {
+        rem = unlink_max(&(*node)->left);
+        (*node)->key = rem->key;
+        (*node)->val = rem->val;
+    }
+    free(rem);
 }
 
 bool tree_equals(Tree_node *root, size_t len, ...) {

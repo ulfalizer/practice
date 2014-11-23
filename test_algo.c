@@ -60,7 +60,74 @@ static void test_binsearch() {
     #undef VERIFY_BINSEARCH
 }
 
+static void test_next_lex() {
+    #define TEST_STRING(str) \
+      do {                   \
+          char s[] = str
+    #define VERIFY_NEXT_PERM(str)      \
+          VERIFY(next_lex(s));         \
+          VERIFY(strcmp(s, str) == 0)
+    #define VERIFY_NO_MORE_PERMS \
+          VERIFY(!next_lex(s))
+    #define END_TEST \
+      }              \
+      while (0)
+
+    TEST_STRING("");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    TEST_STRING("a");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    TEST_STRING("ab");
+    VERIFY_NEXT_PERM("ba");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    TEST_STRING("abc");
+    VERIFY_NEXT_PERM("acb");
+    VERIFY_NEXT_PERM("bac");
+    VERIFY_NEXT_PERM("bca");
+    VERIFY_NEXT_PERM("cab");
+    VERIFY_NEXT_PERM("cba");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    TEST_STRING("aa");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    TEST_STRING("aab");
+    VERIFY_NEXT_PERM("aba");
+    VERIFY_NEXT_PERM("baa");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    TEST_STRING("abb");
+    VERIFY_NEXT_PERM("bab");
+    VERIFY_NEXT_PERM("bba");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    TEST_STRING("aabb");
+    VERIFY_NEXT_PERM("abab");
+    VERIFY_NEXT_PERM("abba");
+    VERIFY_NEXT_PERM("baab");
+    VERIFY_NEXT_PERM("baba");
+    VERIFY_NEXT_PERM("bbaa");
+    VERIFY_NO_MORE_PERMS;
+    END_TEST;
+
+    #undef TEST_STRING
+    #undef VERIFY_NEXT_PERM
+    #undef VERIFY_NO_MORE_PERMS
+    #undef END_TEST
+}
+
 void test_algo() {
     test_substr();
     test_binsearch();
+    test_next_lex();
 }

@@ -28,6 +28,8 @@ void *emalloc(size_t size, const char *desc);
 void *erealloc(void *ptr, size_t size, const char *desc);
 char *estrdup(const char *s, const char *desc);
 
+typedef unsigned char uc;
+
 #define swap(a, b) do { typeof(a) tmp = a; a = b; b = tmp; } while(0)
 
 #define max(a, b)         \

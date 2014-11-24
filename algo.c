@@ -52,6 +52,61 @@ bool next_lex(char *s) {
     return true;
 }
 
+// Unrolled base case for generating all permutations of four elements. Speeds
+// things up by a little less than 2x compared to no base case on my machine.
+// Base case with three elements is ~15% slower than with four elements. (All
+// tests run with an empty 'fn'.)
+static void permute_4(char *s, void fn(char *perm)) {
+    char a = s[0], b = s[1], c = s[2], d = s[3];
+    fn(s); s[0] = b; s[1] = a; fn(s); s[0] = c; s[2] = b;
+    fn(s); s[0] = a; s[1] = c; fn(s); s[0] = b; s[2] = a;
+    fn(s); s[0] = c; s[1] = b; fn(s); s[0] = d; s[3] = c;
+    fn(s); s[0] = b; s[1] = d; fn(s); s[0] = a; s[2] = b;
+    fn(s); s[0] = d; s[1] = a; fn(s); s[0] = b; s[2] = d;
+    fn(s); s[0] = a; s[1] = b; fn(s); s[1] = c; s[3] = b;
+    fn(s); s[0] = c; s[1] = a; fn(s); s[0] = d; s[2] = c;
+    fn(s); s[0] = a; s[1] = d; fn(s); s[0] = c; s[2] = a;
+    fn(s); s[0] = d; s[1] = c; fn(s); s[2] = b; s[3] = a;
+    fn(s); s[0] = c; s[1] = d; fn(s); s[0] = b; s[2] = c;
+    fn(s); s[0] = d; s[1] = b; fn(s); s[0] = c; s[2] = d;
+    fn(s); s[0] = b; s[1] = c; fn(s);
+}
+
+void perm_heaps(char *s, void fn(char *perm)) {
+    // The current level. The valid indices at level 'lev' are
+    // 0, 1, ..., lev.
+    size_t lev;
+    // indices[lev] holds the current index for level 'lev'.
+    size_t *indices;
+    // Length of string to permute.
+    size_t len;
+
+    len = strlen(s);
+    assert(len >= 4);
+    indices = alloca(sizeof(size_t)*len);
+    for (size_t i = 0; i < len; ++i)
+        indices[i] = 0;
+
+    permute_4(s, fn);
+    for (lev = 4; lev < len;)
+        if (indices[lev] < lev) {
+            // Select an element and swap it for the last element using Heap's
+            // strategy.
+            size_t swap_pos = (lev & 1) ? indices[lev] : 0;
+            swap(s[swap_pos], s[lev]);
+            // Increase the index at this level.
+            ++indices[lev];
+            // "Recurse" all the way down to the unrolled base case.
+            lev = 4;
+            permute_4(s, fn);
+        }
+        else
+            // We're done at this level. Set the index to zero for when (if) we
+            // return to this level later, and then "return" to the next higher
+            // level.
+            indices[lev++] = 0;
+}
+
 bool binsearch(int find, int *nums, size_t len) {
     // The search range is [left,right[.
     size_t left = 0, middle, right = len;

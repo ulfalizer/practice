@@ -1,4 +1,4 @@
-// A dynamically-resized array implementation.
+// A dynamically-resized array.
 
 typedef struct Vector {
     void **buf;

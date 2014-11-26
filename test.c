@@ -5,6 +5,7 @@ void test_eval();
 void test_hash_table();
 void test_list();
 void test_min_heap();
+void test_min_max_stack();
 void test_queue();
 void test_rot_tree();
 void test_search_tree();
@@ -18,6 +19,7 @@ int main() {
     test_hash_table();
     test_list();
     test_min_heap();
+    test_min_max_stack();
     test_queue();
     test_rot_tree();
     test_search_tree();

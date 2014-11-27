@@ -232,6 +232,11 @@ static void test_dfs() {
 
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_dfs,
        1,
+      _,2);
+    TRAVERSE_TEST_RES(1, 2);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_dfs,
+       1,
       2,3);
     TRAVERSE_TEST_RES(2, 1, 3);
 
@@ -270,6 +275,11 @@ static void test_bfs() {
 
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_bfs,
        1,
+      _,2);
+    TRAVERSE_TEST_RES(1, 2);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_bfs,
+       1,
       2,3);
     TRAVERSE_TEST_RES(1, 2, 3);
 
@@ -291,6 +301,135 @@ static void test_bfs() {
        3,  4,  _,  5,
       _,6,_,7,_,_,8,9);
     TRAVERSE_TEST_RES(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+}
+
+static void test_iter_preorder() {
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder);
+    TRAVERSE_TEST_RES();
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder,
+      1);
+    TRAVERSE_TEST_RES(1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder,
+       1,
+      2);
+    TRAVERSE_TEST_RES(1, 2);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder,
+       1,
+      _,2);
+    TRAVERSE_TEST_RES(1, 2);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder,
+       1,
+      2,3);
+    TRAVERSE_TEST_RES(1, 2, 3);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder,
+         1,
+       2,  3,
+      4,5,6,7);
+    TRAVERSE_TEST_RES(1, 2, 4, 5, 3, 6, 7);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder,
+         1,
+       2,  3,
+      _,5,6,_);
+    TRAVERSE_TEST_RES(1, 2, 5, 3, 6);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder,
+             0,
+         1,      2,
+       3,  4,  _,  5,
+      _,6,_,7,_,_,8,9);
+    TRAVERSE_TEST_RES(0, 1, 3, 6, 4, 7, 2, 5, 8, 9);
+}
+
+static void test_iter_inorder() {
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder);
+    TRAVERSE_TEST_RES();
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder,
+      1);
+    TRAVERSE_TEST_RES(1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder,
+       1,
+      2);
+    TRAVERSE_TEST_RES(2, 1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder,
+       1,
+      _,2);
+    TRAVERSE_TEST_RES(1, 2);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder,
+       1,
+      2,3);
+    TRAVERSE_TEST_RES(2, 1, 3);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder,
+         1,
+       2,  3,
+      4,5,6,7);
+    TRAVERSE_TEST_RES(4, 2, 5, 1, 6, 3, 7);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder,
+         1,
+       2,  3,
+      _,5,6,_);
+    TRAVERSE_TEST_RES(2, 5, 1, 6, 3);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder,
+             0,
+         1,      2,
+       3,  4,  _,  5,
+      _,6,_,7,_,_,8,9);
+    TRAVERSE_TEST_RES(3, 6, 1, 4, 7, 0, 2, 8, 5, 9);
+}
+
+static void test_iter_postorder() {
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder);
+    TRAVERSE_TEST_RES();
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder,
+      1);
+    TRAVERSE_TEST_RES(1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder,
+       1,
+      2);
+    TRAVERSE_TEST_RES(2, 1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder,
+       1,
+      _,2);
+    TRAVERSE_TEST_RES(2, 1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder,
+       1,
+      2,3);
+    TRAVERSE_TEST_RES(2, 3, 1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder,
+         1,
+       2,  3,
+      4,5,6,7);
+    TRAVERSE_TEST_RES(4, 5, 2, 6, 7, 3, 1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder,
+         1,
+       2,  3,
+      _,5,6,_);
+    TRAVERSE_TEST_RES(5, 2, 6, 3, 1);
+
+    TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder,
+             0,
+         1,      2,
+       3,  4,  _,  5,
+      _,6,_,7,_,_,8,9);
+    TRAVERSE_TEST_RES(6, 3, 7, 4, 1, 8, 9, 5, 2, 0);
 }
 
 #undef TRAVERSE_TEST_TREE
@@ -375,5 +514,8 @@ void test_tree() {
     test_rotations();
     test_dfs();
     test_bfs();
+    test_iter_inorder();
+    test_iter_preorder();
+    test_iter_postorder();
     test_valid_bin_search_tree();
 }

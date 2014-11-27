@@ -39,10 +39,19 @@ void tree_remove(Tree_node **node);
 bool tree_equals(Tree_node *root, size_t len, ...);
 // Returns true if the trees rooted at 'r1' and 'r2' are equal.
 bool trees_equal(Tree_node *r1, Tree_node *r2);
+
 // Adds all tree nodes in-order into the vector.
 void tree_nodes_to_vector_dfs(Tree_node *root, Vector *vector);
 // Adds all tree nodes level-order into the vector.
 void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector);
+
+// Adds all tree nodes pre-order into the vector (non-recursive).
+void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector);
+// Adds all tree nodes in-order into the vector (non-recursive).
+void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector);
+// Adds all tree nodes post-order into the vector (non-recursive).
+void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector);
+
 // Returns true if the tree is a valid binary search tree
 // (<left subtree nodes> < <node> < <right subtree nodes>, for all nodes).
 bool valid_bin_search_tree(Tree_node *root);

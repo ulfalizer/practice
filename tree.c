@@ -1,5 +1,6 @@
 #include "common.h"
 #include "queue.h"
+#include "stack.h"
 #include "tree.h"
 #include "vector.h"
 
@@ -190,6 +191,77 @@ void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector) {
         if (node->right != NULL)
             vector_add(vector, node->right);
     }
+}
+
+void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector) {
+    Stack stack;
+
+    stack_init(&stack);
+    for (;;) {
+        for (; node != NULL; node = node->left) {
+            vector_add(vector, node);
+            stack_push(&stack, node);
+        }
+
+        if (stack_len(&stack) == 0)
+            break;
+
+        node = ((Tree_node*)stack_pop(&stack))->right;
+    }
+    stack_free(&stack);
+}
+
+void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector) {
+    Stack stack;
+
+    stack_init(&stack);
+    for (;;) {
+        for (; node != NULL; node = node->left)
+            stack_push(&stack, node);
+
+        if (stack_len(&stack) == 0)
+            break;
+
+        node = stack_pop(&stack);
+        vector_add(vector, node);
+        node = node->right;
+    }
+    stack_free(&stack);
+}
+
+void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector) {
+    Stack stack;
+
+    stack_init(&stack);
+    for (;;) {
+        Tree_node *parent;
+
+        for (; node != NULL; node = node->left)
+            stack_push(&stack, node);
+
+        // We know the parent has no left child at this point, which makes the
+        // code below work out for all cases.
+
+move_up:
+        if (stack_len(&stack) == 0)
+            break;
+
+        // 'parent' is the parent of 'node'.
+        parent = stack_peek(&stack);
+        if (node == parent->right) {
+            // We arrived from the right (or skipped an empty right tree). Pop
+            // the parent, add it to the result, and move up the tree.
+            stack_pop(&stack);
+            vector_add(vector, parent);
+            node = parent;
+
+            goto move_up;
+        }
+        // We arrived from the left. Keep the parent on the stack and process
+        // its right subtree.
+        node = parent->right;
+    }
+    stack_free(&stack);
 }
 
 // Slightly convoluted to be able to handle INT_MIN and INT_MAX. The possible

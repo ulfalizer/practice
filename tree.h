@@ -12,6 +12,9 @@ typedef struct Tree_node {
 // specifies the lack of a node. The last level does not need to be fully
 // specified.
 //
+// The key of each node is set to the specified value, while the value is set
+// to the key plus one -- having them be different is handy for testing.
+//
 // Usage example assuming _ == 0xDEAD:
 //
 // tree_make(15,
@@ -51,6 +54,11 @@ void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector);
 void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector);
 // Adds all tree nodes post-order into the vector (non-recursive).
 void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector);
+
+// If 'key' exists in the tree, sets 'val' to its value (if 'val' is not NULL)
+// and returns true. Otherwise, returns false and does not modify 'val'.
+// Implemented non-recursively.
+bool tree_dfs_iter(Tree_node *node, int key, int *val);
 
 // Returns true if the tree is a valid binary search tree
 // (<left subtree nodes> < <node> < <right subtree nodes>, for all nodes).

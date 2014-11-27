@@ -16,15 +16,16 @@ Tree_node *tree_make(size_t len, ...) {
     nodes = emalloc(sizeof(Tree_node*)*len, "make tree, pointer array");
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i) {
-        int node_val = va_arg(ap, int);
-        if (node_val == 0xDEAD) {
+        int node_key = va_arg(ap, int);
+        if (node_key == 0xDEAD) {
             // Makes e.g. tree_make(1, 0xDEAD) work too for creating an empty
             // tree, and means we crash reliably for malformed trees.
             nodes[i] = NULL;
             continue;
         }
         nodes[i] = emalloc(sizeof(Tree_node), "make tree, node");
-        nodes[i]->key = node_val;
+        nodes[i]->key = node_key;
+        nodes[i]->val = node_key + 1;
         nodes[i]->left = nodes[i]->right = NULL;
         // Is this the root node?
         if (i != 0) {
@@ -262,6 +263,31 @@ move_up:
         node = parent->right;
     }
     stack_free(&stack);
+}
+
+bool tree_dfs_iter(Tree_node *node, int key, int *val) {
+    Stack stack;
+
+    stack_init(&stack);
+    for (;;) {
+        for (; node != NULL; node = node->left) {
+            if (node->key == key) {
+                if (val != NULL)
+                    *val = node->val;
+
+                stack_free(&stack);
+                return true;
+            }
+            stack_push(&stack, node);
+        }
+
+        if (stack_len(&stack) == 0) {
+            stack_free(&stack);
+            return false;
+        }
+
+        node = ((Tree_node*)stack_pop(&stack))->right;
+    }
 }
 
 // Slightly convoluted to be able to handle INT_MIN and INT_MAX. The possible

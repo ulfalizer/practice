@@ -435,6 +435,76 @@ static void test_iter_postorder() {
 #undef TRAVERSE_TEST_TREE
 #undef TRAVERSE_TEST_RES
 
+static void test_dfs_iter() {
+    #define TEST_DFS_ITER_TREE(...)                 \
+      do {                                          \
+          Tree_node *tree = MAKE_TREE(__VA_ARGS__); \
+          int val
+    #define VERIFY_HAS_KEY(key)                   \
+          VERIFY(tree_dfs_iter(tree, key, &val)); \
+          VERIFY(val == key + 1)
+    #define VERIFY_NOT_HAS_KEY(key)                \
+          val = 234;                               \
+          VERIFY(!tree_dfs_iter(tree, key, &val)); \
+          VERIFY(val == 234)
+    #define TEST_DFS_ITER_END \
+          tree_free(tree);    \
+      }                       \
+      while (0)
+
+    TEST_DFS_ITER_TREE();
+    VERIFY_NOT_HAS_KEY(1);
+    TEST_DFS_ITER_END;
+
+    TEST_DFS_ITER_TREE(
+      1);
+    VERIFY_HAS_KEY(1);
+    VERIFY_NOT_HAS_KEY(2);
+    TEST_DFS_ITER_END;
+
+    TEST_DFS_ITER_TREE(
+       3,
+      1);
+    VERIFY_HAS_KEY(3);
+    VERIFY_HAS_KEY(1);
+    VERIFY_NOT_HAS_KEY(0);
+    VERIFY_NOT_HAS_KEY(2);
+    VERIFY_NOT_HAS_KEY(4);
+    TEST_DFS_ITER_END;
+
+    TEST_DFS_ITER_TREE(
+       1,
+      _,3);
+    VERIFY_HAS_KEY(3);
+    VERIFY_HAS_KEY(1);
+    VERIFY_NOT_HAS_KEY(0);
+    VERIFY_NOT_HAS_KEY(2);
+    VERIFY_NOT_HAS_KEY(4);
+    TEST_DFS_ITER_END;
+
+    TEST_DFS_ITER_TREE(
+         1,
+       3,  5,
+      _,7,9);
+    VERIFY_HAS_KEY(1);
+    VERIFY_HAS_KEY(3);
+    VERIFY_HAS_KEY(5);
+    VERIFY_HAS_KEY(7);
+    VERIFY_HAS_KEY(9);
+    VERIFY_NOT_HAS_KEY(0);
+    VERIFY_NOT_HAS_KEY(2);
+    VERIFY_NOT_HAS_KEY(4);
+    VERIFY_NOT_HAS_KEY(6);
+    VERIFY_NOT_HAS_KEY(8);
+    VERIFY_NOT_HAS_KEY(10);
+    TEST_DFS_ITER_END;
+
+    #undef TEST_DFS_ITER_TREE
+    #undef VERIFY_HAS_KEY
+    #undef VERIFY_NOT_HAS_KEY
+    #undef TEST_DFS_ITER_END
+}
+
 static void test_valid_bin_search_tree() {
     #define VERIFY_BIN_SEARCH_TREE(valid, ...)          \
       {                                                 \
@@ -517,5 +587,6 @@ void test_tree() {
     test_iter_inorder();
     test_iter_preorder();
     test_iter_postorder();
+    test_dfs_iter();
     test_valid_bin_search_tree();
 }

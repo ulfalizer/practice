@@ -43,6 +43,8 @@ typedef unsigned char uc;
      typeof(b) _b = b;    \
      _a < _b ? _a : _b; })
 
+#define uninitialized_var(x) x = x
+
 // Returns its argument as a string literal.
 #define STRINGIFY(x) STRINGIFY_(x)
 #define STRINGIFY_(x) #x

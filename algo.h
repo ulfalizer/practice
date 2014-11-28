@@ -1,6 +1,14 @@
 // Misc. functions and algorithms.
 
 bool substr(const char *find, const char *s);
+// 's' is assumed to consist of a sequence of '0' and '1' characters (where we
+// use a character array for ease of testing). Returns the zero-based index of
+// the 0 which, when replaced by a 1, yields the longest continuous sequence of
+// 1s in 's'.
+//
+// Returns the smallest index if there are many candidates and (size_t)-1 if
+// 's' contains no 0s.
+size_t max_ones(char *s);
 // Prints all permutations of characters in 's'.
 void print_perms(char *s);
 // Generates the next higher permutation of 's' in lexicographic order. Returns

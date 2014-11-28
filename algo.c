@@ -12,6 +12,26 @@ bool substr(const char *find, const char *s) {
     return *find == '\0';
 }
 
+size_t max_ones(char *s) {
+    size_t i;
+    size_t max = 0;
+    size_t uninitialized_var(max_i);
+    size_t prev_zero = -1;
+    size_t prev_prev_zero = -1;
+
+    for (i = 0; s[i] != '\0'; ++i)
+        if (s[i] == '0') {
+            if (i - prev_prev_zero > max) {
+                max = i - prev_prev_zero;
+                max_i = prev_zero;
+            }
+            prev_prev_zero = prev_zero;
+            prev_zero = i;
+        }
+
+    return (i - prev_prev_zero > max) ? prev_zero : max_i;
+}
+
 static void print_perms_rec(char *s, size_t i) {
     if (s[i] == '\0')
         puts(s);

@@ -18,6 +18,93 @@ static void test_substr() {
     VERIFY(substr("foo", "xxfooxx"));
 }
 
+static void test_max_ones() {
+    VERIFY(max_ones("") == (size_t)-1);
+    VERIFY(max_ones("0") == 0);
+    VERIFY(max_ones("1") == (size_t)-1);
+    VERIFY(max_ones("00") == 0);
+    VERIFY(max_ones("01") == 0);
+    VERIFY(max_ones("10") == 1);
+    VERIFY(max_ones("11") == (size_t)-1);
+    VERIFY(max_ones("000") == 0);
+    VERIFY(max_ones("001") == 1);
+    VERIFY(max_ones("010") == 0);
+    VERIFY(max_ones("011") == 0);
+    VERIFY(max_ones("100") == 1);
+    VERIFY(max_ones("101") == 1);
+    VERIFY(max_ones("110") == 2);
+    VERIFY(max_ones("111") == (size_t)-1);
+    VERIFY(max_ones("000000") == 0);
+    VERIFY(max_ones("000001") == 4);
+    VERIFY(max_ones("000010") == 3);
+    VERIFY(max_ones("000011") == 3);
+    VERIFY(max_ones("000100") == 2);
+    VERIFY(max_ones("000101") == 4);
+    VERIFY(max_ones("000110") == 2);
+    VERIFY(max_ones("000111") == 2);
+    VERIFY(max_ones("001000") == 1);
+    VERIFY(max_ones("001001") == 1);
+    VERIFY(max_ones("001010") == 3);
+    VERIFY(max_ones("001011") == 3);
+    VERIFY(max_ones("001100") == 1);
+    VERIFY(max_ones("001101") == 4);
+    VERIFY(max_ones("001110") == 1);
+    VERIFY(max_ones("001111") == 1);
+    VERIFY(max_ones("010000") == 0);
+    VERIFY(max_ones("010001") == 0);
+    VERIFY(max_ones("010010") == 0);
+    VERIFY(max_ones("010011") == 3);
+    VERIFY(max_ones("010100") == 2);
+    VERIFY(max_ones("010101") == 2);
+    VERIFY(max_ones("010110") == 2);
+    VERIFY(max_ones("010111") == 2);
+    VERIFY(max_ones("011000") == 0);
+    VERIFY(max_ones("011001") == 0);
+    VERIFY(max_ones("011010") == 3);
+    VERIFY(max_ones("011011") == 3);
+    VERIFY(max_ones("011100") == 0);
+    VERIFY(max_ones("011101") == 4);
+    VERIFY(max_ones("011110") == 0);
+    VERIFY(max_ones("011111") == 0);
+    VERIFY(max_ones("100000") == 1);
+    VERIFY(max_ones("100001") == 1);
+    VERIFY(max_ones("100010") == 1);
+    VERIFY(max_ones("100011") == 3);
+    VERIFY(max_ones("100100") == 1);
+    VERIFY(max_ones("100101") == 4);
+    VERIFY(max_ones("100110") == 2);
+    VERIFY(max_ones("100111") == 2);
+    VERIFY(max_ones("101000") == 1);
+    VERIFY(max_ones("101001") == 1);
+    VERIFY(max_ones("101010") == 1);
+    VERIFY(max_ones("101011") == 3);
+    VERIFY(max_ones("101100") == 1);
+    VERIFY(max_ones("101101") == 1);
+    VERIFY(max_ones("101110") == 1);
+    VERIFY(max_ones("101111") == 1);
+    VERIFY(max_ones("110000") == 2);
+    VERIFY(max_ones("110001") == 2);
+    VERIFY(max_ones("110010") == 2);
+    VERIFY(max_ones("110011") == 2);
+    VERIFY(max_ones("110100") == 2);
+    VERIFY(max_ones("110101") == 2);
+    VERIFY(max_ones("110110") == 2);
+    VERIFY(max_ones("110111") == 2);
+    VERIFY(max_ones("111000") == 3);
+    VERIFY(max_ones("111001") == 3);
+    VERIFY(max_ones("111010") == 3);
+    VERIFY(max_ones("111011") == 3);
+    VERIFY(max_ones("111100") == 4);
+    VERIFY(max_ones("111101") == 4);
+    VERIFY(max_ones("111110") == 5);
+    VERIFY(max_ones("111111") == (size_t)-1);
+    VERIFY(max_ones("0000100000000") == 3);
+    VERIFY(max_ones("0000100110000") == 6);
+    VERIFY(max_ones("1100100110011") == 2);
+    VERIFY(max_ones("1100101110011") == 5);
+    VERIFY(max_ones("1100101110111") == 9);
+}
+
 static void test_binsearch() {
     #define VERIFY_BINSEARCH(in_list, find, ...)                    \
       {                                                             \
@@ -128,6 +215,7 @@ static void test_next_lex() {
 
 void test_algo() {
     test_substr();
+    test_max_ones();
     test_binsearch();
     test_next_lex();
 }

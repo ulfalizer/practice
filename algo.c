@@ -32,6 +32,39 @@ size_t max_ones(char *s) {
     return (i - prev_prev_zero > max) ? prev_zero : max_i;
 }
 
+static void print_balanced_rec(int i, int remain, int level, char *res) {
+    // No opening parentheses remain to be placed. Place remaining closing
+    // parentheses and return result.
+    if (remain == 0) {
+        while (res[i] != '\0')
+            res[i++] = ')';
+        puts(res);
+
+        return;
+    }
+
+    // Place left parenthesis and recurse.
+    res[i] = '(';
+    print_balanced_rec(i + 1, remain - 1, level + 1, res);
+    // Place right parenthesis and recurse, if possible.
+    if (level > 0) {
+        res[i] = ')';
+        print_balanced_rec(i + 1, remain, level - 1, res);
+    }
+}
+
+void print_balanced(int n) {
+    char *res;
+
+    if (n == 0)
+        return;
+
+    res = alloca(2*n + 1);
+    memset(res, 1, 2*n);
+    res[2*n] = '\0';
+    print_balanced_rec(0, n, 0, res);
+}
+
 static void print_perms_rec(char *s, size_t i) {
     if (s[i] == '\0')
         puts(s);

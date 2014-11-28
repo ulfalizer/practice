@@ -9,6 +9,9 @@ bool substr(const char *find, const char *s);
 // Returns the smallest index if there are many candidates and (size_t)-1 if
 // 's' contains no 0s.
 size_t max_ones(char *s);
+// Prints all strings with balanced left/right parentheses that have 'n'
+// opening parentheses.
+void print_balanced(int n);
 // Prints all permutations of characters in 's'.
 void print_perms(char *s);
 // Generates the next higher permutation of 's' in lexicographic order. Returns

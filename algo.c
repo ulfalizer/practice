@@ -1,5 +1,6 @@
 #include "common.h"
 #include "algo.h"
+#include "stack.h"
 
 bool substr(const char *find, const char *s) {
     for (size_t i = 0; s[i] != '\0'; ++i) {
@@ -63,6 +64,30 @@ void print_balanced(int n) {
     memset(res, 1, 2*n);
     res[2*n] = '\0';
     print_balanced_rec(0, n, 0, res);
+}
+
+bool is_balanced(const char *s) {
+    static const char paren_table[1 << CHAR_BIT] =
+      { [')'] = '(', [']'] = '[', ['}'] = '{' };
+    bool res;
+    Stack stack;
+
+    stack_init(&stack);
+    for (; *s != '\0'; ++s) {
+        char match = paren_table[(uc)*s];
+        if (match == 0)
+            stack_push(&stack, (void*)(intptr_t)*s);
+        else
+            if (stack_len(&stack) == 0 ||
+              (char)(intptr_t)stack_pop(&stack) != match) {
+                stack_free(&stack);
+                return false;
+            }
+    }
+
+    res = stack_len(&stack) == 0;
+    stack_free(&stack);
+    return res;
 }
 
 static void print_perms_rec(char *s, size_t i) {

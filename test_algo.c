@@ -105,6 +105,39 @@ static void test_max_ones() {
     VERIFY(max_ones("1100101110111") == 9);
 }
 
+static void test_is_balanced() {
+    VERIFY(is_balanced(""));
+    VERIFY(is_balanced("()"));
+    VERIFY(is_balanced("{}"));
+    VERIFY(is_balanced("[]"));
+    VERIFY(is_balanced("()()"));
+    VERIFY(is_balanced("(){}"));
+    VERIFY(is_balanced("()[]"));
+    VERIFY(is_balanced("(())"));
+    VERIFY(is_balanced("[{}]"));
+    VERIFY(is_balanced("{[]}"));
+    VERIFY(is_balanced("[]({[][]}[]){()}"));
+
+    VERIFY(!is_balanced("("));
+    VERIFY(!is_balanced("{"));
+    VERIFY(!is_balanced("["));
+    VERIFY(!is_balanced(")"));
+    VERIFY(!is_balanced("}"));
+    VERIFY(!is_balanced("]"));
+    VERIFY(!is_balanced(")("));
+    VERIFY(!is_balanced("()("));
+    VERIFY(!is_balanced("())"));
+    VERIFY(!is_balanced("(()"));
+    VERIFY(!is_balanced("(}"));
+    VERIFY(!is_balanced("(]"));
+    VERIFY(!is_balanced("{)"));
+    VERIFY(!is_balanced("[)"));
+    VERIFY(!is_balanced("[())"));
+    VERIFY(!is_balanced("([))"));
+    VERIFY(!is_balanced("((])"));
+    VERIFY(!is_balanced("(()]"));
+}
+
 static void test_binsearch() {
     #define VERIFY_BINSEARCH(in_list, find, ...)                    \
       {                                                             \
@@ -216,6 +249,7 @@ static void test_next_lex() {
 void test_algo() {
     test_substr();
     test_max_ones();
+    test_is_balanced();
     test_binsearch();
     test_next_lex();
 }

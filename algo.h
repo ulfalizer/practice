@@ -12,6 +12,9 @@ size_t max_ones(char *s);
 // Prints all strings with balanced left/right parentheses that have 'n'
 // opening parentheses.
 void print_balanced(int n);
+// Returns true if 's' has balanced left/right parentheses from the set
+// '(', '[', '{'. Assumes no other characters appear in 's'.
+bool is_balanced(const char *s);
 // Prints all permutations of characters in 's'.
 void print_perms(char *s);
 // Generates the next higher permutation of 's' in lexicographic order. Returns

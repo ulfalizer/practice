@@ -99,10 +99,9 @@ bool eval(const char *s, int *res) {
     if (setjmp(err_jmp_buf) == 1)
         return false;
     tmp = eval_sum(&s);
-    if (*s == '\0') {
-        *res = tmp;
-        return true;
-    }
-    // Found extra trailing characters.
-    return false;
+    if (*s != '\0')
+        // Found extra trailing characters.
+        return false;
+    *res = tmp;
+    return true;
 }

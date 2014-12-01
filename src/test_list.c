@@ -16,8 +16,10 @@ static void test_add() {
     List list;
     list_init(&list);
 
+    // Verify that the list is empty.
     VERIFY_LIST_EQUALS(list);
     list_add(&list, 10);
+    // Verify that the list is not empty.
     VERIFY_NOT_LIST_EQUALS(list);
     VERIFY_LIST_EQUALS(list, 10);
     list_add(&list, 20);
@@ -36,7 +38,7 @@ static void test_make() {
           list_free(&list);                        \
       }
 
-    VERIFY_MAKE();
+    VERIFY_MAKE(); // Empty list.
     VERIFY_MAKE(10);
     VERIFY_MAKE(10, 20);
     VERIFY_MAKE(10, 20, 30);
@@ -52,7 +54,7 @@ static void test_is_sorted() {
           list_free(&list);                        \
       }
 
-    VERIFY_SORTED(true);
+    VERIFY_SORTED(true); // Empty list should be sorted.
     VERIFY_SORTED(true, 1);
     VERIFY_SORTED(true, 1, 2);
     VERIFY_SORTED(true, 1, 1);
@@ -74,8 +76,8 @@ static void test_remove() {
     VERIFY_REMOVE(10,  20, 20, 10);
     VERIFY_REMOVE(10,  20, 20);
     VERIFY_REMOVE(20,  20);
-    VERIFY_REMOVE(20);
-    VERIFY_REMOVE(10);
+    VERIFY_REMOVE(20); // Empty?
+    VERIFY_REMOVE(10); // Empty?
 
     list_free(&list);
 
@@ -92,8 +94,8 @@ static void test_remove_all() {
     VERIFY_REMOVE_ALL(5,  1, 2, 1, 1, 2, 2, 10, 1, 1, 1, 2, 2, 2);
     VERIFY_REMOVE_ALL(1,  2, 2, 2, 10, 2, 2, 2);
     VERIFY_REMOVE_ALL(2,  10);
-    VERIFY_REMOVE_ALL(10);
-    VERIFY_REMOVE_ALL(1);
+    VERIFY_REMOVE_ALL(10); // Empty?
+    VERIFY_REMOVE_ALL(1); // Empty?
 
     list_free(&list);
 
@@ -110,8 +112,8 @@ static void test_reverse() {
           list_free(&list);                        \
       }
 
-    VERIFY_REVERSE_SET_LIST();
-    VERIFY_REVERSE_RESULT();
+    VERIFY_REVERSE_SET_LIST(); // Empty.
+    VERIFY_REVERSE_RESULT(); // Empty?
 
     VERIFY_REVERSE_SET_LIST(10);
     VERIFY_REVERSE_RESULT(10);
@@ -140,7 +142,7 @@ static void test_sort(void sort_fn(List *)) {
           list_free(&l2);                \
       }
 
-    VERIFY_SORT();
+    VERIFY_SORT(); // Empty list should sort correctly too.
     VERIFY_SORT(1);
     VERIFY_SORT(1, 1);
     VERIFY_SORT(1, 2);

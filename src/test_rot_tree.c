@@ -183,6 +183,7 @@ static void test_structure() {
        2,  10,
       0,_,8,12);
 
+    // Still using
     //    6
     //  2   10
     // 0 4 8 12
@@ -217,6 +218,7 @@ static void test_structure() {
        2,  8,
       0,4,_,12);
 
+    // Still using
     //    6
     //  2   10
     // 0 4 8 12
@@ -238,6 +240,7 @@ static void test_structure() {
        _,  _,  _,  10,
       _,_,_,_,_,_,8,12);
 
+    // Still using
     //    6
     //  2   10
     // 0 4 8 12

@@ -16,7 +16,7 @@ static int _ = 0xDEAD;
 
 // Tests both tree_equals() and trees_equal().
 static void test_equals() {
-    // Specifies the tree to use for the tests.
+    // Specifies the tree to use for the following tests.
     #define TEST_EQUALS_TREE(...)                                   \
       do {                                                          \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__), *tree2
@@ -38,6 +38,7 @@ static void test_equals() {
 
     // Empty tree.
     TEST_EQUALS_TREE();
+
     TEST_EQUALS(true);
     TEST_EQUALS(true,
       _);
@@ -52,11 +53,13 @@ static void test_equals() {
     TEST_EQUALS(false,
        1,
       _,_);
+
     TEST_EQUALS_END;
 
     // One-element tree.
     TEST_EQUALS_TREE(
       1);
+
     TEST_EQUALS(true,
       1);
     TEST_EQUALS(true,
@@ -77,12 +80,14 @@ static void test_equals() {
     TEST_EQUALS(false,
        1,
       _,1);
+
     TEST_EQUALS_END;
 
     // Two-element tree.
     TEST_EQUALS_TREE(
        1,
       2);
+
     TEST_EQUALS(true,
        1,
       2);
@@ -105,12 +110,14 @@ static void test_equals() {
     TEST_EQUALS(false,
        1,
       _,2);
+
     TEST_EQUALS_END;
 
     // Three-element tree.
     TEST_EQUALS_TREE(
        1,
       2,3);
+
     TEST_EQUALS(true,
        1,
       2,3);
@@ -127,6 +134,7 @@ static void test_equals() {
     TEST_EQUALS(false,
        1,
       2,1);
+
     TEST_EQUALS_END;
 
     // Complex tree.
@@ -135,6 +143,7 @@ static void test_equals() {
          1,      2,
        3,  4,  _,  5,
       _,6,_,7,_,_,8,9);
+
     TEST_EQUALS(true,
              0,
          1,      2,
@@ -156,6 +165,7 @@ static void test_equals() {
          3,      4,      _,      5,
        _,  6,  _,  7,  _,  _,  8,  9,
       _,_,0);
+
     TEST_EQUALS_END;
 
     #undef TEST_EQUALS_TREE
@@ -242,6 +252,7 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
   while (0)
 
 static void test_dfs() {
+    // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_dfs);
     TRAVERSE_TEST_RES();
 
@@ -285,6 +296,7 @@ static void test_dfs() {
 }
 
 static void test_bfs() {
+    // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_bfs);
     TRAVERSE_TEST_RES();
 
@@ -328,6 +340,7 @@ static void test_bfs() {
 }
 
 static void test_iter_preorder() {
+    // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder);
     TRAVERSE_TEST_RES();
 
@@ -371,6 +384,7 @@ static void test_iter_preorder() {
 }
 
 static void test_iter_inorder() {
+    // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder);
     TRAVERSE_TEST_RES();
 
@@ -414,6 +428,7 @@ static void test_iter_inorder() {
 }
 
 static void test_iter_postorder() {
+    // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder);
     TRAVERSE_TEST_RES();
 
@@ -476,6 +491,7 @@ static void test_dfs_iter() {
       }                                             \
       while (0)
 
+    // Empty tree.
     TEST_DFS_ITER_TREE();
     VERIFY_NOT_HAS_KEY(1);
     TEST_DFS_ITER_END;
@@ -537,6 +553,7 @@ static void test_valid_bin_search_tree() {
           tree_free(tree);                              \
       }
 
+    // Empty trees are valid binary search trees.
     VERIFY_BIN_SEARCH_TREE(true);
     VERIFY_BIN_SEARCH_TREE(true,
       1);

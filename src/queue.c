@@ -19,25 +19,27 @@ size_t queue_len(Queue *queue) {
     return (queue->end + queue->buf_len - queue->start) & (queue->buf_len - 1);
 }
 
-static void grow_and_add(Queue *queue, void *val) {
+// Doubles the size of the buffer. Assumes the buffer is precisely full
+// ('start' == 'end', here interpreted as "full").
+//
+// This grows the buffer as it becomes full -- not at the next insertion after
+// that. Additional logic would allow the buffer to be precisely full.
+static void grow(Queue *queue) {
     void **new_buf;
 
+    assert(queue->start == queue->end);
+
     new_buf = emalloc(2*sizeof(void*)*queue->buf_len, "queue grow");
-    // Copy the old contents to the beginning of the new buffer.
-    if (queue->end < queue->start) {
-        memcpy(new_buf,
-          queue->buf + queue->start,
-          sizeof(void*)*(queue->buf_len - queue->start));
-        memcpy(new_buf + queue->buf_len - queue->start,
-          queue->buf,
-          sizeof(void*)*queue->end);
-    }
-    else
-        memcpy(new_buf,
-          queue->buf + queue->start,
-          sizeof(void*)*(queue->end - queue->start));
-    // Write the new element after the old contents.
-    new_buf[queue->buf_len - 1] = val;
+
+    // Copy from 'start' up to the end of the buffer.
+    memcpy(new_buf,
+      queue->buf + queue->start,
+      sizeof(void*)*(queue->buf_len - queue->start));
+    // Copy from the beginning of the buffer up to but not including
+    // 'start' (== 'end').
+    memcpy(new_buf + queue->buf_len - queue->start,
+      queue->buf,
+      sizeof(void*)*queue->start);
     // Free the old buffer.
     free(queue->buf);
 
@@ -48,14 +50,11 @@ static void grow_and_add(Queue *queue, void *val) {
 }
 
 void queue_add(Queue *queue, void *val) {
-    size_t new_end = (queue->end + 1) & (queue->buf_len - 1);
+    queue->buf[queue->end] = val;
+    queue->end = (queue->end + 1) & (queue->buf_len - 1);
     // Buffer full?
-    if (new_end == queue->start)
-        grow_and_add(queue, val);
-    else {
-        queue->buf[queue->end] = val;
-        queue->end = new_end;
-    }
+    if (queue->end == queue->start)
+        grow(queue);
 }
 
 void *queue_remove(Queue *queue) {

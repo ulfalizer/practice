@@ -1,7 +1,13 @@
 #include "common.h"
 #include "queue.h"
 
-// Keep the length as a power of two to speed up wrapping.
+// Keep the length as a power of two to speed up wrapping. Using modulos
+// instead makes repeated inserts and removes of 1000 elements ~4 times slower
+// on my Core i7-2600K.
+//
+// Pre-calculating the mask (buf_len - 1) and updating it whenever the buffer
+// size changes is excessive and actually makes things slightly slower on my
+// system (perhaps due to extra memory instructions).
 #define INITIAL_BUF_LEN 16
 
 void queue_init(Queue *queue) {

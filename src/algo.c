@@ -37,8 +37,8 @@ static void print_balanced_rec(int i, int remain, int level, char *res) {
     // No opening parentheses remain to be placed. Place remaining closing
     // parentheses and return result.
     if (remain == 0) {
-        while (res[i] != '\0')
-            res[i++] = ')';
+        for (; res[i] != '\0'; ++i)
+            res[i] = ')';
         puts(res);
 
         return;

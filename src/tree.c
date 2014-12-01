@@ -78,18 +78,18 @@ unsigned tree_depth(Tree_node *root) {
     return 1 + max(tree_depth(root->left), tree_depth(root->right));
 }
 
-void tree_rot_right(Tree_node **root) {
-    Tree_node *left = (*root)->left;
-    (*root)->left = left->right;
-    left->right = *root;
-    *root = left;
+void tree_rot_right(Tree_node **node) {
+    Tree_node *left = (*node)->left;
+    (*node)->left = left->right;
+    left->right = *node;
+    *node = left;
 }
 
-void tree_rot_left(Tree_node **root) {
-    Tree_node *right = (*root)->right;
-    (*root)->right = right->left;
-    right->left = *root;
-    *root = right;
+void tree_rot_left(Tree_node **node) {
+    Tree_node *right = (*node)->right;
+    (*node)->right = right->left;
+    right->left = *node;
+    *node = right;
 }
 
 static Tree_node *unlink_max(Tree_node **cur) {

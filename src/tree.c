@@ -15,14 +15,15 @@ Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right) {
 
 Tree_node *tree_make(size_t len, ...) {
     va_list ap;
-    Tree_node **nodes, *res;
+    Tree_node **nodes;
 
     if (len == 0)
         return NULL;
 
     // Build an array of node pointers (like in a heap) and use it to construct
     // the tree.
-    nodes = emalloc(sizeof(Tree_node*)*len, "make tree, pointer array");
+    nodes = alloca(sizeof(Tree_node*)*len);
+
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i) {
         int node_key = va_arg(ap, int);
@@ -44,9 +45,8 @@ Tree_node *tree_make(size_t len, ...) {
         }
     }
     va_end(ap);
-    res = nodes[0];
-    free(nodes);
-    return res;
+
+    return nodes[0];
 }
 
 void tree_free(Tree_node *root) {

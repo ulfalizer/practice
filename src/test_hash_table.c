@@ -1,6 +1,9 @@
 #include "common.h"
 #include "hash_table.h"
 
+// Assignments of 234 in the tests below are for verifying that arguments are
+// only modified when they should be.
+
 static void populate(Hash_table *hash_table) {
     hash_table_set(hash_table, "negative one", -1, NULL);
     hash_table_set(hash_table, "zero", 0, NULL);

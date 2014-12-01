@@ -2,6 +2,12 @@
 #include "tree.h"
 #include "vector.h"
 
+// The trees below are specified in a "visual" breadth-first order; see
+// tree_make().
+
+// Assignments of 234 in the tests below are for verifying that arguments are
+// only modified when they should be.
+
 // Helper for specifying the lack of a node with tree_make().
 static int _ = 0xDEAD;
 
@@ -38,25 +44,32 @@ static void test_equals() {
     TEST_EQUALS(true,
        _,
       _);
-    TEST_EQUALS(false, 1);
-    TEST_EQUALS(false, 1,
+    TEST_EQUALS(false,
+      1);
+    TEST_EQUALS(false,
+       1,
       _);
-    TEST_EQUALS(false, 1,
-       _,
-      _);
+    TEST_EQUALS(false,
+       1,
+      _,_);
     TEST_EQUALS_END;
 
     // One-element tree.
-    TEST_EQUALS_TREE(1);
-    TEST_EQUALS(true, 1);
-    TEST_EQUALS(true, 1,
+    TEST_EQUALS_TREE(
+      1);
+    TEST_EQUALS(true,
+      1);
+    TEST_EQUALS(true,
+       1,
       _);
     TEST_EQUALS(true, 1,
        _,
       _);
     TEST_EQUALS(false);
-    TEST_EQUALS(false, 2);
-    TEST_EQUALS(false, 2,
+    TEST_EQUALS(false,
+      2);
+    TEST_EQUALS(false,
+       2,
       _);
     TEST_EQUALS(false,
        1,
@@ -81,7 +94,8 @@ static void test_equals() {
        2,  _,
       _);
     TEST_EQUALS(false);
-    TEST_EQUALS(false, 1);
+    TEST_EQUALS(false,
+      1);
     TEST_EQUALS(false,
        1,
       1);

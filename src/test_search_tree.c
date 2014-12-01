@@ -1,6 +1,9 @@
 #include "common.h"
 #include "search_tree.h"
 
+// Assignments of 234 in the tests below are for verifying that arguments are
+// only modified when they should be.
+
 static void populate(Search_tree *tree) {
     #define ADD_DOUBLE(n)                  \
       search_tree_set(tree, n, 2*n, NULL); \

@@ -2,6 +2,9 @@
 #include "rot_tree.h"
 #include "tree.h"
 
+// Assignments of 234 in the tests below are for verifying that arguments are
+// only modified when they should be.
+
 // Helper for specifying the lack of a node with tree_make().
 static int _ = 0xDEAD;
 
@@ -33,15 +36,18 @@ static void test_structure() {
 
     // Empty tree.
     SET_TREE();
+
     VERIFY_STRUCT(SET(1),
       1);
     VERIFY_STRUCT(GET(1));
     VERIFY_STRUCT(REM(1));
+
     END_TEST;
 
     // One-level tree.
     SET_TREE(
       2);
+
     VERIFY_STRUCT(SET(2),
       2);
     VERIFY_STRUCT(SET(1),
@@ -57,6 +63,7 @@ static void test_structure() {
     VERIFY_STRUCT(REM(1),
       2);
     VERIFY_STRUCT(REM(2));
+
     END_TEST;
 
     // Two-level tree.
@@ -92,6 +99,7 @@ static void test_structure() {
        4,  _,
       2,6,_,_);
 
+    // Still using
     //  4
     // 2 6
 
@@ -123,6 +131,7 @@ static void test_structure() {
        4,  _,
       2,_,_,_);
 
+    // Still using
     //  4
     // 2 6
 
@@ -305,22 +314,18 @@ static void test_set_get_helper(bool keys_exist) {
           VERIFY(rot_tree_valid(&tree));                  \
       }
 
-    #define VERIFY_SET_GET_DOUBLE(key) \
-      VERIFY_SET_GET(key, 2*key)
-
     Rot_tree tree;
     rot_tree_init(&tree);
 
     if (keys_exist)
         populate(&tree);
     for (int i = 0; i < 10; ++i)
-        VERIFY_SET_GET_DOUBLE(i);
+        VERIFY_SET_GET(i, 2*i);
     VERIFY_SET_GET(INT_MAX, 100);
     VERIFY_SET_GET(INT_MIN, 200);
     rot_tree_free(&tree);
 
     #undef VERIFY_SET_GET
-    #undef VERIFY_SET_GET_DOUBLE
 }
 
 static void test_remove() {

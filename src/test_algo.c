@@ -181,16 +181,16 @@ static void test_binsearch() {
 }
 
 static void test_next_lex() {
-    #define TEST_STRING(str) \
-      do {                   \
+    #define TEST_STRING(str)          \
+      do {                            \
           char s[] = str
-    #define VERIFY_NEXT_PERM(str)      \
-          VERIFY(next_lex(s));         \
+    #define VERIFY_NEXT_PERM(str)     \
+          VERIFY(next_lex(s));        \
           VERIFY(strcmp(s, str) == 0)
-    #define VERIFY_NO_MORE_PERMS \
+    #define VERIFY_NO_MORE_PERMS      \
           VERIFY(!next_lex(s))
-    #define END_TEST \
-      }              \
+    #define END_TEST                  \
+      }                               \
       while (0)
 
     TEST_STRING("");

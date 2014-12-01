@@ -101,9 +101,9 @@ static void test_remove_all() {
 }
 
 static void test_reverse() {
-    #define VERIFY_REVERSE_SET_LIST(...)  \
-      {                                   \
-          MAKE_LIST(list, ##__VA_ARGS__); \
+    #define VERIFY_REVERSE_SET_LIST(...)           \
+      {                                            \
+          MAKE_LIST(list, ##__VA_ARGS__);          \
           list_reverse(&list);
     #define VERIFY_REVERSE_RESULT(...)             \
           VERIFY_LIST_EQUALS(list, ##__VA_ARGS__); \
@@ -127,6 +127,8 @@ static void test_reverse() {
 }
 
 static void test_sort(void sort_fn(List *)) {
+    // Assume selection sort is correct and test other sorting algorithms by
+    // comparing against it.
     #define VERIFY_SORT(...)             \
       {                                  \
           MAKE_LIST(l1, ##__VA_ARGS__);  \

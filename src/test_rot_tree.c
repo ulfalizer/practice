@@ -9,10 +9,10 @@ static void test_structure() {
     // White-box testing of the internal structure after various operations.
 
     // Set the tree to use for the following tests.
-    #define SET_TREE(...)                                      \
-      do {                                                     \
-          Rot_tree tree;                                       \
-          Tree_node *tmp;                                      \
+    #define SET_TREE(...)                                                     \
+      do {                                                                    \
+          Rot_tree tree;                                                      \
+          Tree_node *tmp;                                                     \
           tmp = tree_make(N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
     // Apply 'op' to (a copy of) the tree and verify that the structure of the
     // resulting tree matches the remaining arguments.
@@ -22,9 +22,9 @@ static void test_structure() {
           VERIFY(tree_equals(tree.root, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)); \
           rot_tree_free(&tree)
     // End the test (so we can set a new tree to test).
-    #define END_TEST      \
-          tree_free(tmp); \
-      }                   \
+    #define END_TEST                                                          \
+          tree_free(tmp);                                                     \
+      }                                                                       \
       while (0)
 
     #define SET(x) rot_tree_set(&tree, x, x, NULL)

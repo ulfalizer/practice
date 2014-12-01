@@ -11,8 +11,8 @@ static int _ = 0xDEAD;
 // Tests both tree_equals() and trees_equal().
 static void test_equals() {
     // Specifies the tree to use for the tests.
-    #define TEST_EQUALS_TREE(...)                          \
-      do {                                                 \
+    #define TEST_EQUALS_TREE(...)                                   \
+      do {                                                          \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__), *tree2
     // Verifies that the tree equals (equals == true) or does not equal the
     // given tree.
@@ -25,29 +25,39 @@ static void test_equals() {
           VERIFY(equals == trees_equal(tree, tree2));               \
           tree_free(tree2)
     // Ends the test.
-    #define TEST_EQUALS_END \
-          tree_free(tree);  \
-      }                     \
+    #define TEST_EQUALS_END                                         \
+          tree_free(tree);                                          \
+      }                                                             \
       while (0)
 
     // Empty tree.
     TEST_EQUALS_TREE();
     TEST_EQUALS(true);
-    TEST_EQUALS(true, _);
-    TEST_EQUALS(true, _, _);
+    TEST_EQUALS(true,
+      _);
+    TEST_EQUALS(true,
+       _,
+      _);
     TEST_EQUALS(false, 1);
-    TEST_EQUALS(false, 1, _);
-    TEST_EQUALS(false, 1, _,_);
+    TEST_EQUALS(false, 1,
+      _);
+    TEST_EQUALS(false, 1,
+       _,
+      _);
     TEST_EQUALS_END;
 
     // One-element tree.
     TEST_EQUALS_TREE(1);
     TEST_EQUALS(true, 1);
-    TEST_EQUALS(true, 1, _);
-    TEST_EQUALS(true, 1, _,_);
+    TEST_EQUALS(true, 1,
+      _);
+    TEST_EQUALS(true, 1,
+       _,
+      _);
     TEST_EQUALS(false);
     TEST_EQUALS(false, 2);
-    TEST_EQUALS(false, 2, _);
+    TEST_EQUALS(false, 2,
+      _);
     TEST_EQUALS(false,
        1,
       1);
@@ -140,8 +150,8 @@ static void test_equals() {
 }
 
 static void test_rotations() {
-    #define TEST_ROTATION_TREE(...)                \
-      do {                                         \
+    #define TEST_ROTATION_TREE(...)                                      \
+      do {                                                               \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__)
     #define TEST_ROTATION_RESULT(fn, ...)                                \
           fn(&tree);                                                     \
@@ -210,11 +220,11 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
       vector_init(&v);                          \
       tree = MAKE_TREE(__VA_ARGS__);            \
       fn(tree, &v)
-#define TRAVERSE_TEST_RES(...)                \
-      VERIFY_VECTOR_EQUALS(v, ##__VA_ARGS__); \
-      vector_free(&v);                        \
-      tree_free(tree);                        \
-  }                                           \
+#define TRAVERSE_TEST_RES(...)                  \
+      VERIFY_VECTOR_EQUALS(v, ##__VA_ARGS__);   \
+      vector_free(&v);                          \
+      tree_free(tree);                          \
+  }                                             \
   while (0)
 
 static void test_dfs() {
@@ -440,16 +450,16 @@ static void test_dfs_iter() {
       do {                                          \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__); \
           int val
-    #define VERIFY_HAS_KEY(key)                   \
-          VERIFY(tree_dfs_iter(tree, key, &val)); \
+    #define VERIFY_HAS_KEY(key)                     \
+          VERIFY(tree_dfs_iter(tree, key, &val));   \
           VERIFY(val == key + 1)
-    #define VERIFY_NOT_HAS_KEY(key)                \
-          val = 234;                               \
-          VERIFY(!tree_dfs_iter(tree, key, &val)); \
+    #define VERIFY_NOT_HAS_KEY(key)                 \
+          val = 234;                                \
+          VERIFY(!tree_dfs_iter(tree, key, &val));  \
           VERIFY(val == 234)
-    #define TEST_DFS_ITER_END \
-          tree_free(tree);    \
-      }                       \
+    #define TEST_DFS_ITER_END                       \
+          tree_free(tree);                          \
+      }                                             \
       while (0)
 
     TEST_DFS_ITER_TREE();

@@ -36,6 +36,7 @@ static void test_set_get_helper(bool keys_exist) {
           VERIFY(v == val + 1);                                   \
           VERIFY(hash_table_get(&hash_table, key, NULL));         \
       }
+
     Hash_table hash_table;
     hash_table_init(&hash_table);
     if (keys_exist)

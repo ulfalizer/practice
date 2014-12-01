@@ -145,6 +145,8 @@ void test_eval() {
     BAD("(");
     BAD(")");
     BAD(")1");
+    BAD("1(1)");
+    BAD("(1)1");
     BAD("()");
     BAD("(A)");
     BAD("(+)");

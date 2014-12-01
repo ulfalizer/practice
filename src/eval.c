@@ -1,7 +1,13 @@
 #include "common.h"
 #include "eval.h"
 
+// Used for returning to the main eval() function on syntax errors.
 static jmp_buf err_jmp_buf;
+
+// The parsing functions below consume as much of the input as can be part of
+// the current construction and then delegate to a higher level without looking
+// at the rest. This makes it straightforward to catch all syntax errors since
+// we detect them at the highest possible level.
 
 static int eval_sum(const char **s);
 

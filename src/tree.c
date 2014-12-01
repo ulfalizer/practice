@@ -4,6 +4,15 @@
 #include "tree.h"
 #include "vector.h"
 
+Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right) {
+    Tree_node *node = emalloc(sizeof(Tree_node), "create tree node");
+    node->key = key;
+    node->val = val;
+    node->left = left;
+    node->right = right;
+    return node;
+}
+
 Tree_node *tree_make(size_t len, ...) {
     va_list ap;
     Tree_node **nodes, *res;
@@ -23,10 +32,7 @@ Tree_node *tree_make(size_t len, ...) {
             nodes[i] = NULL;
             continue;
         }
-        nodes[i] = emalloc(sizeof(Tree_node), "make tree, node");
-        nodes[i]->key = node_key;
-        nodes[i]->val = node_key + 1;
-        nodes[i]->left = nodes[i]->right = NULL;
+        nodes[i] = create_node(node_key, node_key + 1, NULL, NULL);
         // Is this the root node?
         if (i != 0) {
             // Nope, so point the correct child pointer in the parent to it.
@@ -52,24 +58,10 @@ void tree_free(Tree_node *root) {
 }
 
 Tree_node *tree_copy(Tree_node *root) {
-    Tree_node *copy;
     if (root == NULL)
         return NULL;
-
-    copy = emalloc(sizeof(Tree_node), "copy tree");
-    copy->key = root->key;
-    copy->val = root->val;
-    copy->left = tree_copy(root->left);
-    copy->right = tree_copy(root->right);
-    return copy;
-}
-
-Tree_node *create_node(int key, int val) {
-    Tree_node *node = emalloc(sizeof(Tree_node), "create tree node");
-    node->left = node->right = NULL;
-    node->key = key;
-    node->val = val;
-    return node;
+    return create_node(root->key, root->val,
+      tree_copy(root->left), tree_copy(root->right));
 }
 
 unsigned tree_depth(Tree_node *root) {

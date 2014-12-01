@@ -77,7 +77,7 @@ bool rot_tree_set(Rot_tree *tree, int key, int val, int *oldval) {
             return true;
         }
 
-    *cur = create_node(key, val);
+    *cur = create_node(key, val, NULL, NULL);
     assemble(tree, *cur, &left, &right, left_insert, right_insert);
     return false;
 }

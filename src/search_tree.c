@@ -25,7 +25,7 @@ bool search_tree_set(Search_tree *tree, int key, int val, int *oldval) {
     Tree_node **node = get_node_ptr(tree, key);
 
     if (*node == NULL) {
-        *node = create_node(key, val);
+        *node = create_node(key, val, NULL, NULL);
         return false;
     }
 

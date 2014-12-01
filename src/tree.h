@@ -8,6 +8,9 @@ typedef struct Tree_node {
     int val;
 } Tree_node;
 
+// Helper function for creating a new node.
+Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right);
+
 // Builds a tree out of the variable argument list (with 'len' entries). 0xDEAD
 // specifies the lack of a node. The last level does not need to be fully
 // specified.
@@ -27,9 +30,6 @@ void tree_free(Tree_node *root);
 
 // Returns a new tree with copies of all nodes.
 Tree_node *tree_copy(Tree_node *root);
-
-// Creates a new tree node with no children.
-Tree_node *create_node(int key, int val);
 
 // Returns the number of levels in the tree -- zero for an empty tree, one
 // for a tree with one node, etc.

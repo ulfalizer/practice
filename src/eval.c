@@ -13,12 +13,15 @@ static int eval_sum(const char **s);
 
 static int eval_num(const char **s) {
     int res = 0;
+
     if (!isdigit(**s))
         longjmp(err_jmp_buf, 1);
-    while (isdigit(**s)) {
+
+    do {
         res = 10*res + **s - '0';
         ++*s;
     }
+    while (isdigit(**s));
     return res;
 }
 

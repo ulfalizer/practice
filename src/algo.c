@@ -68,6 +68,7 @@ void print_balanced(int n) {
 }
 
 bool is_balanced(const char *s) {
+    // Remaining entries are implicitly zero-initialized.
     static const char paren_table[1 << CHAR_BIT] =
       { [')'] = '(', [']'] = '[', ['}'] = '{' };
     bool res;

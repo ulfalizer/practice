@@ -106,30 +106,6 @@ void print_perms(char *s) {
     print_perms_rec(s, 0);
 }
 
-bool next_lex(char *s) {
-    size_t i, swap_i;
-    size_t len;
-
-    if (*s == '\0')
-        return false;
-    len = strlen(s);
-    // Go left while elements are monotonically increasing.
-    for (i = len - 1; i > 0 && (uc)s[i - 1] >= (uc)s[i]; --i);
-    if (i == 0)
-        // Already lexicographically sorted.
-        return false;
-    swap_i = i - 1;
-    // Find the smallest element greater than s[swap_i] on its right and swap
-    // it for s[swap_i]. No need to check for the end of the string since we
-    // will terminate on null anyway.
-    for (++i; (uc)s[i] > (uc)s[swap_i]; ++i);
-    swap(s[swap_i], s[i - 1]);
-    // Reverse the sequence on the right of swap_i.
-    for (i = 0; i < (len - swap_i)/2; ++i)
-        swap(s[swap_i + 1 + i], s[len - 1 - i]);
-    return true;
-}
-
 // Unrolled base case for generating all permutations of four elements. Speeds
 // things up by a little less than 2x compared to no base case on my machine.
 // Base case with three elements is ~15% slower than with four elements. (All
@@ -183,6 +159,30 @@ void perm_heaps(char *s, void fn(char *perm)) {
             // return to this level later, and then "return" to the next higher
             // level.
             indices[lev++] = 0;
+}
+
+bool next_lex(char *s) {
+    size_t i, swap_i;
+    size_t len;
+
+    if (*s == '\0')
+        return false;
+    len = strlen(s);
+    // Go left while elements are monotonically increasing.
+    for (i = len - 1; i > 0 && (uc)s[i - 1] >= (uc)s[i]; --i);
+    if (i == 0)
+        // Already lexicographically sorted.
+        return false;
+    swap_i = i - 1;
+    // Find the smallest element greater than s[swap_i] on its right and swap
+    // it for s[swap_i]. No need to check for the end of the string since we
+    // will terminate on null anyway.
+    for (++i; (uc)s[i] > (uc)s[swap_i]; ++i);
+    swap(s[swap_i], s[i - 1]);
+    // Reverse the sequence on the right of swap_i.
+    for (i = 0; i < (len - swap_i)/2; ++i)
+        swap(s[swap_i + 1 + i], s[len - 1 - i]);
+    return true;
 }
 
 bool binsearch(int find, int *nums, size_t len) {

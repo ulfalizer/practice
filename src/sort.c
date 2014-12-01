@@ -87,6 +87,9 @@ void quicksort(int *nums, size_t n) {
         }
     swap(nums[store_i], nums[n - 1]);
 
+    // Possible optimization:
+    // Always making the call on the largest partition the tail-recursive call
+    // would guarantee log(n) space.
     quicksort(nums, store_i);
     quicksort(nums + store_i + 1, n - store_i - 1);
 }

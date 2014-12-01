@@ -61,6 +61,7 @@ void print_balanced(int n) {
         return;
 
     res = alloca(2*n + 1);
+    // Lets us check for the end of the string using null termination.
     memset(res, 1, 2*n);
     res[2*n] = '\0';
     print_balanced_rec(0, n, 0, res);

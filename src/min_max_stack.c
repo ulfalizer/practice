@@ -3,9 +3,9 @@
 #include "min_max_stack.h"
 
 typedef struct Counted {
-    // Number of successive elements in the main stack having this value as the
-    // min or max. Saves space versus pushing/popping the auxiliary stacks for
-    // each operation.
+    // Number of successive elements (minus one) in the main stack having this
+    // value as the min or max. Saves space versus pushing/popping the
+    // auxiliary stacks for each operation.
     size_t n;
     int val;
 } Counted;

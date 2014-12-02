@@ -26,7 +26,8 @@ void queue_free(Queue *queue) {
 }
 
 size_t queue_len(Queue *queue) {
-    return (queue->end + queue->buf_len - queue->start) & (queue->buf_len - 1);
+    // This works out in two's complement even if end < start.
+    return (queue->end - queue->start) & (queue->buf_len - 1);
 }
 
 // Doubles the size of the buffer. Assumes the buffer is precisely full

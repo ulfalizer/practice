@@ -30,13 +30,11 @@ void stack_push(Stack *stack, void *val) {
 }
 
 void *stack_peek(Stack *stack) {
-    if (stack->len == 0)
-        fail("peeking empty stack");
+    assert(stack->len > 0);
     return stack->buf[stack->len - 1];
 }
 
 void *stack_pop(Stack *stack) {
-    if (stack->len == 0)
-        fail("popping empty stack");
+    assert(stack->len > 0);
     return stack->buf[--stack->len];
 }

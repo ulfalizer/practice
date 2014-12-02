@@ -18,8 +18,7 @@ size_t min_heap_len(Min_heap *heap) {
 void min_heap_add(Min_heap *heap, int val) {
     size_t i;
 
-    if (heap->len == HEAP_MAX_SIZE)
-        fail("heap full");
+    assert(heap->len < HEAP_MAX_SIZE);
 
     for (i = heap->len;
       i != 0 && val < heap->storage[parent(i)];
@@ -32,8 +31,8 @@ void min_heap_add(Min_heap *heap, int val) {
 int min_heap_remove(Min_heap *heap) {
     size_t i;
     int res, val;
-    if (heap->len == 0)
-        fail("heap empty");
+
+    assert(heap->len > 0);
     res = heap->storage[0];
     val = heap->storage[--heap->len];
     // Makes it safe to only check whether the left child is out of bounds. A

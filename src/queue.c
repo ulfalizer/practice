@@ -5,9 +5,13 @@
 // instead makes repeated inserts and removes of 1000 elements ~4 times slower
 // on my Core i7-2600K.
 //
-// Pre-calculating the mask (buf_len - 1) and updating it whenever the buffer
-// size changes is excessive and actually makes things slightly slower on my
-// system (perhaps due to extra memory instructions).
+// We could also pre-calculate the wrap mask (buf_len - 1) and update it
+// whenever the buffer size changes (or store just the mask), but it doesn't
+// seem to give a worthwhile speed-up on my system across a series of repeated
+// queue_add/remove/len() operations (an equal number of each operation with a
+// queue that never grows beyond 1000 elements gave a ~1-2% speedup with both
+// approaches. Just rearranging the elements of the Queue struct had an effect
+// in the same range).
 #define INITIAL_BUF_LEN 16
 
 void queue_init(Queue *queue) {

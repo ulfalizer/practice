@@ -21,7 +21,7 @@ static Tree_node **get_node_ptr(Search_tree *tree, int key) {
     return cur;
 }
 
-bool search_tree_set(Search_tree *tree, int key, int val, int *oldval) {
+bool search_tree_set(Search_tree *tree, int key, int val, int *old_val) {
     Tree_node **node = get_node_ptr(tree, key);
 
     if (*node == NULL) {
@@ -29,8 +29,8 @@ bool search_tree_set(Search_tree *tree, int key, int val, int *oldval) {
         return false;
     }
 
-    if (oldval != NULL)
-        *oldval = (*node)->val;
+    if (old_val != NULL)
+        *old_val = (*node)->val;
     (*node)->val = val;
     return true;
 }

@@ -11,16 +11,17 @@ void rot_tree_init(Rot_tree *tree);
 void rot_tree_free(Rot_tree *tree);
 
 // Sets 'key' to 'val'. If 'key' already exists, sets 'old_val' to its previous
-// value and returns true. Otherwise, returns false without modifying
-// 'old_val'.
-bool rot_tree_set(Rot_tree *tree, int key, int val, int *oldval);
+// value (if 'old_val' is not NULL) and returns true. Otherwise, returns false
+// without modifying 'old_val'.
+bool rot_tree_set(Rot_tree *tree, int key, int val, int *old_val);
 
 // If 'key' exists, sets 'val' to its value (if 'val' is not NULL) and returns
 // true. Otherwise, returns false without modifying 'val'.
 bool rot_tree_get(Rot_tree *tree, int key, int *val);
 
-// If 'key' exists, sets 'val' to its value and then removes it and returns
-// true. Otherwise, returns false without modifying 'val'.
+// If 'key' exists, sets 'val' to its value (if 'val' is not NULL) and then
+// removes it and returns true. Otherwise, returns false without modifying
+// 'val'.
 bool rot_tree_remove(Rot_tree *tree, int key, int *val);
 
 // Prints the representation of the rotate-to-root tree to stdout.

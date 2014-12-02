@@ -56,7 +56,7 @@ static void assemble(Rot_tree *tree,
   *left_insert = tree;          \
   left_insert = &(tree)->right
 
-bool rot_tree_set(Rot_tree *tree, int key, int val, int *oldval) {
+bool rot_tree_set(Rot_tree *tree, int key, int val, int *old_val) {
     DECLARE_INIT_LEFT_RIGHT;
     Tree_node **cur = &tree->root;
 
@@ -70,8 +70,8 @@ bool rot_tree_set(Rot_tree *tree, int key, int val, int *oldval) {
             cur = &(*cur)->right;
         }
         else {
-            if (oldval != NULL)
-                *oldval = (*cur)->val;
+            if (old_val != NULL)
+                *old_val = (*cur)->val;
             (*cur)->val = val;
             assemble(tree, *cur, &left, &right, left_insert, right_insert);
             return true;

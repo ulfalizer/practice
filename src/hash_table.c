@@ -2,9 +2,9 @@
 #include "hash_table.h"
 
 #define INITIAL_BUCKETS 63
-// The table size is increased by a factor of GROWTH_FACTOR when the number of
-// elements grows beyond MAX_LOAD*#buckets. There might be nicer ways to grow
-// the table depending on the hash function.
+// The number of buckets is increased by a factor of GROWTH_FACTOR when the
+// number of elements grows beyond MAX_LOAD*#buckets. There might be nicer ways
+// to grow the table depending on the hash function.
 #define MAX_LOAD 0.7
 #define GROWTH_FACTOR 2
 
@@ -38,12 +38,12 @@ void hash_table_free(Hash_table *table) {
 }
 
 // Resizes the hash table (changes the number of buckets).
-static void resize(Hash_table *table, size_t new_size) {
+static void resize(Hash_table *table, size_t new_n_buckets) {
     Hash_node **new_buckets;
 
     // Allocate new set of initially empty buckets.
-    new_buckets = emalloc(sizeof(Hash_node*)*new_size, "hash resize");
-    for (size_t i = 0; i < new_size; ++i)
+    new_buckets = emalloc(sizeof(Hash_node*)*new_n_buckets, "hash resize");
+    for (size_t i = 0; i < new_n_buckets; ++i)
         new_buckets[i] = NULL;
     // Rehash keys.
     for (size_t i = 0; i < table->n_buckets; ++i) {
@@ -53,7 +53,7 @@ static void resize(Hash_table *table, size_t new_size) {
 
             // Move node to new bucket.
             next = node->next;
-            new_index = hash(node->key) % new_size;
+            new_index = hash(node->key) % new_n_buckets;
             node->next = new_buckets[new_index];
             new_buckets[new_index] = node;
         }
@@ -62,8 +62,8 @@ static void resize(Hash_table *table, size_t new_size) {
     free(table->buckets);
     table->buckets = new_buckets;
     // Calculate new maximum load from the new size.
-    table->max_load = MAX_LOAD*new_size;
-    table->n_buckets = new_size;
+    table->max_load = MAX_LOAD*new_n_buckets;
+    table->n_buckets = new_n_buckets;
 }
 
 bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val) {

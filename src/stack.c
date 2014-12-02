@@ -19,8 +19,8 @@ size_t stack_len(Stack *stack) {
 
 static void grow(Stack *stack) {
     stack->buf_len *= 2;
-    stack->buf =
-      erealloc(stack->buf, sizeof(void*)*stack->buf_len, "stack grow");
+    stack->buf = erealloc(stack->buf, sizeof(void*)*stack->buf_len,
+      "stack grow");
 }
 
 void stack_push(Stack *stack, void *val) {

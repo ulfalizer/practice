@@ -43,13 +43,11 @@ static void grow(Queue *queue) {
     new_buf = emalloc(2*sizeof(void*)*queue->buf_len, "queue grow");
 
     // Copy from 'start' up to the end of the buffer.
-    memcpy(new_buf,
-      queue->buf + queue->start,
+    memcpy(new_buf, queue->buf + queue->start,
       sizeof(void*)*(queue->buf_len - queue->start));
     // Copy from the beginning of the buffer up to but not including
     // 'start' (== 'end').
-    memcpy(new_buf + queue->buf_len - queue->start,
-      queue->buf,
+    memcpy(new_buf + queue->buf_len - queue->start, queue->buf,
       sizeof(void*)*queue->start);
     // Free the old buffer.
     free(queue->buf);

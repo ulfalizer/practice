@@ -19,8 +19,8 @@ size_t vector_len(Vector *vector) {
 
 static void grow(Vector *vector) {
     vector->buf_len *= 2;
-    vector->buf =
-      erealloc(vector->buf, sizeof(void*)*vector->buf_len, "vector grow");
+    vector->buf = erealloc(vector->buf, sizeof(void*)*vector->buf_len,
+      "vector grow");
 }
 
 void vector_add(Vector *vector, void *val) {

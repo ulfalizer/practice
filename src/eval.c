@@ -36,14 +36,12 @@ static int eval_exp(const char **s) {
     case '+': ++*s; base = eval_exp(s); break;
     case '-': ++*s; base = -eval_exp(s); break;
     case '(':
-        {
         ++*s; // Eat "(".
         base = eval_sum(s);
         if (**s != ')')
             longjmp(err_jmp_buf, 1);
         ++*s; // Eat ")".
         break;
-        }
     default:
         base = eval_num(s);
     }

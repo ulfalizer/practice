@@ -68,7 +68,7 @@ void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector);
 void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector);
 
 // If 'key' exists in the tree, sets 'val' to its value (if 'val' is not NULL)
-// and returns true. Otherwise, returns false and does not modify 'val'.
+// and returns true. Otherwise, returns false without modifying 'val'.
 // Implemented non-recursively.
 bool tree_dfs_iter(Tree_node *node, int key, int *val);
 

@@ -10,16 +10,16 @@ void search_tree_init(Search_tree *tree);
 void search_tree_free(Search_tree *tree);
 
 // Sets 'key' to 'val'. If 'key' already exists, sets 'old_val' to its previous
-// value and returns true. Otherwise, returns false and does not modify
+// value and returns true. Otherwise, returns false without modifying
 // 'old_val'.
 bool search_tree_set(Search_tree *tree, int key, int val, int *oldval);
 
 // If 'key' exists, sets 'val' to its value (if 'val' is not NULL) and returns
-// true. Otherwise, returns false and does not modify 'val'.
+// true. Otherwise, returns false without modifying 'val'.
 bool search_tree_get(Search_tree *tree, int key, int *val);
 
 // If 'key' exists, sets 'val' to its value and then removes it and returns
-// true. Otherwise, returns false and does not modify 'val'.
+// true. Otherwise, returns false without modifying 'val'.
 bool search_tree_remove(Search_tree *tree, int key, int *val);
 
 // Prints the representation of the search tree to stdout.

@@ -19,18 +19,18 @@ void hash_table_init(Hash_table *table);
 void hash_table_free(Hash_table *table);
 
 // Sets 'key' to 'val'. If 'key' already exists, sets 'old_val' to its previous
-// value and returns true. Otherwise, returns false and does not modify
+// value and returns true. Otherwise, returns false without modifying
 // 'old_val'.
 //
 // The key is copied and so is safe to modify after calling this function.
 bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val);
 
 // If 'key' exists, sets 'val' to its value (if 'val' is not NULL) and returns
-// true. Otherwise, returns false and does not modify 'val'.
+// true. Otherwise, returns false without modifying 'val'.
 bool hash_table_get(Hash_table *table, const char *key, int *val);
 
 // If 'key' exists, sets 'val' to its value and then removes it and returns
-// true. Otherwise, returns false and does not modify 'val'.
+// true. Otherwise, returns false without modifying 'val'.
 bool hash_table_remove(Hash_table *table, const char *key, int *val);
 
 // Prints the representation of the hash table to stdout.

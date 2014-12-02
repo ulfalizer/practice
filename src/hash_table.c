@@ -73,15 +73,14 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
     bucket = hash_table->buckets + hash(key) % hash_table->n_buckets;
 
     // Is there already a node with the key?
-    for (Hash_node **node = bucket; *node; node = &(*node)->next) {
-        if (strcmp(key, (*node)->key) == 0) {
-            // Yes, so just replace its value.
+    for (Hash_node *node = *bucket; node; node = node->next)
+        if (strcmp(key, node->key) == 0) {
+            // Yes, so just replace its value and return.
             if (old_val != NULL)
-                *old_val = (*node)->val;
-            (*node)->val = val;
+                *old_val = node->val;
+            node->val = val;
             return true;
         }
-    }
 
     // We need to allocate a new node. Check if we exceed the max load for the
     // current number of buckets and grow the table if so.
@@ -95,7 +94,6 @@ bool hash_table_set(Hash_table *hash_table, const char *key, int val, int *old_v
     new_node->key = estrdup(key, "hash set, key");
     new_node->val = val;
     *bucket = new_node;
-
     return false;
 }
 

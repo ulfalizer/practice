@@ -33,9 +33,7 @@ size_t min_max_stack_len(Min_max_stack *stack) {
 }
 
 static void add_counted(Stack *stack, int val) {
-    Counted *c;
-
-    c = emalloc(sizeof(Counted), "min/max add count");
+    Counted *c = emalloc(sizeof(Counted), "min/max add count");
     c->val = val;
     c->n = 0;
     stack_push(stack, c);
@@ -50,22 +48,22 @@ void min_max_stack_push(Min_max_stack *stack, int val) {
         // Initialize min and max stacks.
         add_counted(&stack->min_stack, val);
         add_counted(&stack->max_stack, val);
-        return;
     }
+    else {
+        // Update min stack.
+        c = stack_peek(&stack->min_stack);
+        if (val < c->val)
+            add_counted(&stack->min_stack, val);
+        else
+            ++c->n;
 
-    // Update min stack.
-    c = stack_peek(&stack->min_stack);
-    if (val < c->val)
-        add_counted(&stack->min_stack, val);
-    else
-        ++c->n;
-
-    // Update max stack.
-    c = stack_peek(&stack->max_stack);
-    if (val > c->val)
-        add_counted(&stack->max_stack, val);
-    else
-        ++c->n;
+        // Update max stack.
+        c = stack_peek(&stack->max_stack);
+        if (val > c->val)
+            add_counted(&stack->max_stack, val);
+        else
+            ++c->n;
+    }
 }
 
 int min_max_stack_peek(Min_max_stack *stack) {

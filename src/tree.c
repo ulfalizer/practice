@@ -31,6 +31,7 @@ Tree_node *tree_make(size_t len, ...) {
             // Makes e.g. tree_make(1, 0xDEAD) work too for creating an empty
             // tree, and means we crash reliably for malformed trees.
             nodes[i] = NULL;
+
             continue;
         }
         nodes[i] = create_node(node_key, node_key + 1, NULL, NULL);

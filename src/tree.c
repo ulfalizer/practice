@@ -128,16 +128,17 @@ bool tree_equals(Tree_node *root, size_t len, ...) {
     n_nodes_left = (root != NULL);
     va_start(ap, len);
     for (size_t i = 0; len > 0; ++i, --len) {
+        int key_arg = va_arg(ap, int);
         Tree_node *node = vector_get(&vector, i);
         if (node == NULL) {
-            if (va_arg(ap, int) != 0xDEAD)
+            if (key_arg != 0xDEAD)
                 goto not_equal;
             // Expand the non-existing node to its two non-existing children.
             vector_add(&vector, NULL);
             vector_add(&vector, NULL);
         }
         else {
-            if (node->key != va_arg(ap, int))
+            if (node->key != key_arg)
                 goto not_equal;
             vector_add(&vector, node->left);
             vector_add(&vector, node->right);

@@ -34,9 +34,9 @@ size_t max_ones(char *s) {
 }
 
 static void print_balanced_rec(int i, int remain, int level, char *res) {
-    // No opening parentheses remain to be placed. Place remaining closing
-    // parentheses and return result.
     if (remain == 0) {
+        // No opening parentheses remain to be placed. Place remaining closing
+        // parentheses and return result.
         for (; res[i] != '\0'; ++i)
             res[i] = ')';
         puts(res);
@@ -220,7 +220,7 @@ void print_num(int num, int base) {
     i = MAX_SIZE - 1;
     do {
         // Handles negative numbers in a way that supports INT_MIN (which has
-        // no representable inverse).
+        // no representable inverse in two's complement).
         buf[--i] = digits[abs(num%base)];
         num /= base;
     }

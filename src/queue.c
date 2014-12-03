@@ -16,9 +16,9 @@
 
 void queue_init(Queue *queue) {
     queue->buf = emalloc(sizeof(void*)*INITIAL_BUF_LEN, "queue init");
+    queue->buf_len = INITIAL_BUF_LEN;
     queue->start = 0;
     queue->end = 0;
-    queue->buf_len = INITIAL_BUF_LEN;
 }
 
 void queue_free(Queue *queue) {
@@ -26,7 +26,7 @@ void queue_free(Queue *queue) {
 }
 
 size_t queue_len(Queue *queue) {
-    // This works out in two's complement even if end < start.
+    // This works out even if end < start.
     return (queue->end - queue->start) & (queue->buf_len - 1);
 }
 

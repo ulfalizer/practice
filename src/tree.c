@@ -299,9 +299,7 @@ static bool valid_bin_search_tree_rec(Tree_node *root, int *max, int *min) {
 }
 
 bool valid_bin_search_tree(Tree_node *root) {
-    return root == NULL ||
-      (valid_bin_search_tree_rec(root->left, &root->key, NULL) &&
-       valid_bin_search_tree_rec(root->right, NULL, &root->key));
+    return valid_bin_search_tree_rec(root, NULL, NULL);
 }
 
 static void print_n_spaces(int n) {

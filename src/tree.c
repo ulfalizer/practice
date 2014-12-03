@@ -117,43 +117,43 @@ bool tree_equals(Tree_node *root, size_t len, ...) {
     // Number of yet-to-be-expanded nodes. Zero means we've reached the end of
     // the tree.
     size_t n_nodes_left;
-    Vector vector;
+    Queue queue;
 
     // Do a breadth-first expansion with NULL for empty node positions. For
     // each node position, compare against the next argument.
     //
     // Simple, but wasteful if the tree is sparse.
 
-    vector_init(&vector);
-    vector_add(&vector, root);
+    queue_init(&queue);
+    queue_add(&queue, root);
     n_nodes_left = (root != NULL);
     va_start(ap, len);
-    for (size_t i = 0; len > 0; ++i, --len) {
+    for (size_t i = 0; i < len; ++i) {
         int key_arg = va_arg(ap, int);
-        Tree_node *node = vector_get(&vector, i);
+        Tree_node *node = queue_remove(&queue);
         if (node == NULL) {
             if (key_arg != 0xDEAD)
                 goto not_equal;
             // Expand the non-existing node to its two non-existing children.
-            vector_add(&vector, NULL);
-            vector_add(&vector, NULL);
+            queue_add(&queue, NULL);
+            queue_add(&queue, NULL);
         }
         else {
             if (node->key != key_arg)
                 goto not_equal;
-            vector_add(&vector, node->left);
-            vector_add(&vector, node->right);
+            queue_add(&queue, node->left);
+            queue_add(&queue, node->right);
             n_nodes_left =
               n_nodes_left - 1 + (node->left != NULL) + (node->right != NULL);
         }
     }
     va_end(ap);
-    vector_free(&vector);
+    queue_free(&queue);
     return n_nodes_left == 0;
 
 not_equal:
     va_end(ap);
-    vector_free(&vector);
+    queue_free(&queue);
     return false;
 }
 

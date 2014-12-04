@@ -1,6 +1,7 @@
 #include "common.h"
 #include "algo.h"
 #include "stack.h"
+#include "vector.h"
 
 bool substr(const char *find, const char *s) {
     for (size_t i = 0; s[i] != '\0'; ++i) {
@@ -31,6 +32,44 @@ size_t max_ones(char *s) {
         }
 
     return (i - prev_prev_zero > max) ? prev_zero : max_i;
+}
+
+// Helper function. Searches the interval [left,right[ of 'nums' for 'find'.
+// Returns the index of the smallest element greater than or equal (hence "ge")
+// to 'find', or 'right' if no such element exists. The values in 'nums' are
+// assumed to be in strictly ascending sorted order.
+static size_t find_ge(int find, int *nums, size_t left, size_t right) {
+    // The index we're looking for will always be in the range [left, right],
+    // which eventually shrinks down to a single index.
+    size_t middle;
+    while (left != right) {
+        middle = left + (right - left)/2;
+        if (nums[middle] >= find)
+            right = middle;
+        else
+            left = middle + 1;
+    }
+    return right;
+}
+
+void sorted_intersect(int *a1, size_t a1_len,
+                      int *a2, size_t a2_len, Vector *res) {
+    size_t i1 = 0, i2 = 0;
+    while (i1 < a1_len && i2 < a2_len)
+        // We do a binary search for the larger of the two elements if the
+        // elements are not equal. The search is performed in the array with
+        // the smaller element, and the array index for that array updated to
+        // point to the next element equal to or greater than the searched-for
+        // element (or to just past the end of the array if no such element
+        // exists).
+        if (a1[i1] == a2[i2]) {
+            vector_add(res, (void*)(intptr_t)a1[i1]);
+            ++i1; ++i2;
+        }
+        else if (a1[i1] > a2[i2])
+            i2 = find_ge(a1[i1], a2, i2, a2_len);
+        else
+            i1 = find_ge(a2[i2], a1, i1, a1_len);
 }
 
 static void print_balanced_rec(int i, int remain, int level, char *res) {

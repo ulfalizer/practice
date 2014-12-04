@@ -1,5 +1,6 @@
 #include "common.h"
 #include "algo.h"
+#include "vector.h"
 
 static void test_substr() {
     VERIFY(substr("", ""));
@@ -103,6 +104,104 @@ static void test_max_ones() {
     VERIFY(max_ones("1100100110011") == 2);
     VERIFY(max_ones("1100101110011") == 5);
     VERIFY(max_ones("1100101110111") == 9);
+}
+
+static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
+    va_list ap;
+    VERIFY(vector_len(v) == len);
+    va_start(ap, len);
+    for (size_t i = 0; i < len; ++i)
+        VERIFY((intptr_t)vector_get(v, i) == va_arg(ap, int));
+    va_end(ap);
+}
+
+#define VERIFY_VECTOR_EQUALS(v, ...) \
+  verify_vector_equals_helper(&v, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
+
+static void test_sorted_intersect() {
+    #define ARRAY_1(...)                                  \
+      do {                                                \
+          int a1[] = { __VA_ARGS__ };                     \
+          size_t a1_len = N_ARGS(__VA_ARGS__)
+    #define ARRAY_2(...)                                  \
+          int a2[] = { __VA_ARGS__ };                     \
+          size_t a2_len = N_ARGS(__VA_ARGS__)
+    #define VERIFY_COMMON(...)                            \
+          Vector res;                                     \
+          vector_init(&res);                              \
+          sorted_intersect(a1, a1_len, a2, a2_len, &res); \
+          VERIFY_VECTOR_EQUALS(res, ##__VA_ARGS__);       \
+          vector_free(&res);                              \
+      }                                                   \
+      while (0)
+
+    ARRAY_1();
+    ARRAY_2();
+    VERIFY_COMMON();
+
+    ARRAY_1(1);
+    ARRAY_2();
+    VERIFY_COMMON();
+
+    ARRAY_1();
+    ARRAY_2(1);
+    VERIFY_COMMON();
+
+    ARRAY_1(1);
+    ARRAY_2(   2);
+    VERIFY_COMMON();
+
+    ARRAY_1(1);
+    ARRAY_2(1);
+    VERIFY_COMMON(1);
+
+    ARRAY_1(1, 2);
+    ARRAY_2(1);
+    VERIFY_COMMON(1);
+
+    ARRAY_1(1, 2);
+    ARRAY_2(   2);
+    VERIFY_COMMON(2);
+
+    ARRAY_1(1);
+    ARRAY_2(1, 2);
+    VERIFY_COMMON(1);
+
+    ARRAY_1(   2);
+    ARRAY_2(1, 2);
+    VERIFY_COMMON(2);
+
+    ARRAY_1(   1,    3);
+    ARRAY_2(0,    2);
+    VERIFY_COMMON();
+
+    ARRAY_1(0,    2);
+    ARRAY_2(   1,    3);
+    VERIFY_COMMON();
+
+    ARRAY_1(0, 1, 2, 3, 4, 5);
+    ARRAY_2(0, 1, 2, 3, 4, 5);
+    VERIFY_COMMON(0, 1, 2, 3, 4, 5);
+
+    ARRAY_1(0, 1, 2, 3, 4   );
+    ARRAY_2(   1, 2, 3, 4, 5);
+    VERIFY_COMMON(1, 2, 3, 4);
+
+    ARRAY_1(   1, 2, 3, 4, 5);
+    ARRAY_2(0, 1, 2, 3, 4   );
+    VERIFY_COMMON(1, 2, 3, 4);
+
+    ARRAY_1(0, 1, 2,    4, 5, 6,    8, 9,     11,             15);
+    ARRAY_2(      2, 3, 4,       7,    9, 10,     12, 13, 14, 15, 16, 17);
+    VERIFY_COMMON(2, 4, 9, 15);
+
+    ARRAY_1(      2, 3, 4,       7,    9, 10,     12, 13, 14, 15, 16, 17);
+    ARRAY_2(0, 1, 2,    4, 5, 6,    8, 9,     11,             15);
+    VERIFY_COMMON(2, 4, 9, 15);
+
+    #undef ARRAY_1
+    #undef ARRAY_2
+    #undef VERIFY_COMMON
 }
 
 static void test_is_balanced() {
@@ -249,6 +348,7 @@ static void test_next_lex() {
 void test_algo() {
     test_substr();
     test_max_ones();
+    test_sorted_intersect();
     test_is_balanced();
     test_binsearch();
     test_next_lex();

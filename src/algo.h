@@ -12,6 +12,24 @@ bool substr(const char *find, const char *s);
 // 's' contains no 0s.
 size_t max_ones(char *s);
 
+typedef struct Vector Vector;
+
+// Adds the common elements of 'a1' and 'a2' (of length 'a1_len' and 'a2_len',
+// respectively) to 'res'. The values in each array are assumed to be in
+// strictly ascending sorted order.
+//
+// Tries to skip over ranges of values in both arrays via binary search. The
+// idea is that this might improve performance for inputs where the common
+// elements are known to be few and far between. I haven't done any
+// benchmarking though, and I suspect you'd need pretty special circumstances
+// for this to be worthwhile.
+//
+// A simpler approach would be to keep a pointer for each list and always
+// increment the one pointing to the smallest element. You could also
+// experiment with different increments, etc.
+void sorted_intersect(int *a1, size_t a1_len,
+                      int *a2, size_t a2_len, Vector *res);
+
 // Prints all strings with balanced left/right parentheses that have 'n'
 // opening parentheses.
 void print_balanced(int n);

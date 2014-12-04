@@ -94,12 +94,11 @@ static void print_balanced_rec(int i, int remain, int level, char *res) {
 }
 
 void print_balanced(int n) {
-    char *res;
-
     if (n == 0)
         return;
 
-    res = alloca(2*n + 1);
+    char res[2*n + 1]; // Variable-length array.
+
     // Lets us check for the end of the string using null termination.
     memset(res, 1, 2*n);
     res[2*n] = '\0';
@@ -171,14 +170,13 @@ void perm_heaps(char *s, void fn(char *perm)) {
     // The current level. The valid indices at level 'lev' are
     // 0, 1, ..., lev.
     size_t lev;
-    // indices[lev] holds the current index for level 'lev'.
-    size_t *indices;
     // Length of string to permute.
     size_t len;
 
     len = strlen(s);
     assert(len >= 4);
-    indices = alloca(sizeof(size_t)*len);
+    // indices[lev] holds the current index for level 'lev'.
+    size_t indices[len]; // Variable-length array.
     for (size_t i = 0; i < len; ++i)
         indices[i] = 0;
 

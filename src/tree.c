@@ -15,14 +15,13 @@ Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right) {
 
 Tree_node *tree_make(size_t len, ...) {
     va_list ap;
-    Tree_node **nodes;
 
     if (len == 0)
         return NULL;
 
     // Build an array of node pointers (like in a heap) and use it to construct
     // the tree.
-    nodes = alloca(sizeof(Tree_node*)*len);
+    Tree_node *nodes[len]; // Variable-length array.
 
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i) {

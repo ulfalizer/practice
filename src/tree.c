@@ -37,11 +37,11 @@ Tree_node *tree_make(size_t len, ...) {
         // Is this the root node?
         if (i != 0) {
             // Nope, so point the correct child pointer in the parent to it.
-            size_t parent = (i - 1)/2;
+            Tree_node *parent = nodes[(i - 1)/2];
             if (i % 2 == 1)
-                nodes[parent]->left = nodes[i];
+                parent->left = nodes[i];
             else
-                nodes[parent]->right = nodes[i];
+                parent->right = nodes[i];
         }
     }
     va_end(ap);

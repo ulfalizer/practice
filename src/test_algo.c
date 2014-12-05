@@ -119,20 +119,18 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
   verify_vector_equals_helper(&v, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
 static void test_sorted_intersect() {
-    #define ARRAY_1(...)                                  \
-      do {                                                \
-          int a1[] = { __VA_ARGS__ };                     \
-          size_t a1_len = N_ARGS(__VA_ARGS__)
-    #define ARRAY_2(...)                                  \
-          int a2[] = { __VA_ARGS__ };                     \
-          size_t a2_len = N_ARGS(__VA_ARGS__)
-    #define VERIFY_COMMON(...)                            \
-          Vector res;                                     \
-          vector_init(&res);                              \
-          sorted_intersect(a1, a1_len, a2, a2_len, &res); \
-          VERIFY_VECTOR_EQUALS(res, ##__VA_ARGS__);       \
-          vector_free(&res);                              \
-      }                                                   \
+    #define ARRAY_1(...)                                                \
+      do {                                                              \
+          int a1[] = { __VA_ARGS__ }
+    #define ARRAY_2(...)                                                \
+          int a2[] = { __VA_ARGS__ }
+    #define VERIFY_COMMON(...)                                          \
+          Vector res;                                                   \
+          vector_init(&res);                                            \
+          sorted_intersect(a1, ARRAY_LEN(a1), a2, ARRAY_LEN(a2), &res); \
+          VERIFY_VECTOR_EQUALS(res, ##__VA_ARGS__);                     \
+          vector_free(&res);                                            \
+      }                                                                 \
       while (0)
 
     ARRAY_1();

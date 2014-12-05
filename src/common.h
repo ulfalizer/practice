@@ -45,6 +45,8 @@ typedef unsigned char uc;
 
 #define uninitialized_var(x) x = x
 
+#define ARRAY_LEN(a) (sizeof (a)/sizeof *(a))
+
 // Returns its argument as a string literal.
 #define STRINGIFY(x) STRINGIFY_(x)
 #define STRINGIFY_(x) #x

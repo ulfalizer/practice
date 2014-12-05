@@ -121,7 +121,7 @@ void list_selection_sort(List *list) {
 }
 
 // Helper function. Inserts 'node' into 'sorted', which is sorted in ascending
-// order, so as to preserve sortedness.
+// order, in a way that preserves sortedness.
 static void list_insert(Node *node, Node **sorted) {
     Node **cur;
     // Find the pointer to the first element whose value is greater than or

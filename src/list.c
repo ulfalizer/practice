@@ -145,15 +145,22 @@ void list_insertion_sort(List *list) {
     }
 }
 
+// Merges the (ascendingly) sorted lists 'first' and 'second' into one sorted
+// list. Updates 'first' to point to the resulting list.
 static void merge(Node **first, Node *second) {
     for (Node **cur = first;; cur = &(*cur)->next) {
         if (*cur == NULL) {
+            // No elements remain in 'first'. Append the rest of 'second' to
+            // it.
             *cur = second;
             return;
         }
         if (second == NULL)
             return;
-        if ((*cur)->val >= second->val)
+        if (second->val < (*cur)->val)
+            // 'second' should be the next element, so assign it to *cur.
+            // Simultaneously make the old continuation of 'cur' the new
+            // 'second' so we don't lose it.
             swap(*cur, second);
     }
 }

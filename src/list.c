@@ -125,7 +125,7 @@ void list_selection_sort(List *list) {
 static void list_insert(Node *node, Node **sorted) {
     Node **cur;
     // Find the pointer to the first element whose value is greater than or
-    // equal to the node's, if any (otherwise we'll get the final null
+    // equal to the node's, if any (otherwise we'll get the final (NULL)
     // pointer).
     for (cur = sorted; *cur && (*cur)->val < node->val; cur = &(*cur)->next);
     // Insert 'node' before that element.
@@ -165,6 +165,10 @@ static void merge(Node **first, Node *second) {
     }
 }
 
+// Splits the list started by 'node' into two lists such that the second list
+// gets floor(#elements/2) elements. Returns the second list.
+//
+// This would be faster if we explicitly stored the length of lists.
 static Node *split(Node *node) {
     Node *speedy = node;
     if (node == NULL)
@@ -177,6 +181,7 @@ static Node *split(Node *node) {
         node = node->next;
     }
     Node *tmp = node->next;
+    // Terminate the first list at the midpoint.
     node->next = NULL;
     return tmp;
 }

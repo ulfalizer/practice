@@ -96,12 +96,17 @@ void list_reverse(List *list) {
     list->start = prev;
 }
 
+// Helper function. Removes and returns the minimum elements from the list.
+// Assumes there is at least one element.
 static Node *extract_min(Node **node) {
     Node **min = node, *res;
+    // Locate the minimum element.
     for (; *node; node = &(*node)->next)
         if ((*node)->val < (*min)->val)
             min = node;
     res = *min;
+    // Update the pointer to the minimum element to point to the following
+    // element instead.
     *min = (*min)->next;
     return res;
 }
@@ -115,24 +120,28 @@ void list_selection_sort(List *list) {
     }
 }
 
-static void list_insert(Node **sorted, Node *node) {
+// Helper function. Inserts 'node' into 'sorted', which is sorted in ascending
+// order, so as to preserve sortedness.
+static void list_insert(Node *node, Node **sorted) {
     Node **cur;
+    // Find the pointer to the first element whose value is greater than or
+    // equal to the node's, if any (otherwise we'll get the final null
+    // pointer).
     for (cur = sorted; *cur && (*cur)->val < node->val; cur = &(*cur)->next);
+    // Insert 'node' before that element.
     node->next = *cur;
     *cur = node;
 }
 
 // Most efficient when the reverse of the list is almost sorted. Not stable.
 void list_insertion_sort(List *list) {
-    Node *cur;
-    if (list->start == NULL)
-        return;
-    cur = list->start->next;
-    list->start->next = NULL;
-    while (cur) {
-        Node *next = cur->next;
-        list_insert(&list->start, cur);
-        cur = next;
+    Node *cur = list->start, *next;
+    // list->start points to the sorted list we insert into. It's initially
+    // empty.
+    list->start = NULL;
+    for (; cur; cur = next) {
+        next = cur->next;
+        list_insert(cur, &list->start);
     }
 }
 

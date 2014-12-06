@@ -1,6 +1,7 @@
 #include "common.h"
 
 void test_algo();
+void test_embedded_list();
 void test_eval();
 void test_hash_table();
 void test_list();
@@ -15,6 +16,7 @@ void test_vector();
 
 int main() {
     test_algo();
+    test_embedded_list();
     test_eval();
     test_hash_table();
     test_list();

@@ -18,3 +18,6 @@ The entry point is in <b>test.c</b>.
 
 Many of the interfaces would be neater in C++, but I started out in C for some
 reason.
+
+The <b>INITIAL\_\*</b> lengths for the data structures could be considered excessively
+small, but it helps with testing here.

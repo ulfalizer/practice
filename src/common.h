@@ -15,12 +15,12 @@
 #include <string.h>
 
 // Exits unsuccessfully with a message.
-void fail(char const *format, ...)
-  __attribute__((format(printf, 1, 2), noreturn));
+_Noreturn void fail(char const *format, ...)
+  __attribute__((format(printf, 1, 2)));
 
 // Exits unsuccessfully with errno and a message.
-void err(char const *format, ...)
-  __attribute__((format(printf, 1, 2), noreturn));
+_Noreturn void err(char const *format, ...)
+  __attribute__((format(printf, 1, 2)));
 
 // Returns a list of integers parsed from 'argv'. Caller frees list.
 int *parse_int_args(int argc, char *argv[]);

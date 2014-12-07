@@ -71,4 +71,4 @@ typedef unsigned char uc;
 
 // Returns the least power of two greater than or equal to 'n'. Assumes 'n' is
 // non-zero and that the result does not overflow.
-unsigned long ge_pow_2(unsigned long n);
+unsigned long long ge_pow_2(unsigned long long n);

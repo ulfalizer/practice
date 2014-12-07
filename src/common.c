@@ -54,7 +54,7 @@ char *estrdup(const char *s, const char *desc) {
     return res;
 }
 
-unsigned long ge_pow_2(unsigned long n) {
+unsigned long long ge_pow_2(unsigned long long n) {
     // The generic method from
     // https://graphics.stanford.edu/~seander/bithacks.html is around 10%
     // slower than this version on my Core i7-2600K for a tight loop with
@@ -66,5 +66,5 @@ unsigned long ge_pow_2(unsigned long n) {
     //
     // A version based on e.g. log2() is more than 10 times slower than this
     // version.
-    return 1UL << (CHAR_BIT*sizeof n - __builtin_clzl(n - 1));
+    return 1UL << (CHAR_BIT*sizeof n - __builtin_clzll(n - 1));
 }

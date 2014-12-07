@@ -53,3 +53,18 @@ char *estrdup(const char *s, const char *desc) {
         err("strdup failed: %s", desc);
     return res;
 }
+
+unsigned long ge_pow_2(unsigned long n) {
+    // The generic method from
+    // https://graphics.stanford.edu/~seander/bithacks.html is around 10%
+    // slower than this version on my Core i7-2600K for a tight loop with
+    // repeated calls.
+    //
+    // A look-up table (return ge_pow_2_table[__builtin_clzl(n - 1)]) is about
+    // the same speed as this version (with 1, 2, 3, 4, ... as the input
+    // sequence).
+    //
+    // A version based on e.g. log2() is more than 10 times slower than this
+    // version.
+    return 1UL << (CHAR_BIT*sizeof n - __builtin_clzl(n - 1));
+}

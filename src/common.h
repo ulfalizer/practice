@@ -68,3 +68,7 @@ typedef unsigned char uc;
   n10, n11, n12, n13, n14, n15, n16, n17, n18, n19, \
   n20, n21, n22, n23, n24, n25, n26, n27, n28,   N, \
   ...) N
+
+// Returns the least power of two greater than or equal to 'n'. Assumes 'n' is
+// non-zero and that the result does not overflow.
+unsigned long ge_pow_2(unsigned long n);

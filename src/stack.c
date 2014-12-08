@@ -4,7 +4,7 @@
 #define INITIAL_BUF_LEN 16
 
 void stack_init(Stack *stack) {
-    stack->buf = emalloc(sizeof(void*)*INITIAL_BUF_LEN, "stack init");
+    stack->buf = emalloc(sizeof(*stack->buf)*INITIAL_BUF_LEN, "stack init");
     stack->buf_len = INITIAL_BUF_LEN;
     stack->len = 0;
 }
@@ -19,7 +19,7 @@ size_t stack_len(Stack *stack) {
 
 static void grow(Stack *stack) {
     stack->buf_len *= 2;
-    stack->buf = erealloc(stack->buf, sizeof(void*)*stack->buf_len,
+    stack->buf = erealloc(stack->buf, sizeof(*stack->buf)*stack->buf_len,
       "stack grow");
 }
 

@@ -15,7 +15,7 @@
 #define INITIAL_BUF_LEN 16
 
 void queue_init(Queue *queue) {
-    queue->buf = emalloc(sizeof(void*)*INITIAL_BUF_LEN, "queue init");
+    queue->buf = emalloc(sizeof(*queue->buf)*INITIAL_BUF_LEN, "queue init");
     queue->buf_len = INITIAL_BUF_LEN;
     queue->start = 0;
     queue->end = 0;
@@ -40,15 +40,15 @@ static void grow(Queue *queue) {
 
     assert(queue->start == queue->end);
 
-    new_buf = emalloc(2*sizeof(void*)*queue->buf_len, "queue grow");
+    new_buf = emalloc(2*sizeof(*queue->buf)*queue->buf_len, "queue grow");
 
     // Copy from 'start' up to the end of the buffer.
     memcpy(new_buf, queue->buf + queue->start,
-      sizeof(void*)*(queue->buf_len - queue->start));
+      sizeof(*queue->buf)*(queue->buf_len - queue->start));
     // Copy from the beginning of the buffer up to but not including
     // 'start' (== 'end').
     memcpy(new_buf + queue->buf_len - queue->start, queue->buf,
-      sizeof(void*)*queue->start);
+      sizeof(*queue->buf)*queue->start);
     // Free the old buffer.
     free(queue->buf);
 

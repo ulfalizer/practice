@@ -4,7 +4,7 @@
 #define INITIAL_BUF_LEN 16
 
 void vector_init(Vector *vector) {
-    vector->buf = emalloc(sizeof(void*)*INITIAL_BUF_LEN, "vector init");
+    vector->buf = emalloc(sizeof(*vector->buf)*INITIAL_BUF_LEN, "vector init");
     vector->buf_len = INITIAL_BUF_LEN;
     vector->len = 0;
 }
@@ -19,7 +19,7 @@ size_t vector_len(Vector *vector) {
 
 static void grow(Vector *vector) {
     vector->buf_len *= 2;
-    vector->buf = erealloc(vector->buf, sizeof(void*)*vector->buf_len,
+    vector->buf = erealloc(vector->buf, sizeof(*vector->buf)*vector->buf_len,
       "vector grow");
 }
 

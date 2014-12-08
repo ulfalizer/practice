@@ -7,7 +7,7 @@
 // pointers (with no corresponding data) where the 'next' pointer points to the
 // first element of the list and the 'prev' pointer to the last.
 //
-// A pratical implementation would add more functionality, of course. :)
+// A practical implementation would add more functionality, of course. :)
 //
 // This is not strict-aliasing safe.
 

@@ -49,9 +49,9 @@ static void grow(Queue *queue) {
     // 'start' (== 'end').
     memcpy(new_buf + queue->buf_len - queue->start, queue->buf,
       sizeof(*queue->buf)*queue->start);
+
     // Free the old buffer.
     free(queue->buf);
-
     queue->buf = new_buf;
     queue->start = 0;
     queue->end = queue->buf_len;

@@ -15,15 +15,15 @@ void list_free(List *list) {
 
 void list_make(List *list, size_t len, ...) {
     va_list ap;
-    void list_add(List *list, int val);
-    void list_reverse(List *list);
-    list_init(list);
+    Node **cur;
 
     va_start(ap, len);
-    while (len--)
-        list_add(list, va_arg(ap, int));
+    for (cur = &list->start; len > 0; cur = &(*cur)->next, --len) {
+        *cur = emalloc(sizeof(Node), "list make");
+        (*cur)->val = va_arg(ap, int);
+    }
+    *cur = NULL;
     va_end(ap);
-    list_reverse(list);
 }
 
 void list_add(List *list, int val) {
@@ -36,6 +36,7 @@ void list_add(List *list, int val) {
 bool list_equals(List *list, size_t len, ...) {
     va_list ap;
     Node *node;
+
     va_start(ap, len);
     for (node = list->start; node && len > 0; node = node->next, --len)
         if (node->val != va_arg(ap, int)) {

@@ -40,6 +40,13 @@ void *emalloc(size_t size, const char *desc) {
     return res;
 }
 
+void *emalloc_align(size_t size, size_t align, const char *desc) {
+    void *res;
+    if (posix_memalign(&res, align, size) != 0)
+        err("posix_memalign failed: %s", desc);
+    return res;
+}
+
 void *erealloc(void *ptr, size_t size, const char *desc) {
     void *res = realloc(ptr, size);
     if (res == NULL)

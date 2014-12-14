@@ -1,6 +1,7 @@
 #include "common.h"
 
 void test_algo();
+void test_arena_allocator();
 void test_common();
 void test_embedded_list();
 void test_eval();
@@ -18,6 +19,7 @@ void test_vector();
 
 int main() {
     test_algo();
+    test_arena_allocator();
     test_common();
     test_embedded_list();
     test_eval();

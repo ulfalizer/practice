@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <math.h>
 #include <setjmp.h>
+#include <stdalign.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -28,6 +29,7 @@ int *parse_int_args(int argc, char *argv[]);
 
 // Checked allocation functions.
 void *emalloc(size_t size, const char *desc);
+void *emalloc_align(size_t size, size_t align, const char *desc);
 void *erealloc(void *ptr, size_t size, const char *desc);
 char *estrdup(const char *s, const char *desc);
 

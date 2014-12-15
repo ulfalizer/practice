@@ -8,13 +8,13 @@ tests := $(addprefix tests/, test.c test_algo.c test_arena_allocator.c \
   test_rot_tree.c test_search_tree.c test_sort.c test_string_builder.c \
   test_tree.c test_vector.c)
 
-headers := $(addprefix src/, algo.h arena_allocator.h common.h \
+headers := $(addprefix include/, algo.h arena_allocator.h common.h \
   embedded_list.h hash_table.h list.h min_heap.h min_max_stack.h queue.h \
   rot_tree.h search_tree.h sort.h stack.h tree.h vector.h)
 
 test: $(sources) $(tests) $(headers)
 # We strictly only need -fno-strict-aliasing for test_embedded_list.c.
-	gcc -std=gnu11 -g -Og -fno-strict-aliasing -Wall -Isrc/ -o $@ $(sources) $(tests) -lm
+	gcc -std=gnu11 -g -Og -fno-strict-aliasing -Wall -Iinclude -o $@ $(sources) $(tests) -lm
 
 .PHONY: clean
 clean:

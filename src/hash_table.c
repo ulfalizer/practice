@@ -10,9 +10,10 @@
 
 static unsigned long hash(const char *s) {
     // djb2 algorithm.
-    unsigned long hash = 5381;
-    while (*s)
-        hash = ((hash << 5) + hash) + (unsigned char)*s++;
+    unsigned long hash;
+
+    for (hash = 5381; *s != '\0'; ++s)
+        hash = ((hash << 5) + hash) + (uc)*s;
     return hash;
 }
 

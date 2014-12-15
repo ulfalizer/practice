@@ -105,10 +105,70 @@ static void test_align() {
     arena_free(&arena);
 }
 
+static void test_strdup() {
+    Arena arena;
+    char *s[4];
+
+    arena_init(&arena);
+
+    s[0] = arena_strdup(&arena, "");
+    s[1] = arena_strdup(&arena, "a");
+    s[2] = arena_strdup(&arena, "ab");
+    s[3] = arena_strdup(&arena, "abc");
+    VERIFY(strcmp(s[0], "") == 0);
+    VERIFY(strcmp(s[1], "a") == 0);
+    VERIFY(strcmp(s[2], "ab") == 0);
+    VERIFY(strcmp(s[3], "abc") == 0);
+
+    // Should be modifiable.
+    for (int i = 0; i < ARRAY_LEN(s); ++i)
+        *s[i] = 'x';
+
+    arena_free(&arena);
+}
+
+static void test_strndup() {
+    Arena arena;
+    char *s[11];
+
+    arena_init(&arena);
+
+    s[0]  = arena_strndup(&arena, "", 0);
+    s[1]  = arena_strndup(&arena, "", 1);
+    s[2]  = arena_strndup(&arena, "a", 0);
+    s[3]  = arena_strndup(&arena, "a", 1);
+    s[4]  = arena_strndup(&arena, "a", 2);
+    s[5]  = arena_strndup(&arena, "a", 3);
+    s[6]  = arena_strndup(&arena, "ab", 1);
+    s[7]  = arena_strndup(&arena, "ab", 2);
+    s[8]  = arena_strndup(&arena, "ab", 3);
+    s[9]  = arena_strndup(&arena, "foo bar", 3);
+    s[10] = arena_strndup(&arena, "foo bar", 1000);
+    VERIFY(strcmp(s[0], "") == 0);
+    VERIFY(strcmp(s[1], "") == 0);
+    VERIFY(strcmp(s[2], "") == 0);
+    VERIFY(strcmp(s[3], "a") == 0);
+    VERIFY(strcmp(s[4], "a") == 0);
+    VERIFY(strcmp(s[5], "a") == 0);
+    VERIFY(strcmp(s[6], "a") == 0);
+    VERIFY(strcmp(s[7], "ab") == 0);
+    VERIFY(strcmp(s[8], "ab") == 0);
+    VERIFY(strcmp(s[9], "foo") == 0);
+    VERIFY(strcmp(s[10], "foo bar") == 0);
+
+    // Should be modifiable.
+    for (int i = 0; i < ARRAY_LEN(s); ++i)
+        *s[i] = 'x';
+
+    arena_free(&arena);
+}
+
 void test_arena_allocator() {
     test_one_byte_allocs();
     test_normal_allocs();
     test_big_allocs();
     test_big_allocs_chain();
     test_align();
+    test_strdup();
+    test_strndup();
 }

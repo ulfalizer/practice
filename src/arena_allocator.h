@@ -47,3 +47,9 @@ void arena_free(Arena *arena);
 
 // Allocates 'size' bytes from the arena.
 void *arena_alloc(Arena *arena, size_t size);
+
+// Like strdup(), allocating out of the arena.
+char *arena_strdup(Arena *arena, const char *s);
+
+// Like strndup(), allocating out of the arena.
+char *arena_strndup(Arena *arena, const char *s, size_t n);

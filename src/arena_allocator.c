@@ -56,3 +56,24 @@ void *arena_alloc(Chunk **arena, size_t size) {
 
     return chunk->big_storage;
 }
+
+char *arena_strdup(Chunk **arena, const char *s) {
+    size_t len;
+    void *res;
+
+    len = strlen(s) + 1;
+    res = arena_alloc(arena, len);
+    memcpy(res, s, len);
+    return res;
+}
+
+char *arena_strndup(Chunk **arena, const char *s, size_t n) {
+    size_t len;
+    char *res;
+
+    for (len = 0; s[len] != '\0' && len < n; ++len);
+    res = arena_alloc(arena, len);
+    memcpy(res, s, len);
+    res[len] = '\0';
+    return res;
+}

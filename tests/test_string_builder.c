@@ -1,5 +1,5 @@
 #include "common.h"
-#include "string.h"
+#include "string_builder.h"
 
 #pragma GCC diagnostic ignored "-Wformat-security"
 

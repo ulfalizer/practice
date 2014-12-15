@@ -1,5 +1,4 @@
-// A dynamically-resized null-terminated string (perhaps "string builder" is
-// more fitting).
+// A dynamically grown string builder.
 
 typedef struct String {
     char *buf;
@@ -10,7 +9,7 @@ typedef struct String {
 void string_init(String *s);
 void string_free(String *s);
 
-// Appends characters to the end of the buffer. Format is like for printf().
+// Appends to the strings. Format is like for printf().
 void string_append(String *s, const char *format, ...)
   __attribute__((format(printf, 2, 3)));
 

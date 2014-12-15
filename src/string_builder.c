@@ -1,5 +1,5 @@
 #include "common.h"
-#include "string.h"
+#include "string_builder.h"
 
 #define INITIAL_BUF_LEN 16
 

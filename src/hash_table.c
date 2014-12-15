@@ -1,7 +1,11 @@
 #include "common.h"
 #include "hash_table.h"
 
-#define INITIAL_BUCKETS 63
+// Keep the number of buckets as a power of two to keep things simple and speed
+// up the modulos operation. The downside is that we're effectively truncating
+// the result of the hash function to the lowest n bits, which could decrease
+// entropy.
+#define INITIAL_BUCKETS 64
 // The number of buckets is increased by a factor of GROWTH_FACTOR when the
 // number of elements grows beyond MAX_LOAD*#buckets. There might be nicer ways
 // to grow the table depending on the hash function.
@@ -19,7 +23,7 @@ static unsigned long hash(const char *s) {
 
 // Returns a pointer to the start of the bucket for 'key' in 'table'.
 static Hash_node **get_bucket(Hash_table *table, const char *key) {
-    return table->buckets + hash(key) % table->n_buckets;
+    return table->buckets + (hash(key) & (table->n_buckets - 1));
 }
 
 // Creates and initializes a new set of 'n_buckets' empty buckets in 'table'.

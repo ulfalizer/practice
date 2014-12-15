@@ -9,10 +9,10 @@ typedef struct Hash_node {
 typedef struct Hash_table {
     Hash_node **buckets;
     size_t n_buckets;
-    // The table is grown when the number of elements exceeds 'max_load'.
-    size_t max_load;
     // Number of elements stored in the hash table.
     size_t n_elements;
+    // The table is grown when the number of elements exceeds 'max_load'.
+    size_t max_load;
 } Hash_table;
 
 void hash_table_init(Hash_table *table);

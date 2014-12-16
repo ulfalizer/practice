@@ -46,3 +46,12 @@ void string_append(String *s, const char *format, ...) {
     va_end(ap_copy);
     va_end(ap);
 }
+
+const char *string_get(String *s) {
+    return s->buf;
+}
+
+// Returns the length of the string (excluding the terminating null).
+size_t string_len(String *s) {
+    return s->len;
+}

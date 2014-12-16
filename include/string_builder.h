@@ -18,11 +18,7 @@ void string_append(String *s, const char *format, ...)
 // The pointer is only guaranteed to remain valid until the next append
 // operation, and becomes invalid when the buffer is freed. A safer version
 // would strdup() the result.
-inline const char *string_get(String *s) {
-    return s->buf;
-}
+const char *string_get(String *s);
 
 // Returns the length of the string (excluding the terminating null).
-inline size_t string_len(String *s) {
-    return s->len;
-}
+size_t string_len(String *s);

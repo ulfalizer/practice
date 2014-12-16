@@ -6,7 +6,7 @@ Small and simple implementations of various algorithms and data structures.
 * The [src](src) directory contains the implementations.
 * The [tests](tests) directory contains unit tests.
 
-The code makes use of C99/11 features, including variadic macros, <b>stdbool.h</b>,
+The code makes use of C99/11 features, including variadic macros, <b>\<stdbool.h\></b>,
 and <b>alignas()</b> (for the arena allocator).
 
 Running:

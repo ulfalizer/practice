@@ -6,58 +6,89 @@ static size_t g_aligned(size_t size) {
     return (size + ALIGN) & ~(ALIGN - 1);
 }
 
-void arena_init(Chunk **arena) {
-    *arena = emalloc_align(DEFAULT_CHUNK_SIZE, ALIGN, "arena chunk init");
-    (*arena)->next = NULL;
-    (*arena)->start = (*arena)->storage;
-    (*arena)->end = (char*)*arena + DEFAULT_CHUNK_SIZE;
+// Returns the amount of data that fits in 'chunk', ignoring how much data it
+// currently holds.
+static size_t storage_size(Chunk *chunk) {
+    return chunk->end - chunk->storage;
 }
 
-void arena_free(Chunk **arena) {
+void arena_init(Arena *arena) {
+    arena->cur = emalloc_align(DEFAULT_CHUNK_SIZE, ALIGN, "arena chunk init");
+    arena->cur->next = NULL;
+    arena->cur->start = arena->cur->storage;
+    arena->cur->end = (char*)arena->cur + DEFAULT_CHUNK_SIZE;
+    arena->first = arena->cur;
+}
+
+void arena_free(Arena *arena) {
     Chunk *next;
-    for (; *arena != NULL; *arena = next) {
-        next = (*arena)->next;
-        free(*arena);
+    for (Chunk *cur = arena->first; cur != NULL; cur = next) {
+        next = cur->next;
+        free(cur);
     }
 }
 
-void *arena_alloc(Chunk **arena, size_t size) {
-    Chunk *chunk;
-
-    if ((*arena)->start + size <= (*arena)->end) {
+void *arena_alloc(Arena *arena, size_t size) {
+    if (arena->cur->start + size <= arena->cur->end) {
         // The allocation fits within the head chunk.
-        void *res = (*arena)->start;
-        (*arena)->start += g_aligned(size);
+        void *res = arena->cur->start;
+        arena->cur->start += g_aligned(size);
 
         return res;
     }
 
-    // We need to allocate a new chunk.
+    // We need a new chunk.
 
-    if (size <= DEFAULT_CHUNK_SIZE - sizeof(Chunk)) {
-        // The allocation fits within a default-sized chunk.
-        chunk = emalloc_align(DEFAULT_CHUNK_SIZE, ALIGN, "arena chunk small");
-        chunk->next = *arena;
-        chunk->start = chunk->storage + g_aligned(size);
-        chunk->end = (char*)chunk + DEFAULT_CHUNK_SIZE;
+    if (arena->cur->next != NULL && size <= storage_size(arena->cur->next))
+        // The allocation fits within the next chunk (allocated before
+        // resetting the cursor). Reuse it.
+        //
+        // We could also do a search of all free chunks to try to find one that
+        // can accommodate the request, but keep it simple. The allocator is
+        // optimized for small allocations that can be satisfied by the first
+        // free chunk.
+        arena->cur = arena->cur->next;
+    else {
+        // Allocate a new chunk. We support large allocations (assumed to be
+        // uncommon) via oversized chunks.
+        //
+        // We can't reorder chunks since that would break cursor semantics, so
+        // oversized chunks will always incur some (likely negligible) overhead
+        // at the next allocation to discover that the head chunk is full.
+        size_t chunk_size = max(DEFAULT_CHUNK_SIZE, sizeof(Chunk) + size);
+        Chunk *chunk = emalloc_align(chunk_size, ALIGN, "arena chunk");
 
-        *arena = chunk;
+        chunk->next = arena->cur->next;
+        chunk->end = (char*)chunk + chunk_size;
 
-        return chunk->storage;
+        arena->cur->next = chunk;
+        arena->cur = chunk;
     }
-    // The allocation is too large for a default-sized chunk. Allocate a big
-    // chunk.
-    chunk = emalloc_align(offsetof(Chunk, big_storage) + size, ALIGN,
-      "arena chunk large");
-    // Insert the big chunk after the head chunk (so that we do not
-    // accidentally attempt to allocate out of it).
-    chunk->next = (*arena)->next;
-    (*arena)->next = chunk;
 
-    return chunk->big_storage;
+    arena->cur->start = arena->cur->storage + g_aligned(size);
+    return arena->cur->storage;
 }
 
-char *arena_strdup(Chunk **arena, const char *s) {
+void arena_get_cursor(Arena *arena, Arena_cursor *cursor) {
+    cursor->chunk = arena->cur;
+    cursor->start = arena->cur->start;
+}
+
+void arena_set_cursor(Arena *arena, Arena_cursor *cursor, bool reuse_chunks) {
+    arena->cur = cursor->chunk;
+    arena->cur->start = cursor->start;
+    if (!reuse_chunks) {
+        Chunk *next;
+
+        for (Chunk *c = arena->cur->next; c != NULL; c = next) {
+            next = c->next;
+            free(c);
+        }
+        arena->cur->next = NULL;
+    }
+}
+
+char *arena_strdup(Arena *arena, const char *s) {
     size_t len;
     void *res;
 
@@ -67,7 +98,7 @@ char *arena_strdup(Chunk **arena, const char *s) {
     return res;
 }
 
-char *arena_strndup(Chunk **arena, const char *s, size_t n) {
+char *arena_strndup(Arena *arena, const char *s, size_t n) {
     size_t len;
     char *res;
 

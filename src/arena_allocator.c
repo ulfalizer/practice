@@ -22,6 +22,7 @@ void arena_init(Arena *arena) {
 
 void arena_free(Arena *arena) {
     Chunk *next;
+    assume(arena->first != NULL);
     for (Chunk *cur = arena->first; cur != NULL; cur = next) {
         next = cur->next;
         free(cur);

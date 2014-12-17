@@ -55,6 +55,11 @@ typedef unsigned char uc;
 #define STRINGIFY(x) STRINGIFY_(x)
 #define STRINGIFY_(x) #x
 
+// Optimization hints. All uses have been shown to decrease code size with GCC.
+#define assume(x)              \
+  if (!(x))                    \
+      __builtin_unreachable();
+
 #define VERIFY(cond)                                                  \
   if (!(cond))                                                        \
       fail(__FILE__":"STRINGIFY(__LINE__)": "#cond" should be true");

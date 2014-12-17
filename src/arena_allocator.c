@@ -58,6 +58,7 @@ void *arena_alloc(Arena *arena, size_t size) {
         // at the next allocation to discover that the head chunk is full.
         size_t chunk_size = max(DEFAULT_CHUNK_SIZE, sizeof(Chunk) + size);
         Chunk *chunk = emalloc_align(chunk_size, ALIGN, "arena chunk");
+
         chunk->next = arena->cur->next;
         chunk->end = (char*)chunk + chunk_size;
 

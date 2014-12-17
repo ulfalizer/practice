@@ -79,13 +79,14 @@ void arena_set_cursor(Arena *arena, Arena_cursor *cursor, bool reuse_chunks) {
     arena->cur = cursor->chunk;
     arena->cur->start = cursor->start;
     if (!reuse_chunks) {
+        Chunk *c = arena->cur->next;
         Chunk *next;
 
-        for (Chunk *c = arena->cur->next; c != NULL; c = next) {
+        arena->cur->next = NULL;
+        for (; c != NULL; c = next) {
             next = c->next;
             free(c);
         }
-        arena->cur->next = NULL;
     }
 }
 

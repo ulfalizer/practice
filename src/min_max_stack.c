@@ -33,7 +33,7 @@ size_t min_max_stack_len(Min_max_stack *stack) {
 }
 
 static void add_counted(Stack *stack, int val) {
-    Counted *c = emalloc(sizeof(Counted), "min/max add count");
+    Counted *c = emalloc(sizeof *c, "min/max add count");
     c->val = val;
     c->n = 0;
     stack_push(stack, c);

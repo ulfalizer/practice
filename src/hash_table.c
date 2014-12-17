@@ -29,7 +29,8 @@ static Hash_node **get_bucket(Hash_table *table, const char *key) {
 // Creates and initializes a new set of 'n_buckets' empty buckets in 'table'.
 // Does not update 'n_elements'.
 static void init_buckets(Hash_table *table, size_t n_buckets) {
-    table->buckets = emalloc(sizeof(Hash_node*)*n_buckets, "hash buckets init");
+    table->buckets = emalloc(sizeof(*table->buckets)*n_buckets,
+      "hash buckets init");
     for (size_t i = 0; i < n_buckets; ++i)
         table->buckets[i] = NULL;
     table->n_buckets = n_buckets;
@@ -102,7 +103,7 @@ bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val) {
         bucket = get_bucket(table, key);
     }
 
-    new_node = emalloc(sizeof(Hash_node), "hash set, node");
+    new_node = emalloc(sizeof *new_node, "hash set, node");
     new_node->next = *bucket;
     new_node->key = estrdup(key, "hash set, key");
     new_node->val = val;

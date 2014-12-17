@@ -19,7 +19,7 @@ void list_make(List *list, size_t len, ...) {
 
     va_start(ap, len);
     for (cur = &list->start; len > 0; cur = &(*cur)->next, --len) {
-        *cur = emalloc(sizeof(Node), "list make");
+        *cur = emalloc(sizeof **cur, "list make");
         (*cur)->val = va_arg(ap, int);
     }
     *cur = NULL;
@@ -27,7 +27,7 @@ void list_make(List *list, size_t len, ...) {
 }
 
 void list_add(List *list, int val) {
-    Node *new_node = emalloc(sizeof(Node), "list add");
+    Node *new_node = emalloc(sizeof *new_node, "list add");
     new_node->next = list->start;
     new_node->val = val;
     list->start = new_node;

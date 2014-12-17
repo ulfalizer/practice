@@ -5,7 +5,7 @@
 #include "vector.h"
 
 Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right) {
-    Tree_node *node = emalloc(sizeof(Tree_node), "create tree node");
+    Tree_node *node = emalloc(sizeof *node, "create tree node");
     node->key = key;
     node->val = val;
     node->left = left;

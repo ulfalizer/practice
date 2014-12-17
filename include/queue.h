@@ -18,5 +18,6 @@ size_t queue_len(Queue *queue);
 // Appends a new element to 'queue'.
 void queue_add(Queue *queue, void *val);
 
-// Removes and returns the first element in 'queue'.
+// Removes and returns the first element in 'queue'. Must not be called with an
+// empty queue.
 void *queue_remove(Queue *queue);

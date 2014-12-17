@@ -15,5 +15,5 @@ size_t vector_len(Vector *vector);
 // Appends a new element to 'vector'.
 void vector_add(Vector *vector, void *val);
 
-// Gets the element at 'index' in 'vector'.
+// Returns the element at 'index' in 'vector'. The element must exist.
 void *vector_get(Vector *vector, size_t index);

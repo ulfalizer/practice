@@ -48,8 +48,8 @@ void print_perms(char *s);
 // Assumes strlen(s) >= 4 for simplicity.
 void perm_heaps(char *s, void fn(char *perm));
 
-// Generates the next higher permutation of 's' in lexicographic order. Returns
-// false if no higher permutation exists.
+// Generates the next higher permutation of 's' in lexicographic order
+// in-place. Returns false if no higher permutation exists.
 bool next_lex(char *s);
 
 // Returns true if 'find' appears in the sorted list 'nums' of length 'len'.

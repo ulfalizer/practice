@@ -12,14 +12,15 @@ typedef struct List {
 void list_init(List *list);
 void list_free(List *list);
 
-// Creates a list with the 'len' ints from the variable argument list.
+// Creates a list with the 'len' int values from the variable argument list, in
+// the same order.
 void list_make(List *list, size_t len, ...);
 
 // Adds 'val' to the beginning of 'list'.
 void list_add(List *list, int val);
 
-// Returns true if 'list' equals the 'len' int values from the variable
-// argument list.
+// Returns true if 'list' has length 'len' and contains the 'len' int values
+// from the variable argument list, in the same order.
 bool list_equals(List *list, size_t len, ...);
 
 // Returns true if lists 'l1' and 'l2' are equal.

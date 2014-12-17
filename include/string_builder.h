@@ -9,7 +9,7 @@ typedef struct String {
 void string_init(String *s);
 void string_free(String *s);
 
-// Appends to the strings. Format is like for printf().
+// Appends text to 's'. Format is like for printf().
 void string_append(String *s, const char *format, ...)
   __attribute__((format(printf, 2, 3)));
 

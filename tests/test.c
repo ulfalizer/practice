@@ -10,6 +10,7 @@ void test_list();
 void test_min_heap();
 void test_min_max_stack();
 void test_queue();
+void test_regex();
 void test_rot_tree();
 void test_search_tree();
 void test_string();
@@ -28,6 +29,7 @@ int main() {
     test_min_heap();
     test_min_max_stack();
     test_queue();
+    test_regex();
     test_rot_tree();
     test_search_tree();
     test_sort();

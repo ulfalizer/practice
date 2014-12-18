@@ -22,6 +22,7 @@ void arena_init(Arena *arena) {
 
 void arena_free(Arena *arena) {
     Chunk *next;
+
     assume(arena->first != NULL);
     for (Chunk *cur = arena->first; cur != NULL; cur = next) {
         next = cur->next;
@@ -91,22 +92,15 @@ void arena_set_cursor(Arena *arena, Arena_cursor *cursor, bool reuse_chunks) {
 }
 
 char *arena_strdup(Arena *arena, const char *s) {
-    size_t len;
-    void *res;
+    size_t len = strlen(s) + 1;
 
-    len = strlen(s) + 1;
-    res = arena_alloc(arena, len);
-    memcpy(res, s, len);
-    return res;
+    return memcpy(arena_alloc(arena, len), s, len);
 }
 
 char *arena_strndup(Arena *arena, const char *s, size_t n) {
-    size_t len;
-    char *res;
+    size_t len = strnlen(s, n);
+    char *res = arena_alloc(arena, len + 1);
 
-    for (len = 0; s[len] != '\0' && len < n; ++len);
-    res = arena_alloc(arena, len);
-    memcpy(res, s, len);
     res[len] = '\0';
-    return res;
+    return memcpy(res, s, len);
 }

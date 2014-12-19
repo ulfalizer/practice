@@ -61,7 +61,7 @@ static char parse_literal(const char **pat) {
 // parse_literals() helper. If the input starts with a non-quantified literal
 // (a literal not followed by '?', '*', or '+'), move 'pat' past it and return
 // true. Otherwise, return false without modifying 'pat'.
-static bool next_nq_literal(const char **pat) {
+static bool skip_nq_literal(const char **pat) {
     const char *tmp;
 
     if (!is_literal(**pat))
@@ -103,7 +103,7 @@ static Regex_node *parse_literals(const char **pat, Arena *arena) {
     cur = *pat;
 
     first_literal = parse_literal(&cur);
-    if (!next_nq_literal(&cur)) {
+    if (!skip_nq_literal(&cur)) {
         // Single character. Use a CHAR node.
         node = make_node(CHAR, arena);
         node->c = first_literal;
@@ -115,7 +115,7 @@ static Regex_node *parse_literals(const char **pat, Arena *arena) {
 
     // Many characters. Use a SPAN node.
 
-    while (next_nq_literal(&cur));
+    while (skip_nq_literal(&cur));
 
     node = make_node(SPAN, arena);
     node->s = arena_strndup(arena, *pat, cur - *pat);

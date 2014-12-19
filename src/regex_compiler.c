@@ -93,17 +93,17 @@ static void deescape(char *s) {
 // SPAN node with the literals. Otherwise, returns a CHAR node with the initial
 // literal. We must be careful to handle escaped literals correctly.
 static Regex_node *parse_literals(const char **pat, Arena *arena) {
-    const char *cur;
+    const char *start;
     char first_literal;
     Regex_node *node;
 
     if (!is_literal(**pat))
         longjmp(err_jmp_buf, 1);
 
-    cur = *pat;
+    start = *pat;
 
-    first_literal = parse_literal(&cur);
-    if (!skip_nq_literal(&cur)) {
+    first_literal = parse_literal(pat);
+    if (!skip_nq_literal(pat)) {
         // Single character. Use a CHAR node.
 
         node = make_node(CHAR, arena);
@@ -112,14 +112,12 @@ static Regex_node *parse_literals(const char **pat, Arena *arena) {
     else {
         // Many characters. Use a SPAN node.
 
-        while (skip_nq_literal(&cur));
+        while (skip_nq_literal(pat));
 
         node = make_node(SPAN, arena);
-        node->s = arena_strndup(arena, *pat, cur - *pat);
+        node->s = arena_strndup(arena, start, *pat - start);
         deescape(node->s);
     }
-
-    *pat = cur;
 
     return node;
 }

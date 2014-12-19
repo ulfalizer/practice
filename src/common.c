@@ -25,7 +25,7 @@ void fail(char const *format, ...) {
 
 int *parse_int_args(int argc, char *argv[]) {
     void *emalloc(size_t size, const char *desc);
-    int *res = emalloc(sizeof(int)*((argc == 0) ? 0 : argc - 1), "args");
+    int *res = emalloc(sizeof(*res)*((argc == 0) ? 0 : argc - 1), "args");
 
     for (int i = 1; i < argc; ++i) {
         char *end;

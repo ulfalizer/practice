@@ -56,20 +56,20 @@ static void mergesort_rec(int *nums, size_t n, int *scratch) {
     // Merge.
     for (size_t i = 0;; ++i) {
         if (i1 == mid) {
-            memcpy(scratch + i, nums + i2, sizeof(int)*(n - i2));
+            memcpy(scratch + i, nums + i2, sizeof(*nums)*(n - i2));
             break;
         }
         if (i2 == n) {
-            memcpy(scratch + i, nums + i1, sizeof(int)*(mid - i1));
+            memcpy(scratch + i, nums + i1, sizeof(*nums)*(mid - i1));
             break;
         }
         scratch[i] = (nums[i1] < nums[i2]) ? nums[i1++] : nums[i2++];
     }
-    memcpy(nums, scratch, sizeof(int)*n);
+    memcpy(nums, scratch, sizeof(*nums)*n);
 }
 
 void mergesort(int *nums, size_t n) {
-    int *scratch = emalloc(sizeof(int)*n, "mergesort scratch");
+    int *scratch = emalloc(sizeof(*scratch)*n, "mergesort scratch");
 
     mergesort_rec(nums, n, scratch);
     free(scratch);

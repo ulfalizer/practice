@@ -19,7 +19,8 @@ static void test_equals() {
     // Specifies the tree to use for the following tests.
     #define TEST_EQUALS_TREE(...)                                   \
       do {                                                          \
-          Tree_node *tree = MAKE_TREE(__VA_ARGS__), *tree2
+          Tree_node *tree = MAKE_TREE(__VA_ARGS__), *tree2          \
+
     // Verifies that the tree equals (equals == true) or does not equal the
     // given tree.
     #define TEST_EQUALS(equals, ...)                                \
@@ -176,7 +177,8 @@ static void test_equals() {
 static void test_rotations() {
     #define TEST_ROTATION_TREE(...)                                      \
       do {                                                               \
-          Tree_node *tree = MAKE_TREE(__VA_ARGS__)
+          Tree_node *tree = MAKE_TREE(__VA_ARGS__)                       \
+
     #define TEST_ROTATION_RESULT(fn, ...)                                \
           fn(&tree);                                                     \
           VERIFY(tree_equals(tree, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)); \
@@ -226,7 +228,9 @@ static void test_rotations() {
 
 static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
     va_list ap;
+
     VERIFY(vector_len(v) == len);
+
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i)
         VERIFY(((Tree_node*)vector_get(v, i))->key == va_arg(ap, int));
@@ -478,7 +482,8 @@ static void test_dfs_iter() {
     #define TEST_DFS_ITER_TREE(...)                 \
       do {                                          \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__); \
-          int val
+          int val                                   \
+
     #define VERIFY_HAS_KEY(key)                     \
           VERIFY(tree_dfs_iter(tree, key, &val));   \
           VERIFY(val == key + 1)
@@ -549,6 +554,7 @@ static void test_valid_bin_search_tree() {
     #define VERIFY_BIN_SEARCH_TREE(valid, ...)          \
       {                                                 \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__);     \
+                                                        \
           VERIFY(valid == valid_bin_search_tree(tree)); \
           tree_free(tree);                              \
       }

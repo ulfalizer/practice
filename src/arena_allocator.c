@@ -66,8 +66,8 @@ void *arena_alloc(Arena *arena, size_t size) {
         arena->cur->next = chunk;
         arena->cur = chunk;
     }
-
     arena->cur->start = arena->cur->storage + g_aligned(size);
+
     return arena->cur->storage;
 }
 

@@ -6,7 +6,7 @@
 // only modified when they should be.
 
 // Helper for specifying the lack of a node with tree_make().
-static int _ = 0xDEAD;
+static const int _ = 0xDEAD;
 
 static void test_structure() {
     // White-box testing of the internal structure after various operations.
@@ -16,6 +16,7 @@ static void test_structure() {
       do {                                                                    \
           Rot_tree tree;                                                      \
           Tree_node *tmp;                                                     \
+                                                                              \
           tmp = tree_make(N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
     // Apply 'op' to (a copy of) the tree and verify that the structure of the
     // resulting tree matches the remaining arguments.
@@ -297,9 +298,16 @@ static void populate(Rot_tree *tree) {
 }
 
 static void test_set_get_helper(bool keys_exist) {
+    Rot_tree tree;
+
+    rot_tree_init(&tree);
+    if (keys_exist)
+        populate(&tree);
+
     #define VERIFY_SET_GET(key, val)                      \
       {                                                   \
           int v = 234;                                    \
+                                                          \
           if (!keys_exist) {                              \
               VERIFY(!rot_tree_get(&tree, key, &v));      \
               VERIFY(v == 234);                           \
@@ -317,24 +325,26 @@ static void test_set_get_helper(bool keys_exist) {
           VERIFY(rot_tree_valid(&tree));                  \
       }
 
-    Rot_tree tree;
-    rot_tree_init(&tree);
-
-    if (keys_exist)
-        populate(&tree);
     for (int i = 0; i < 10; ++i)
         VERIFY_SET_GET(i, 2*i);
     VERIFY_SET_GET(INT_MAX, 100);
     VERIFY_SET_GET(INT_MIN, 200);
-    rot_tree_free(&tree);
 
     #undef VERIFY_SET_GET
+
+    rot_tree_free(&tree);
 }
 
 static void test_remove() {
+    Rot_tree tree;
+
+    rot_tree_init(&tree);
+    populate(&tree);
+
     #define VERIFY_REMOVE_NOT_EXISTS(key)           \
       {                                             \
           int v = 234;                              \
+                                                    \
           VERIFY(!rot_tree_get(&tree, key, &v));    \
           VERIFY(!rot_tree_remove(&tree, key, &v)); \
           VERIFY(!rot_tree_get(&tree, key, &v));    \
@@ -344,6 +354,7 @@ static void test_remove() {
     #define VERIFY_REMOVE_EXISTS(key)                 \
       {                                               \
           int v1, v2;                                 \
+                                                      \
           VERIFY(rot_tree_get(&tree, key, &v1));      \
           VERIFY(rot_tree_remove(&tree, key, &v2));   \
           VERIFY(!rot_tree_get(&tree, key, NULL));    \
@@ -351,9 +362,6 @@ static void test_remove() {
           VERIFY(v1 == v2);                           \
       }
 
-    Rot_tree tree;
-    rot_tree_init(&tree);
-    populate(&tree);
     VERIFY_REMOVE_NOT_EXISTS(10);
     VERIFY_REMOVE_NOT_EXISTS(-10);
     for (int i = 0; i < 10; ++i)
@@ -363,6 +371,8 @@ static void test_remove() {
 
     #undef VERIFY_REMOVE_NOT_EXISTS
     #undef VERIFY_REMOVE_EXISTS
+
+    rot_tree_free(&tree);
 }
 
 static void test_set_get() {

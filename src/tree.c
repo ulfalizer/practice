@@ -6,10 +6,12 @@
 
 Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right) {
     Tree_node *node = emalloc(sizeof *node, "create tree node");
+
     node->key = key;
     node->val = val;
     node->left = left;
     node->right = right;
+
     return node;
 }
 
@@ -72,6 +74,7 @@ unsigned tree_depth(Tree_node *root) {
 
 void tree_rot_right(Tree_node **node) {
     Tree_node *left = (*node)->left;
+
     (*node)->left = left->right;
     left->right = *node;
     *node = left;
@@ -79,6 +82,7 @@ void tree_rot_right(Tree_node **node) {
 
 void tree_rot_left(Tree_node **node) {
     Tree_node *right = (*node)->right;
+
     (*node)->right = right->left;
     right->left = *node;
     *node = right;
@@ -86,15 +90,18 @@ void tree_rot_left(Tree_node **node) {
 
 static Tree_node *unlink_max(Tree_node **cur) {
     Tree_node *res;
+
     while ((*cur)->right != NULL)
         cur = &(*cur)->right;
     res = *cur;
     *cur = (*cur)->left;
+
     return res;
 }
 
 void tree_remove(Tree_node **node) {
     Tree_node *rem;
+
     if ((*node)->left == NULL) {
         rem = *node;
         *node = (*node)->right;
@@ -126,6 +133,7 @@ bool tree_equals(Tree_node *root, size_t len, ...) {
     queue_init(&queue);
     queue_add(&queue, root);
     n_nodes_left = (root != NULL);
+
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i) {
         int key_arg = va_arg(ap, int);
@@ -147,12 +155,15 @@ bool tree_equals(Tree_node *root, size_t len, ...) {
         }
     }
     va_end(ap);
+
     queue_free(&queue);
+
     return n_nodes_left == 0;
 
 not_equal:
     va_end(ap);
     queue_free(&queue);
+
     return false;
 }
 
@@ -269,6 +280,7 @@ bool tree_dfs_iter(Tree_node *node, int key, int *val) {
                     *val = node->val;
 
                 stack_free(&stack);
+
                 return true;
             }
             stack_push(&stack, node);
@@ -276,6 +288,7 @@ bool tree_dfs_iter(Tree_node *node, int key, int *val) {
 
         if (stack_len(&stack) == 0) {
             stack_free(&stack);
+
             return false;
         }
 
@@ -294,6 +307,7 @@ static bool valid_bin_search_tree_rec(Tree_node *root, int *max, int *min) {
     if ((max != NULL && root->key >= *max) ||
         (min != NULL && root->key <= *min))
         return false;
+
     return valid_bin_search_tree_rec(root->left, &root->key, min) &&
       valid_bin_search_tree_rec(root->right, max, &root->key);
 }
@@ -322,6 +336,7 @@ void tree_print(Tree_node *root) {
             // spacing before the first element of the level is half the
             // spacing before the remaining elements.
             unsigned spacing = 1 << (depth - level - (i == 0));
+
             if (node == NULL) {
                 print_n_spaces(spacing);
                 queue_add(&queue, NULL);

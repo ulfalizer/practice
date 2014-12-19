@@ -36,5 +36,6 @@ int main() {
     test_string();
     test_tree();
     test_vector();
+
     puts("all tests passed");
 }

@@ -108,7 +108,9 @@ static void test_max_ones() {
 
 static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
     va_list ap;
+
     VERIFY(vector_len(v) == len);
+
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i)
         VERIFY((intptr_t)vector_get(v, i) == va_arg(ap, int));
@@ -126,6 +128,7 @@ static void test_sorted_intersect() {
           int a2[] = { __VA_ARGS__ }
     #define VERIFY_COMMON(...)                                          \
           Vector res;                                                   \
+                                                                        \
           vector_init(&res);                                            \
           sorted_intersect(a1, ARRAY_LEN(a1), a2, ARRAY_LEN(a2), &res); \
           VERIFY_VECTOR_EQUALS(res, ##__VA_ARGS__);                     \
@@ -239,6 +242,7 @@ static void test_binsearch() {
     #define VERIFY_BINSEARCH(in_list, find, ...)                    \
       {                                                             \
         int a[] = { __VA_ARGS__ };                                  \
+                                                                    \
         VERIFY(in_list == binsearch(find, a, N_ARGS(__VA_ARGS__))); \
       }
 
@@ -280,7 +284,8 @@ static void test_binsearch() {
 static void test_next_lex() {
     #define TEST_STRING(str)          \
       do {                            \
-          char s[] = str
+          char s[] = str              \
+
     #define VERIFY_NEXT_PERM(str)     \
           VERIFY(next_lex(s));        \
           VERIFY(strcmp(s, str) == 0)

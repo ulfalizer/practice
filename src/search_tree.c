@@ -18,6 +18,7 @@ static Tree_node **get_node_ptr(Search_tree *tree, int key) {
 
     while (*cur && key != (*cur)->key)
         cur = (key < (*cur)->key) ? &(*cur)->left : &(*cur)->right;
+
     return cur;
 }
 
@@ -26,12 +27,14 @@ bool search_tree_set(Search_tree *tree, int key, int val, int *old_val) {
 
     if (*node == NULL) {
         *node = create_node(key, val, NULL, NULL);
+
         return false;
     }
 
     if (old_val != NULL)
         *old_val = (*node)->val;
     (*node)->val = val;
+
     return true;
 }
 
@@ -43,6 +46,7 @@ bool search_tree_get(Search_tree *tree, int key, int *val) {
 
     if (val != NULL)
         *val = node->val;
+
     return true;
 }
 
@@ -55,6 +59,7 @@ bool search_tree_remove(Search_tree *tree, int key, int *val) {
     if (val != NULL)
         *val = (*node)->val;
     tree_remove(node);
+
     return true;
 }
 

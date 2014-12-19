@@ -20,18 +20,19 @@ static void populate(Search_tree *tree) {
     ADD_DOUBLE(8);
     ADD_DOUBLE(0);
 
+    #undef ADD_DOUBLE
+
     search_tree_set(tree, INT_MAX, 100, NULL);
     VERIFY(search_tree_valid(tree));
     search_tree_set(tree, INT_MIN, 200, NULL);
     VERIFY(search_tree_valid(tree));
-
-    #undef ADD_DOUBLE
 }
 
 static void test_set_get_helper(bool keys_exist) {
     #define VERIFY_SET_GET(key, val)                         \
       {                                                      \
           int v = 234;                                       \
+                                                             \
           if (!keys_exist) {                                 \
               VERIFY(!search_tree_get(&tree, key, &v));      \
               VERIFY(v == 234);                              \
@@ -68,9 +69,15 @@ static void test_set_get_helper(bool keys_exist) {
 }
 
 static void test_remove() {
+    Search_tree tree;
+
+    search_tree_init(&tree);
+    populate(&tree);
+
     #define VERIFY_REMOVE_NOT_EXISTS(key)              \
       {                                                \
           int v = 234;                                 \
+                                                       \
           VERIFY(!search_tree_get(&tree, key, &v));    \
           VERIFY(!search_tree_remove(&tree, key, &v)); \
           VERIFY(!search_tree_get(&tree, key, &v));    \
@@ -80,6 +87,7 @@ static void test_remove() {
     #define VERIFY_REMOVE_EXISTS(key)                    \
       {                                                  \
           int v1, v2;                                    \
+                                                         \
           VERIFY(search_tree_get(&tree, key, &v1));      \
           VERIFY(search_tree_remove(&tree, key, &v2));   \
           VERIFY(!search_tree_get(&tree, key, NULL));    \
@@ -87,9 +95,6 @@ static void test_remove() {
           VERIFY(v1 == v2);                              \
       }
 
-    Search_tree tree;
-    search_tree_init(&tree);
-    populate(&tree);
     VERIFY_REMOVE_NOT_EXISTS(10);
     VERIFY_REMOVE_NOT_EXISTS(-10);
     for (int i = 0; i < 10; ++i)

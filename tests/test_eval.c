@@ -6,6 +6,7 @@ void test_eval() {
     #define V(str, res)               \
       {                               \
           int result;                 \
+                                      \
           VERIFY(eval(str, &result)); \
           VERIFY(result == res);      \
       }
@@ -14,6 +15,7 @@ void test_eval() {
     #define BAD(str)                   \
       {                                \
           int result = 567;            \
+                                       \
           VERIFY(!eval(str, &result)); \
           VERIFY(result == 567);       \
       }

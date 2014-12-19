@@ -93,6 +93,7 @@ bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val) {
             if (old_val != NULL)
                 *old_val = node->val;
             node->val = val;
+
             return true;
         }
 
@@ -108,6 +109,7 @@ bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val) {
     new_node->key = estrdup(key, "hash set, key");
     new_node->val = val;
     *bucket = new_node;
+
     return false;
 }
 
@@ -116,14 +118,16 @@ bool hash_table_get(Hash_table *table, const char *key, int *val) {
         if (strcmp(key, node->key) == 0) {
             if (val != NULL)
                 *val = node->val;
+
             return true;
         }
+
     return false;
 }
 
 bool hash_table_remove(Hash_table *table, const char *key, int *val) {
     for (Hash_node **node = get_bucket(table, key); *node;
-      node = &(*node)->next)
+         node = &(*node)->next)
         if (strcmp(key, (*node)->key) == 0) {
             Hash_node *tmp;
 
@@ -137,8 +141,10 @@ bool hash_table_remove(Hash_table *table, const char *key, int *val) {
             free(tmp);
 
             --table->n_elements;
+
             return true;
         }
+
     return false;
 }
 

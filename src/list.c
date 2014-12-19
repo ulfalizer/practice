@@ -7,6 +7,7 @@ void list_init(List *list) {
 
 void list_free(List *list) {
     Node *next;
+
     for (Node *node = list->start; node; node = next) {
         next = node->next;
         free(node);
@@ -22,12 +23,14 @@ void list_make(List *list, size_t len, ...) {
         *cur = emalloc(sizeof **cur, "list make");
         (*cur)->val = va_arg(ap, int);
     }
-    *cur = NULL;
     va_end(ap);
+
+    *cur = NULL;
 }
 
 void list_add(List *list, int val) {
     Node *new_node = emalloc(sizeof *new_node, "list add");
+
     new_node->next = list->start;
     new_node->val = val;
     list->start = new_node;
@@ -41,9 +44,11 @@ bool list_equals(List *list, size_t len, ...) {
     for (node = list->start; node && len > 0; node = node->next, --len)
         if (node->val != va_arg(ap, int)) {
             va_end(ap);
+
             return false;
         }
     va_end(ap);
+
     return node == NULL && len == 0;
 }
 
@@ -61,9 +66,11 @@ bool lists_equal(List *l1, List *l2) {
 
 bool list_is_sorted(List* list) {
     int prev = INT_MIN;
+
     for (Node *node = list->start; node; prev = node->val, node = node->next)
         if (prev > node->val)
             return false;
+
     return true;
 }
 
@@ -73,6 +80,7 @@ void list_remove(List *list, int val) {
             Node *tmp = *cur;
             *cur = (*cur)->next;
             free(tmp);
+
             return;
         }
 }
@@ -90,6 +98,7 @@ void list_remove_all(List *list, int val) {
 
 void list_reverse(List *list) {
     Node *next, *prev = NULL;
+
     for (Node *cur = list->start; cur; prev = cur, cur = next) {
         next = cur->next;
         cur->next = prev;
@@ -101,6 +110,7 @@ void list_reverse(List *list) {
 // Assumes there is at least one element.
 static Node *extract_min(Node **node) {
     Node **min = node, *res;
+
     // Locate the minimum element.
     for (; *node; node = &(*node)->next)
         if ((*node)->val < (*min)->val)
@@ -109,6 +119,7 @@ static Node *extract_min(Node **node) {
     // Update the pointer to the minimum element to point to the following
     // element instead.
     *min = (*min)->next;
+
     return res;
 }
 
@@ -125,6 +136,7 @@ void list_selection_sort(List *list) {
 // order, in a way that preserves sortedness.
 static void list_insert(Node *node, Node **sorted) {
     Node **cur;
+
     // Find the pointer to the first element whose value is greater than or
     // equal to the node's, if any (otherwise we'll get the final (NULL)
     // pointer).
@@ -137,6 +149,7 @@ static void list_insert(Node *node, Node **sorted) {
 // Most efficient when the reverse of the list is almost sorted. Not stable.
 void list_insertion_sort(List *list) {
     Node *cur = list->start, *next;
+
     // list->start points to the sorted list we insert into. It's initially
     // empty.
     list->start = NULL;
@@ -154,6 +167,7 @@ static void merge(Node **first, Node *second) {
             // No elements remain in 'first'. Append the rest of 'second' to
             // it.
             *cur = second;
+
             return;
         }
         if (second == NULL)
@@ -171,7 +185,8 @@ static void merge(Node **first, Node *second) {
 //
 // This would be faster if we explicitly stored the length of lists.
 static Node *split(Node *node) {
-    Node *speedy = node;
+    Node *speedy = node, *tmp;
+
     if (node == NULL)
         return NULL;
     for (;;) {
@@ -181,16 +196,19 @@ static Node *split(Node *node) {
             break;
         node = node->next;
     }
-    Node *tmp = node->next;
+    tmp = node->next;
     // Terminate the first list at the midpoint.
     node->next = NULL;
+
     return tmp;
 }
 
 static void mergesort_rec(Node **node) {
     Node *other = split(*node);
+
     if (other == NULL)
         return;
+
     mergesort_rec(node);
     mergesort_rec(&other);
     merge(node, other);

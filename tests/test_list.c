@@ -3,6 +3,7 @@
 
 #define MAKE_LIST(name, ...)                           \
   List name;                                           \
+                                                       \
   list_make(&name, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
 #define VERIFY_LIST_EQUALS(list, ...)                            \
@@ -14,6 +15,7 @@
 static void test_add() {
     // Also tests list_equals().
     List list;
+
     list_init(&list);
 
     // Verify that the list is empty.
@@ -34,6 +36,7 @@ static void test_make() {
     #define VERIFY_MAKE(...)                       \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
+                                                   \
           VERIFY_LIST_EQUALS(list, ##__VA_ARGS__); \
           list_free(&list);                        \
       }
@@ -50,6 +53,7 @@ static void test_is_sorted() {
     #define VERIFY_SORTED(sorted, ...)             \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
+                                                   \
           VERIFY(sorted == list_is_sorted(&list)); \
           list_free(&list);                        \
       }
@@ -106,7 +110,8 @@ static void test_reverse() {
     #define VERIFY_REVERSE_SET_LIST(...)           \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
-          list_reverse(&list);
+                                                   \
+          list_reverse(&list)
     #define VERIFY_REVERSE_RESULT(...)             \
           VERIFY_LIST_EQUALS(list, ##__VA_ARGS__); \
           list_free(&list);                        \
@@ -135,6 +140,7 @@ static void test_sort(void sort_fn(List *)) {
       {                                  \
           MAKE_LIST(l1, ##__VA_ARGS__);  \
           MAKE_LIST(l2, ##__VA_ARGS__);  \
+                                         \
           list_selection_sort(&l1);      \
           sort_fn(&l2);                  \
           VERIFY(lists_equal(&l1, &l2)); \

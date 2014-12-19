@@ -3,7 +3,9 @@
 
 void test_min_heap() {
     Min_heap heap;
+
     min_heap_init(&heap);
+
     VERIFY(min_heap_len(&heap) == 0);
     min_heap_add(&heap, 8);
     min_heap_add(&heap, 2);
@@ -17,5 +19,6 @@ void test_min_heap() {
     VERIFY(min_heap_remove(&heap) == 8);
     VERIFY(min_heap_remove(&heap) == 73);
     VERIFY(min_heap_len(&heap) == 0);
+
     min_heap_free(&heap);
 }

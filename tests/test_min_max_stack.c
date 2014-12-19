@@ -3,6 +3,9 @@
 #include "min_max_stack.h"
 
 void test_min_max_stack() {
+    Min_max_stack stack;
+    min_max_stack_init(&stack);
+
     #define VERIFY_PUSH(val, min, max)             \
         min_max_stack_push(&stack, val);           \
         VERIFY(min_max_stack_peek(&stack) == val); \
@@ -14,9 +17,6 @@ void test_min_max_stack() {
         VERIFY(min_max_stack_max(&stack) == max);  \
         VERIFY(min_max_stack_peek(&stack) == val); \
         VERIFY(min_max_stack_pop(&stack) == val);
-
-    Min_max_stack stack;
-    min_max_stack_init(&stack);
 
     VERIFY(min_max_stack_len(&stack) == 0);
     VERIFY_PUSH(3,  3, 3);
@@ -48,8 +48,8 @@ void test_min_max_stack() {
     VERIFY_POP(3,  3, 3);
     VERIFY(min_max_stack_len(&stack) == 0);
 
-    min_max_stack_free(&stack);
-
     #undef VERIFY_PUSH
     #undef VERIFY_POP
+
+    min_max_stack_free(&stack);
 }

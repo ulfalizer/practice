@@ -44,6 +44,7 @@ void insertion_sort(int *nums, size_t n) {
 
 static void mergesort_rec(int *nums, size_t n, int *scratch) {
     size_t i1, i2, mid;
+
     if (n <= 1)
         return;
 
@@ -69,12 +70,14 @@ static void mergesort_rec(int *nums, size_t n, int *scratch) {
 
 void mergesort(int *nums, size_t n) {
     int *scratch = emalloc(sizeof(int)*n, "mergesort scratch");
+
     mergesort_rec(nums, n, scratch);
     free(scratch);
 }
 
 void quicksort(int *nums, size_t n) {
     size_t store_i;
+
     if (n <= 1)
         return;
 
@@ -101,12 +104,15 @@ static size_t right_child(size_t i) { return 2*i + 2; }
 static void trickle_down(int *nums, size_t p, size_t n) {
     while (left_child(p) < n) {
         size_t max_index = p;
+
         if (nums[left_child(p)] > nums[max_index])
             max_index = left_child(p);
         if (right_child(p) < n && nums[right_child(p)] > nums[max_index])
             max_index = right_child(p);
+
         if (max_index == p)
             return;
+
         swap(nums[p], nums[max_index]);
         p = max_index;
     }
@@ -114,6 +120,7 @@ static void trickle_down(int *nums, size_t p, size_t n) {
 
 static void heapify(int *nums, size_t n) {
     size_t p = parent(n - 1);
+
     do
         trickle_down(nums, p, n);
     while (p-- != 0);
@@ -121,9 +128,12 @@ static void heapify(int *nums, size_t n) {
 
 void heapsort(int *nums, size_t n) {
     size_t i;
+
     if (n <= 1)
         return;
+
     heapify(nums, n);
+
     i = n - 1;
     do {
         swap(nums[0], nums[i]);

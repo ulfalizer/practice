@@ -22,6 +22,7 @@ static int eval_num(const char **s) {
         ++*s;
     }
     while (isdigit(**s));
+
     return res;
 }
 
@@ -61,6 +62,7 @@ static int eval_exp(const char **s) {
 static int eval_product(const char **s) {
     bool is_times = true;
     int product = 1;
+
     for (;;) {
         if (is_times)
             product *= eval_exp(s);
@@ -78,6 +80,7 @@ static int eval_product(const char **s) {
 static int eval_sum(const char **s) {
     bool is_plus = true;
     int sum = 0;
+
     for (;;) {
         if (is_plus)
             sum += eval_product(s);
@@ -94,6 +97,7 @@ static int eval_sum(const char **s) {
 
 bool eval(const char *s, int *res) {
     int tmp;
+
     if (setjmp(err_jmp_buf) == 1)
         return false;
     tmp = eval_sum(&s);
@@ -101,5 +105,6 @@ bool eval(const char *s, int *res) {
         // Found extra trailing characters.
         return false;
     *res = tmp;
+
     return true;
 }

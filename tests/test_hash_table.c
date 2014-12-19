@@ -21,6 +21,12 @@ static void populate(Hash_table *table) {
 }
 
 static void test_set_get_helper(bool keys_exist) {
+    Hash_table table;
+
+    hash_table_init(&table);
+    if (keys_exist)
+        populate(&table);
+
     #define VERIFY_SET_GET(key, val)                         \
       {                                                      \
           int v = 234;                                       \
@@ -40,10 +46,6 @@ static void test_set_get_helper(bool keys_exist) {
           VERIFY(hash_table_get(&table, key, NULL));         \
       }
 
-    Hash_table table;
-    hash_table_init(&table);
-    if (keys_exist)
-        populate(&table);
     VERIFY_SET_GET("ten", 10);
     VERIFY_SET_GET("negative one", -1);
     VERIFY_SET_GET("nine", 9);
@@ -57,9 +59,10 @@ static void test_set_get_helper(bool keys_exist) {
     VERIFY_SET_GET("five", 5);
     VERIFY_SET_GET("four", 4);
     VERIFY_SET_GET("", 123);
-    hash_table_free(&table);
 
     #undef VERIFY_SET_GET
+
+    hash_table_free(&table);
 }
 
 static void test_set_get() {
@@ -68,6 +71,11 @@ static void test_set_get() {
 }
 
 static void test_remove() {
+    Hash_table table;
+
+    hash_table_init(&table);
+    populate(&table);
+
     #define VERIFY_REMOVE_NOT_EXISTS(key)              \
       {                                                \
           int v = 234;                                 \
@@ -87,9 +95,6 @@ static void test_remove() {
           VERIFY(v1 == v2);                              \
       }
 
-    Hash_table table;
-    hash_table_init(&table);
-    populate(&table);
     VERIFY_REMOVE_NOT_EXISTS("foo");
     VERIFY_REMOVE_NOT_EXISTS("on");
     VERIFY_REMOVE_NOT_EXISTS("tw");
@@ -107,19 +112,21 @@ static void test_remove() {
     VERIFY_REMOVE_EXISTS("ten");
     VERIFY_REMOVE_EXISTS("");
 
+    #undef VERIFY_REMOVE_NOT_EXISTS
+    #undef VERIFY_REMOVE_EXISTS
+
     // The case where the key exists and val is NULL.
     hash_table_set(&table, "foo", 3, NULL);
     VERIFY(hash_table_remove(&table, "foo", NULL));
 
     hash_table_free(&table);
-
-    #undef VERIFY_REMOVE_NOT_EXISTS
-    #undef VERIFY_REMOVE_EXISTS
 }
 
 static const char *gen_key(int i) {
     static char buf[32];
+
     sprintf(buf, "%d", i);
+
     return buf;
 }
 

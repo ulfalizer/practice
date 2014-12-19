@@ -55,7 +55,6 @@ char *string_get_copy(String *s) {
     return memcpy(emalloc(s->len + 1, "string copy"), s->buf, s->len + 1);
 }
 
-// Returns the length of the string (excluding the terminating null).
 size_t string_len(String *s) {
     return s->len;
 }

@@ -30,17 +30,16 @@ void min_heap_add(Min_heap *heap, int val) {
 
 int min_heap_remove(Min_heap *heap) {
     size_t i;
-    int res, val;
+    int res = heap->storage[0];
+    int val = heap->storage[--heap->len];
 
-    assert(heap->len > 0);
-    res = heap->storage[0];
-    val = heap->storage[--heap->len];
     // Makes it safe to only check whether the left child is out of bounds. A
     // non-existent right child will never be selected as min_i.
     heap->storage[heap->len] = INT_MAX;
     i = 0;
     for (;;) {
         size_t min_i;
+
         if (left_child(i) >= heap->len)
             break;
         min_i =
@@ -52,16 +51,19 @@ int min_heap_remove(Min_heap *heap) {
         i = min_i;
     }
     heap->storage[i] = val;
+
     return res;
 }
 
 static bool valid_min_heap_rec(Min_heap *heap, size_t i) {
     bool left_valid;
+
     if (left_child(i) >= heap->len)
         return true;
     left_valid = valid_min_heap_rec(heap, left_child(i));
     if (right_child(i) >= heap->len)
         return left_valid;
+
     return left_valid && valid_min_heap_rec(heap, right_child(i));
 }
 

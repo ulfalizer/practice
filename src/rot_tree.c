@@ -13,9 +13,9 @@ void rot_tree_free(Rot_tree *tree) {
 }
 
 static void assemble(Rot_tree *tree,
-  Tree_node *new_root,
-  Tree_node **left, Tree_node **right,
-  Tree_node **left_insert, Tree_node **right_insert) {
+                     Tree_node *new_root,
+                     Tree_node **left, Tree_node **right,
+                     Tree_node **left_insert, Tree_node **right_insert) {
     tree->root = new_root;
     *left_insert = tree->root->left;
     *right_insert = tree->root->right;
@@ -106,10 +106,12 @@ bool rot_tree_get(Rot_tree *tree, int key, int *val) {
             if (val != NULL)
                 *val = cur->val;
             assemble(tree, cur, &left, &right, left_insert, right_insert);
+
             return true;
         }
 
     assemble(tree, cur, &left, &right, left_insert, right_insert);
+
     return false;
 }
 
@@ -124,6 +126,7 @@ bool rot_tree_remove(Rot_tree *tree, int key, int *val) {
         if (val != NULL)
             *val = tree->root->val;
         tree_remove(&tree->root);
+
         return true;
     }
 
@@ -153,6 +156,7 @@ bool rot_tree_remove(Rot_tree *tree, int key, int *val) {
         }
 
     assemble(tree, cur, &left, &right, left_insert, right_insert);
+
     return false;
 
 remove:
@@ -160,6 +164,7 @@ remove:
         *val = (*rem)->val;
     tree_remove(rem);
     assemble(tree, cur, &left, &right, left_insert, right_insert);
+
     return true;
 }
 

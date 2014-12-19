@@ -44,11 +44,11 @@ static void grow(Queue *queue) {
 
     // Copy from 'start' up to the end of the buffer.
     memcpy(new_buf, queue->buf + queue->start,
-      sizeof(*queue->buf)*(queue->buf_len - queue->start));
+           sizeof(*queue->buf)*(queue->buf_len - queue->start));
     // Copy from the beginning of the buffer up to but not including
     // 'start' (== 'end').
     memcpy(new_buf + queue->buf_len - queue->start, queue->buf,
-      sizeof(*queue->buf)*queue->start);
+           sizeof(*queue->buf)*queue->start);
 
     // Free the old buffer.
     free(queue->buf);
@@ -68,8 +68,10 @@ void queue_add(Queue *queue, void *val) {
 
 void *queue_remove(Queue *queue) {
     void *res;
+
     assert(queue->start != queue->end);
     res = queue->buf[queue->start];
     queue->start = (queue->start + 1) & (queue->buf_len - 1);
+
     return res;
 }

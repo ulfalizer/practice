@@ -31,7 +31,9 @@ static void init_nodes(List_node *head, Data_node *nodes, size_t len) {
 
 static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
     va_list ap;
+
     VERIFY(vector_len(v) == len);
+
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i)
         VERIFY((intptr_t)vector_get(v, i) == va_arg(ap, int));

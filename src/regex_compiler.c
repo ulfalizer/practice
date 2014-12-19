@@ -34,6 +34,7 @@ bool is_quant(char c) {
 
 static Regex_node *make_node(Regex_node_type type, Arena *arena) {
     Regex_node *node = arena_alloc(arena, sizeof *node);
+
     node->next = NULL;
     node->type = type;
 
@@ -53,6 +54,7 @@ static char parse_literal(const char **pat) {
     }
     res = **pat;
     ++*pat;
+
     return res;
 }
 
@@ -70,6 +72,7 @@ static bool next_nq_literal(const char **pat) {
     if (is_quant(*tmp))
         return false;
     *pat = tmp;
+
     return true;
 }
 
@@ -201,9 +204,11 @@ static Regex_node *parse_regex(const char **pat, Arena *arena) {
 bool regex_compile(const char *pat, Regex *regex, Arena *arena) {
     if (setjmp(err_jmp_buf) == 1)
         return false;
+
     regex->start = parse_regex(&pat, arena);
     if (*pat != '\0')
         // Found extra trailing characters.
         return false;
+
     return true;
 }

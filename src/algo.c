@@ -8,9 +8,11 @@ bool substr(const char *find, const char *s) {
         for (size_t j = 0; find[j] != '\0'; ++j)
             if (s[i + j] != find[j])
                 goto no_match_at_i;
+
         return true;
         no_match_at_i: ;
     }
+
     return *find == '\0';
 }
 
@@ -39,9 +41,10 @@ size_t max_ones(char *s) {
 // to 'find', or 'right' if no such element exists. The values in 'nums' are
 // assumed to be in strictly ascending sorted order.
 static size_t find_ge(int find, int *nums, size_t left, size_t right) {
+    size_t middle;
+
     // The index we're looking for will always be in the range [left, right],
     // which eventually shrinks down to a single index.
-    size_t middle;
     while (left != right) {
         middle = left + (right - left)/2;
         if (nums[middle] >= find)
@@ -49,12 +52,14 @@ static size_t find_ge(int find, int *nums, size_t left, size_t right) {
         else
             left = middle + 1;
     }
+
     return right;
 }
 
 void sorted_intersect(int *a1, size_t a1_len,
                       int *a2, size_t a2_len, Vector *res) {
     size_t i1 = 0, i2 = 0;
+
     while (i1 < a1_len && i2 < a2_len)
         // We do a binary search for the larger of the two elements if the
         // elements are not equal. The search is performed in the array with
@@ -119,14 +124,16 @@ bool is_balanced(const char *s) {
             stack_push(&stack, (void*)(intptr_t)*s);
         else
             if (stack_len(&stack) == 0 ||
-              (char)(intptr_t)stack_pop(&stack) != match) {
+                (char)(intptr_t)stack_pop(&stack) != match) {
+
                 stack_free(&stack);
+
                 return false;
             }
     }
-
     res = stack_len(&stack) == 0;
     stack_free(&stack);
+
     return res;
 }
 
@@ -171,9 +178,8 @@ void perm_heaps(char *s, void fn(char *perm)) {
     // 0, 1, ..., lev.
     size_t lev;
     // Length of string to permute.
-    size_t len;
+    size_t len = strlen(s);
 
-    len = strlen(s);
     assert(len >= 4);
     // indices[lev] holds the current index for level 'lev'.
     size_t indices[len]; // Variable-length array.
@@ -202,31 +208,35 @@ void perm_heaps(char *s, void fn(char *perm)) {
 
 bool next_lex(char *s) {
     size_t i, swap_i;
-    size_t len;
+    size_t len = strlen(s);
 
-    if (*s == '\0')
+    if (len == 0)
         return false;
-    len = strlen(s);
+
     // Go left while elements are monotonically increasing.
     for (i = len - 1; i > 0 && (uc)s[i - 1] >= (uc)s[i]; --i);
     if (i == 0)
         // Already lexicographically sorted.
         return false;
     swap_i = i - 1;
+
     // Find the smallest element greater than s[swap_i] on its right and swap
     // it for s[swap_i]. No need to check for the end of the string since we
     // will terminate on null anyway.
     for (++i; (uc)s[i] > (uc)s[swap_i]; ++i);
     swap(s[swap_i], s[i - 1]);
+
     // Reverse the sequence on the right of swap_i.
     for (i = 0; i < (len - swap_i)/2; ++i)
         swap(s[swap_i + 1 + i], s[len - 1 - i]);
+
     return true;
 }
 
 bool binsearch(int find, int *nums, size_t len) {
     // The search range is [left,right[.
     size_t left = 0, middle, right = len;
+
     while (left != right) {
         middle = left + (right - left)/2; // Overflow safe.
         if (nums[middle] > find)
@@ -236,6 +246,7 @@ bool binsearch(int find, int *nums, size_t len) {
         else
             return true;
     }
+
     return false;
 }
 
@@ -250,9 +261,8 @@ void print_num(int num, int base) {
         'U', 'V', 'W', 'X', 'Y', 'Z' };
     char buf[MAX_SIZE];
     int i;
-    bool negative;
+    bool negative = num < 0;
 
-    negative = num < 0;
     buf[MAX_SIZE - 1] = '\0';
     i = MAX_SIZE - 1;
     do {
@@ -275,5 +285,6 @@ int rev_num(int num, int base) {
         res = base*res + num%base;
         num /= base;
     }
+
     return res;
 }

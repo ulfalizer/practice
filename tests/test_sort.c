@@ -7,6 +7,7 @@ static void test_sort_fn(void sort_fn(int *nums, size_t n_nums)) {
     #define VERIFY_SORT(...)                                  \
       {                                                       \
           int a1[] = { __VA_ARGS__ }, a2[] = { __VA_ARGS__ }; \
+                                                              \
           selection_sort(a1, N_ARGS(__VA_ARGS__));            \
           sort_fn(a2, N_ARGS(__VA_ARGS__));                   \
           for (size_t i = 0; i < N_ARGS(__VA_ARGS__); ++i)    \

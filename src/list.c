@@ -54,7 +54,7 @@ bool list_equals(List *list, size_t len, ...) {
 
 bool lists_equal(List *l1, List *l2) {
     for (Node *n1 = l1->start, *n2 = l2->start;;
-      n1 = n1->next, n2 = n2->next) {
+         n1 = n1->next, n2 = n2->next) {
         if (n1 == NULL)
             return n2 == NULL;
         if (n2 == NULL)

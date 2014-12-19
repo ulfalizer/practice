@@ -3,6 +3,7 @@
 typedef struct String {
     char *buf;
     size_t buf_len;
+    // The length of the string, excluding the terminating null.
     size_t len;
 } String;
 

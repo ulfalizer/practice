@@ -105,21 +105,19 @@ static Regex_node *parse_literals(const char **pat, Arena *arena) {
     first_literal = parse_literal(&cur);
     if (!skip_nq_literal(&cur)) {
         // Single character. Use a CHAR node.
+
         node = make_node(CHAR, arena);
         node->c = first_literal;
-
-        *pat = cur;
-
-        return node;
     }
+    else {
+        // Many characters. Use a SPAN node.
 
-    // Many characters. Use a SPAN node.
+        while (skip_nq_literal(&cur));
 
-    while (skip_nq_literal(&cur));
-
-    node = make_node(SPAN, arena);
-    node->s = arena_strndup(arena, *pat, cur - *pat);
-    deescape(node->s);
+        node = make_node(SPAN, arena);
+        node->s = arena_strndup(arena, *pat, cur - *pat);
+        deescape(node->s);
+    }
 
     *pat = cur;
 

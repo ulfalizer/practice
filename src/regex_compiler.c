@@ -24,11 +24,11 @@ static const uint8_t char_properties[1 << CHAR_BIT] =
     ['(']  = META,
     [')']  = META };
 
-bool is_literal(char c) {
+static bool is_literal(char c) {
     return !(char_properties[(uc)c] & META);
 }
 
-bool is_quant(char c) {
+static bool is_quant(char c) {
     return char_properties[(uc)c] & QUANT;
 }
 

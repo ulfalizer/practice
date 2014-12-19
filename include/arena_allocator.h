@@ -40,7 +40,7 @@ typedef struct Chunk {
     alignas(ALIGN) char storage[];
 } Chunk;
 
-_Static_assert((offsetof(Chunk, storage) & (ALIGN - 1)) == 0,
+static_assert((offsetof(Chunk, storage) & (ALIGN - 1)) == 0,
   "'storage' not properly aligned");
 
 typedef struct Arena {

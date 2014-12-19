@@ -15,7 +15,7 @@ void string_free(String *s) {
 }
 
 // For ge_pow_2(), just to be pedantic.
-_Static_assert(sizeof(unsigned long long) >= sizeof(size_t),
+static_assert(sizeof(unsigned long long) >= sizeof(size_t),
   "ge_pow_2() argument might overflow");
 
 void string_append(String *s, const char *format, ...) {

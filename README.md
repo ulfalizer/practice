@@ -8,7 +8,7 @@ Small and simple implementations of various algorithms and data structures.
 
 The code makes use of C99/11 features, including variadic macros,
 [\<stdbool.h\>](http://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdbool.h.html),
-and <b>alignas()</b> (for the arena allocator).
+<b>static_assert()</b>, and <b>alignas()</b> (for the arena allocator).
 
 Running:
 

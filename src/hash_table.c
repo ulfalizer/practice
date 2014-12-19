@@ -30,7 +30,7 @@ static Hash_node **get_bucket(Hash_table *table, const char *key) {
 // Does not update 'n_elements'.
 static void init_buckets(Hash_table *table, size_t n_buckets) {
     table->buckets = emalloc(sizeof(*table->buckets)*n_buckets,
-      "hash buckets init");
+                             "hash buckets init");
     for (size_t i = 0; i < n_buckets; ++i)
         table->buckets[i] = NULL;
     table->n_buckets = n_buckets;

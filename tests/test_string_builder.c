@@ -75,8 +75,28 @@ static void test_add_long() {
     string_free(&string);
 }
 
+static void test_get_copy() {
+    String string;
+    char *copy;
+    const char *s = "0123456789";
+
+    string_init(&string);
+
+    copy = string_get_copy(&string);
+    VERIFY(*copy == '\0');
+    free(copy);
+
+    string_append(&string, s);
+    copy = string_get_copy(&string);
+    string_free(&string);
+    VERIFY(strcmp(copy, s) == 0);
+
+    free(copy);
+}
+
 void test_string() {
     test_add_single_chars();
     test_add_short();
     test_add_long();
+    test_get_copy();
 }

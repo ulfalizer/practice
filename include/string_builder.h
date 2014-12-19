@@ -16,9 +16,12 @@ void string_append(String *s, const char *format, ...)
 // Returns a pointer to the string. The string is null-terminated.
 //
 // The pointer is only guaranteed to remain valid until the next append
-// operation, and becomes invalid when the buffer is freed. A safer version
-// would strdup() the result.
-const char *string_get(String *s);
+// operation, and becomes invalid when the buffer is freed.
+char *string_get(String *s);
+
+// Safer version of string_get(). Returns a copy of the string, which is
+// free()d by the caller.
+char *string_get_copy(String *s);
 
 // Returns the length of the string (excluding the terminating null).
 size_t string_len(String *s);

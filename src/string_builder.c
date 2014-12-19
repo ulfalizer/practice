@@ -47,8 +47,12 @@ void string_append(String *s, const char *format, ...) {
     va_end(ap);
 }
 
-const char *string_get(String *s) {
+char *string_get(String *s) {
     return s->buf;
+}
+
+char *string_get_copy(String *s) {
+    return memcpy(emalloc(s->len + 1, "string copy"), s->buf, s->len + 1);
 }
 
 // Returns the length of the string (excluding the terminating null).

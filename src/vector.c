@@ -29,6 +29,14 @@ void vector_append(Vector *vector, void *val) {
     vector->buf[vector->len++] = val;
 }
 
+void vector_set(Vector *vector, size_t index, void *val) {
+    vector->buf[index] = val;
+}
+
 void *vector_get(Vector *vector, size_t index) {
     return vector->buf[index];
+}
+
+void **vector_storage(Vector *vector) {
+    return vector->buf;
 }

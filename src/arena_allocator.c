@@ -34,6 +34,7 @@ void *arena_alloc(Arena *arena, size_t size) {
     if (arena->cur->start + size <= arena->cur->end) {
         // The allocation fits within the head chunk.
         void *res = arena->cur->start;
+
         arena->cur->start += g_aligned(size);
 
         return res;

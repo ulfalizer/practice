@@ -53,9 +53,9 @@ void test_embedded_list() {
     init_nodes(&head, data_nodes, ARRAY_LEN(data_nodes));
 
     list_for_each(&head, Data_node)
-        vector_add(&res, (void*)(intptr_t)cur->val);
+        vector_append(&res, (void*)(intptr_t)cur->val);
     list_for_each_backwards(&head, Data_node)
-        vector_add(&res, (void*)(intptr_t)cur->val);
+        vector_append(&res, (void*)(intptr_t)cur->val);
 
     VERIFY_VECTOR_EQUALS(res, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
       9, 8, 7, 6, 5, 4, 3, 2, 1, 0);

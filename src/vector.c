@@ -23,7 +23,7 @@ static void grow(Vector *vector) {
                            "vector grow");
 }
 
-void vector_add(Vector *vector, void *val) {
+void vector_append(Vector *vector, void *val) {
     if (vector->len == vector->buf_len)
         grow(vector);
     vector->buf[vector->len++] = val;

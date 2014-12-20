@@ -10,7 +10,7 @@ void test_vector() {
         VERIFY(vector_len(&vector) == i);
         for (intptr_t j = 0; j < i; ++j)
             VERIFY((intptr_t)vector_get(&vector, j) == j);
-        vector_add(&vector, (void*)i);
+        vector_append(&vector, (void*)i);
     }
 
     vector_free(&vector);

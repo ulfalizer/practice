@@ -182,19 +182,19 @@ void tree_nodes_to_vector_dfs(Tree_node *node, Vector *vector) {
     if (node == NULL)
         return;
     tree_nodes_to_vector_dfs(node->left, vector);
-    vector_add(vector, node);
+    vector_append(vector, node);
     tree_nodes_to_vector_dfs(node->right, vector);
 }
 
 void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector) {
     if (root != NULL)
-        vector_add(vector, root);
+        vector_append(vector, root);
     for (size_t i = vector_len(vector) - 1; i < vector_len(vector); ++i) {
         Tree_node *node = vector_get(vector, i);
         if (node->left != NULL)
-            vector_add(vector, node->left);
+            vector_append(vector, node->left);
         if (node->right != NULL)
-            vector_add(vector, node->right);
+            vector_append(vector, node->right);
     }
 }
 
@@ -204,7 +204,7 @@ void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector) {
     stack_init(&stack);
     for (;;) {
         for (; node != NULL; node = node->left) {
-            vector_add(vector, node);
+            vector_append(vector, node);
             stack_push(&stack, node);
         }
 
@@ -228,7 +228,7 @@ void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector) {
             break;
 
         node = stack_pop(&stack);
-        vector_add(vector, node);
+        vector_append(vector, node);
         node = node->right;
     }
     stack_free(&stack);
@@ -257,7 +257,7 @@ move_up:
             // We arrived from the right (or skipped an empty right tree). Pop
             // the parent, add it to the result, and move up the tree.
             stack_pop(&stack);
-            vector_add(vector, parent);
+            vector_append(vector, parent);
             node = parent;
 
             goto move_up;

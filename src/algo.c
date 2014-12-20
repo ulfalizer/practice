@@ -68,7 +68,7 @@ void sorted_intersect(int *a1, size_t a1_len,
         // element (or to just past the end of the array if no such element
         // exists).
         if (a1[i1] == a2[i2]) {
-            vector_add(res, (void*)(intptr_t)a1[i1]);
+            vector_append(res, (void*)(intptr_t)a1[i1]);
             ++i1; ++i2;
         }
         else if (a1[i1] > a2[i2])

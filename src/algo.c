@@ -260,11 +260,10 @@ void print_num(int num, int base) {
         'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
         'U', 'V', 'W', 'X', 'Y', 'Z' };
     char buf[MAX_SIZE];
-    int i;
+    int i = MAX_SIZE - 1;
     bool negative = num < 0;
 
-    buf[MAX_SIZE - 1] = '\0';
-    i = MAX_SIZE - 1;
+    buf[i] = '\0';
     do {
         // Handles negative numbers in a way that supports INT_MIN (which has
         // no representable inverse in two's complement).

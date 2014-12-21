@@ -67,10 +67,9 @@ void queue_add(Queue *queue, void *val) {
 }
 
 void *queue_remove(Queue *queue) {
-    void *res;
+    void *res = queue->buf[queue->start];
 
     assert(queue->start != queue->end);
-    res = queue->buf[queue->start];
     queue->start = (queue->start + 1) & (queue->buf_len - 1);
 
     return res;

@@ -36,11 +36,10 @@ size_t queue_len(Queue *queue) {
 // This grows the buffer as it becomes full -- not at the next insertion after
 // that. Additional logic would allow the buffer to be precisely full.
 static void grow(Queue *queue) {
-    void **new_buf;
+    void **new_buf =
+      emalloc(2*sizeof(*queue->buf)*queue->buf_len, "queue grow");
 
     assert(queue->start == queue->end);
-
-    new_buf = emalloc(2*sizeof(*queue->buf)*queue->buf_len, "queue grow");
 
     // Copy from 'start' up to the end of the buffer.
     memcpy(new_buf, queue->buf + queue->start,

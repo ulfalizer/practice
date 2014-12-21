@@ -40,6 +40,7 @@ Tree_node *tree_make(size_t len, ...) {
         if (i != 0) {
             // Nope, so point the correct child pointer in the parent to it.
             Tree_node *parent = nodes[(i - 1)/2];
+
             if (i % 2 == 1)
                 parent->left = nodes[i];
             else

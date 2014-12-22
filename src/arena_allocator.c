@@ -31,7 +31,7 @@ void arena_free(Arena *arena) {
 }
 
 void *arena_alloc(Arena *arena, size_t size) {
-    // Assume 'start' + 'size' won't overflow, which is reasonable in most
+    // Assume 'start' + 'g_aligned(size)' won't overflow, which is reasonable in most
     // situations involving small- to medium-sized allocations (as high
     // addresses are usually reserved for the stack and kernel). More robust
     // size checking would compare against 'end' - 'start' and never let

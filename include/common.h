@@ -55,7 +55,11 @@ typedef unsigned char uc;
 #define STRINGIFY(x) STRINGIFY_(x)
 #define STRINGIFY_(x) #x
 
-#define UNREACHABLE __builtin_unreachable()
+#ifdef NDEBUG
+#  define UNREACHABLE __builtin_unreachable()
+#else
+#  define UNREACHABLE assert(!"reached \"unreachable\" code")
+#endif
 
 // Optimization hints. All uses have been shown to decrease code size with GCC.
 #define assume(x)              \

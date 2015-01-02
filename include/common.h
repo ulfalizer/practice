@@ -62,9 +62,11 @@ typedef unsigned char uc;
 #endif
 
 // Optimization hints. All uses have been shown to decrease code size with GCC.
-#define assume(x)              \
-  if (!(x))                    \
-      __builtin_unreachable();
+#define assume(x)      \
+  do                   \
+      if (!(x))        \
+          UNREACHABLE; \
+  while (0)
 
 #define VERIFY(cond)                                                  \
   if (!(cond))                                                        \

@@ -17,6 +17,7 @@ void test_search_tree();
 void test_string();
 void test_sort();
 void test_tree();
+void test_utf8();
 void test_vector();
 
 int main() {
@@ -37,6 +38,7 @@ int main() {
     test_sort();
     test_string();
     test_tree();
+    test_utf8();
     test_vector();
 
     puts("all tests passed");

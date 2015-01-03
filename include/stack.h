@@ -15,7 +15,8 @@ size_t stack_len(Stack *stack);
 // Pushes a new element onto 'stack'.
 void stack_push(Stack *stack, void *val);
 
-// Returns the top element of 'stack' without modifying 'stack'.
+// Returns the top element of 'stack' without modifying 'stack'. Must not be
+// called with an empty stack.
 void *stack_peek(Stack *stack);
 
 // Pops the top element off 'stack'. Must not be called with an empty stack.

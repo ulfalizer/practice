@@ -1,7 +1,7 @@
 #include "common.h"
 #include "utf8.h"
 
-size_t utf8_len(char *s) {
+size_t utf8_len(const char *s) {
     // Maps the initial byte of a multibyte character to the number of bytes in
     // the encoding.
     static const uint8_t char_to_len[256] =

@@ -18,11 +18,10 @@ size_t utf8_len(const char *s) {
         // characters separately to speed things up on common texts.
 
         // Count span of single-byte characters.
-        for (; *ss > 0; ++len, ++ss);
+        for (; *ss > 0; ++len, ss += 1);
 
         // Count span of multibyte characters.
-        for (; *ss < 0; ++len)
-            ss += char_to_len[(uc)*ss];
+        for (; *ss < 0; ++len, ss += char_to_len[(uc)*ss]);
     }
     while (*ss != '\0');
 

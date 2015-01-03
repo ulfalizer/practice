@@ -30,6 +30,7 @@ static void test_set_get_helper(bool keys_exist) {
     #define VERIFY_SET_GET(key, val)                         \
       {                                                      \
           int v = 234;                                       \
+                                                             \
           if (!keys_exist) {                                 \
               VERIFY(!hash_table_get(&table, key, &v));      \
               VERIFY(v == 234);                              \
@@ -79,6 +80,7 @@ static void test_remove() {
     #define VERIFY_REMOVE_NOT_EXISTS(key)              \
       {                                                \
           int v = 234;                                 \
+                                                       \
           VERIFY(!hash_table_get(&table, key, &v));    \
           VERIFY(!hash_table_remove(&table, key, &v)); \
           VERIFY(!hash_table_get(&table, key, &v));    \
@@ -88,6 +90,7 @@ static void test_remove() {
     #define VERIFY_REMOVE_EXISTS(key)                    \
       {                                                  \
           int v1, v2;                                    \
+                                                         \
           VERIFY(hash_table_get(&table, key, &v1));      \
           VERIFY(hash_table_remove(&table, key, &v2));   \
           VERIFY(!hash_table_get(&table, key, NULL));    \

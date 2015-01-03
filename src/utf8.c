@@ -28,3 +28,30 @@ size_t utf8_len(const char *s) {
 
     return len;
 }
+
+static void reverse(char *start, char *end) {
+    while (start < end) {
+        swap(*start, *end);
+        ++start;
+        --end;
+    }
+}
+
+void utf8_reverse(char *s) {
+    char *start = s;
+
+    // Reverse the bytes in each character in the string.
+    while (*s != '\0') {
+        char *first = s;
+
+        // Skip past any continuation bytes.
+        while ((*++s & 0xC0) == 0x80);
+
+        // Reverse the character's bytes.
+        reverse(first, s - 1);
+    }
+
+    // Reverse the bytes in the entire string. We save a strlen() by reusing
+    // the length we indirectly calculated above.
+    reverse(start, s - 1);
+}

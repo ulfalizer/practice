@@ -108,5 +108,6 @@ char *arena_strndup(Arena *arena, const char *s, size_t n) {
     char *res = arena_alloc(arena, len + 1);
 
     res[len] = '\0';
+
     return memcpy(res, s, len);
 }

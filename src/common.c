@@ -1,6 +1,6 @@
 #include "common.h"
 
-_Noreturn static void common_fail(bool print_errno, char const *format,
+_Noreturn static void common_fail(bool print_errno, const char *format,
                                   va_list ap) {
     vfprintf(stderr, format, ap);
     if (print_errno)
@@ -9,14 +9,14 @@ _Noreturn static void common_fail(bool print_errno, char const *format,
     exit(EXIT_FAILURE);
 }
 
-void err(char const *format, ...) {
+void err(const char *format, ...) {
     va_list ap;
 
     va_start(ap, format);
     common_fail(true, format, ap);
 }
 
-void fail(char const *format, ...) {
+void fail(const char *format, ...) {
     va_list ap;
 
     va_start(ap, format);

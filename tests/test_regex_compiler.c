@@ -1,8 +1,8 @@
 #include "common.h"
 #include "arena_allocator.h"
+#include "dynamic_string.h"
 #include "vector.h"
 #include "regex_compiler.h"
-#include "string_builder.h"
 
 #pragma GCC diagnostic ignored "-Wswitch"
 

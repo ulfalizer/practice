@@ -1,4 +1,5 @@
-// A dynamically grown string builder.
+// A dynamically grown string. Don't call the file "string.h" since it collides
+// with the libc header.
 
 typedef struct String {
     char *buf;
@@ -7,8 +8,15 @@ typedef struct String {
     size_t len;
 } String;
 
+// Initializes 's'. It is initially empty.
 void string_init(String *s);
 void string_free(String *s);
+
+// Sets the contents of 's'. Format is like for printf().
+//
+// This function reuses the internal buffer and grows it only as necessary.
+void string_set(String *s, const char *format, ...)
+  __attribute__((format(printf, 2, 3)));
 
 // Appends text to 's'. Format is like for printf().
 void string_append(String *s, const char *format, ...)

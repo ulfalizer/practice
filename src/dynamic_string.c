@@ -1,5 +1,5 @@
 #include "common.h"
-#include "string_builder.h"
+#include "dynamic_string.h"
 
 #define INITIAL_BUF_LEN 16
 
@@ -18,11 +18,10 @@ void string_free(String *s) {
 static_assert(sizeof(unsigned long long) >= sizeof(size_t),
   "ge_pow_2() argument might overflow");
 
-void string_append(String *s, const char *format, ...) {
-    va_list ap, ap_copy;
+static void string_append_helper(String *s, const char *format, va_list ap) {
+    va_list ap_copy;
     size_t new_len;
 
-    va_start(ap, format);
     // The first vsnprintf() will trash 'ap', so keep a copy in case we need to
     // repeat the operation.
     va_copy(ap_copy, ap);
@@ -44,6 +43,22 @@ void string_append(String *s, const char *format, ...) {
     s->len = new_len;
 
     va_end(ap_copy);
+}
+
+void string_set(String *s, const char *format, ...) {
+    va_list ap;
+
+    s->len = 0;
+    va_start(ap, format);
+    string_append_helper(s, format, ap);
+    va_end(ap);
+}
+
+void string_append(String *s, const char *format, ...) {
+    va_list ap;
+
+    va_start(ap, format);
+    string_append_helper(s, format, ap);
     va_end(ap);
 }
 

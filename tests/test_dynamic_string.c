@@ -1,9 +1,32 @@
 #include "common.h"
-#include "string_builder.h"
+#include "dynamic_string.h"
 
 #pragma GCC diagnostic ignored "-Wformat-security"
 
-static void test_add_single_chars() {
+static void test_set() {
+    String string;
+    char buf[1024];
+
+    string_init(&string);
+
+    string_set(&string, "a%s%d%cl", "bcdefghij", 123, 'k');
+    VERIFY(strcmp(string_get(&string), "abcdefghij123kl") == 0);
+
+    for (size_t i = 0; i < ARRAY_LEN(buf); ++i) {
+        for (size_t j = 0; j < i; ++j)
+            buf[j] = (j % 32) + 1; // Arbitrary non-null values.
+        buf[i] = '\0';
+
+        string_set(&string, "%s", buf);
+        VERIFY(strcmp(string_get(&string), buf) == 0);
+        // Do some white-box testing too.
+        VERIFY(string.buf_len >= ge_pow_2(i));
+    }
+
+    string_free(&string);
+}
+
+static void test_append_single_chars() {
     String string;
     char buf[2];
 
@@ -39,7 +62,7 @@ static void test_add_single_chars() {
     string_free(&string);
 }
 
-static void test_add_short() {
+static void test_append_short() {
     String string;
 
     string_init(&string);
@@ -59,7 +82,7 @@ static void test_add_short() {
     string_free(&string);
 }
 
-static void test_add_long() {
+static void test_append_long() {
     String string;
 
     string_init(&string);
@@ -95,8 +118,9 @@ static void test_get_copy() {
 }
 
 void test_string() {
-    test_add_single_chars();
-    test_add_short();
-    test_add_long();
+    test_set();
+    test_append_single_chars();
+    test_append_short();
+    test_append_long();
     test_get_copy();
 }

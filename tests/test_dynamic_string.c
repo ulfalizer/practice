@@ -18,6 +18,7 @@ static void test_set() {
         buf[i] = '\0';
 
         string_set(&string, "%s", buf);
+        VERIFY(string_len(&string) == i);
         VERIFY(strcmp(string_get(&string), buf) == 0);
         // Do some white-box testing too.
         VERIFY(string.buf_len >= ge_pow_2(i));

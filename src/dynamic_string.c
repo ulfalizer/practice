@@ -18,7 +18,31 @@ void string_free(String *s) {
 static_assert(sizeof(unsigned long long) >= sizeof(size_t),
   "ge_pow_2() argument might overflow");
 
-static void string_append_helper(String *s, const char *format, va_list ap) {
+void string_append_v(String *s, const char *format, va_list ap);
+void string_set_v(String *s, const char *format, va_list ap);
+
+void string_set(String *s, const char *format, ...) {
+    va_list ap;
+
+    va_start(ap, format);
+    string_set_v(s, format, ap);
+    va_end(ap);
+}
+
+void string_set_v(String *s, const char *format, va_list ap) {
+    s->len = 0;
+    string_append_v(s, format, ap);
+}
+
+void string_append(String *s, const char *format, ...) {
+    va_list ap;
+
+    va_start(ap, format);
+    string_append_v(s, format, ap);
+    va_end(ap);
+}
+
+void string_append_v(String *s, const char *format, va_list ap) {
     va_list ap_copy;
     size_t new_len;
 
@@ -43,23 +67,6 @@ static void string_append_helper(String *s, const char *format, va_list ap) {
     s->len = new_len;
 
     va_end(ap_copy);
-}
-
-void string_set(String *s, const char *format, ...) {
-    va_list ap;
-
-    s->len = 0;
-    va_start(ap, format);
-    string_append_helper(s, format, ap);
-    va_end(ap);
-}
-
-void string_append(String *s, const char *format, ...) {
-    va_list ap;
-
-    va_start(ap, format);
-    string_append_helper(s, format, ap);
-    va_end(ap);
 }
 
 char *string_get(String *s) {

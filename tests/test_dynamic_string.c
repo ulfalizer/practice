@@ -11,6 +11,7 @@ static void test_set() {
 
     string_set(&string, "a%s%d%cl", "bcdefghij", 123, 'k');
     VERIFY(strcmp(string_get(&string), "abcdefghij123kl") == 0);
+    VERIFY(string_len(&string) == 15);
 
     for (size_t i = 0; i < ARRAY_LEN(buf); ++i) {
         for (size_t j = 0; j < i; ++j)
@@ -99,6 +100,45 @@ static void test_append_long() {
     string_free(&string);
 }
 
+static void set_v_helper(String *s, const char *format, ...) {
+    va_list ap;
+
+    va_start(ap, format);
+    string_set_v(s, format, ap);
+    va_end(ap);
+}
+
+static void append_v_helper(String *s, const char *format, ...) {
+    va_list ap;
+
+    va_start(ap, format);
+    string_append_v(s, format, ap);
+    va_end(ap);
+}
+
+// Test the *_v() function variants, which take a va_list instead of a variable
+// number of arguments.
+static void test_v() {
+    String string;
+
+    string_init(&string);
+
+    set_v_helper(&string, "a%s%d%cl", "bcdefghij", 123, 'k');
+    VERIFY(strcmp(string_get(&string), "abcdefghij123kl") == 0);
+    VERIFY(string_len(&string) == 15);
+
+    append_v_helper(&string, "%d%c", 123, 'q');
+    VERIFY(strcmp(string_get(&string), "abcdefghij123kl123q") == 0);
+    VERIFY(string_len(&string) == 19);
+
+    // Make sure things get reset if we do another string_set_v().
+    set_v_helper(&string, "a%s%d%cl", "bcdefghij", 123, 'k');
+    VERIFY(strcmp(string_get(&string), "abcdefghij123kl") == 0);
+    VERIFY(string_len(&string) == 15);
+
+    string_free(&string);
+}
+
 static void test_get_copy() {
     String string;
     char *copy;
@@ -123,5 +163,6 @@ void test_string() {
     test_append_single_chars();
     test_append_short();
     test_append_long();
+    test_v();
     test_get_copy();
 }

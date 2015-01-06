@@ -18,9 +18,19 @@ void string_free(String *s);
 void string_set(String *s, const char *format, ...)
   __attribute__((format(printf, 2, 3)));
 
+// Equivalent to string_set() but takes a va_list instead of a variable number
+// of arguments.
+void string_set_v(String *s, const char *format, va_list ap)
+  __attribute__((format(printf, 2, 0)));
+
 // Appends text to 's'. Format is like for printf().
 void string_append(String *s, const char *format, ...)
   __attribute__((format(printf, 2, 3)));
+
+// Equivalent to string_append() but takes a va_list instead of a variable
+// number of arguments.
+void string_append_v(String *s, const char *format, va_list ap)
+  __attribute__((format(printf, 2, 0)));
 
 // Returns a pointer to the string. The string is null-terminated.
 //

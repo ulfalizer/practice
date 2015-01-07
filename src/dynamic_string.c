@@ -92,10 +92,6 @@ char *string_get(String *s) {
     return s->buf;
 }
 
-char *string_get_copy(String *s) {
-    return memcpy(emalloc(s->len + 1, "string copy"), s->buf, s->len + 1);
-}
-
 size_t string_len(String *s) {
     return s->len;
 }

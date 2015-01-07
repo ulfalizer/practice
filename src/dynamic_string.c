@@ -19,6 +19,7 @@ static_assert(sizeof(unsigned long long) >= sizeof(size_t),
   "ge_pow_2() argument might overflow");
 
 void string_append_v(String *s, const char *format, va_list ap);
+void string_append_raw(String *s, const char *data, size_t len);
 void string_set_v(String *s, const char *format, va_list ap);
 
 void string_set(String *s, const char *format, ...) {
@@ -32,6 +33,11 @@ void string_set(String *s, const char *format, ...) {
 void string_set_v(String *s, const char *format, va_list ap) {
     s->len = 0;
     string_append_v(s, format, ap);
+}
+
+void string_set_raw(String *s, const char *data, size_t len) {
+    s->len = 0;
+    string_append_raw(s, data, len);
 }
 
 void string_append(String *s, const char *format, ...) {
@@ -52,7 +58,7 @@ void string_append_v(String *s, const char *format, va_list ap) {
 
     new_len = s->len +
       vsnprintf(s->buf + s->len, s->buf_len - s->len, format, ap);
-    if (new_len >= s->buf_len) {
+    if (new_len + 1 > s->buf_len) {
         // The resulting string won't fit in the buffer. Grow the buffer to the
         // next power of two that can accommodate it.
         s->buf_len = ge_pow_2(new_len + 1);
@@ -67,6 +73,19 @@ void string_append_v(String *s, const char *format, va_list ap) {
     s->len = new_len;
 
     va_end(ap_copy);
+}
+
+void string_append_raw(String *s, const char *data, size_t len) {
+    size_t new_len = s->len + len;
+
+    if (new_len > s->buf_len) {
+        // The resulting data won't fit in the buffer. Grow the buffer to the
+        // next power of two that can accommodate it.
+        s->buf_len = ge_pow_2(new_len);
+        s->buf = erealloc(s->buf, s->buf_len, "string grow, raw append");
+    }
+    memcpy(s->buf + s->len, data, len);
+    s->len = new_len;
 }
 
 char *string_get(String *s) {

@@ -139,23 +139,43 @@ static void test_v() {
     string_free(&string);
 }
 
-static void test_get_copy() {
+static void test_raw() {
     String string;
-    char *copy;
-    const char *s = "0123456789";
+    // The last character is not written to the string initially.
+    const char buf[] = "123456789\0001234567";
+    // The result of the append-raw-after-non-raw test.
+    const char raw_res[] = "123456789\0001234567abcdef";
 
     string_init(&string);
 
-    copy = string_get_copy(&string);
-    VERIFY(*copy == '\0');
-    free(copy);
+    // Set to 16 characters (the limit just before the buffer is grown).
+    string_set_raw(&string, buf, sizeof buf - 2);
+    VERIFY(memcmp(string_get(&string), buf, sizeof buf - 2) == 0);
+    VERIFY(string_len(&string) == 16);
+    // Do some white-box testing too.
+    VERIFY(string.buf_len == 16);
 
-    string_append(&string, s);
-    copy = string_get_copy(&string);
+    // Appending zero characters shouldn't change anything.
+    string_append_raw(&string, buf, 0);
+    VERIFY(memcmp(string_get(&string), buf, sizeof buf - 2) == 0);
+    VERIFY(string_len(&string) == 16);
+    VERIFY(string.buf_len == 16);
+
+    // Appending one more character should grow the buffer.
+    string_append_raw(&string, "7", 1);
+    VERIFY(memcmp(string_get(&string), buf, sizeof buf - 1) == 0);
+    VERIFY(string_len(&string) == 17);
+    VERIFY(string.buf_len == 32);
+
+    // Append a string in non-raw mode.
+    string_append(&string, "abc");
+    VERIFY(strcmp(string_get(&string), "123456789\0001234567abc") == 0);
+
+    // Append a string in raw mode.
+    string_append_raw(&string, "def", 3);
+    VERIFY(memcmp(string_get(&string), raw_res, sizeof raw_res - 1) == 0);
+
     string_free(&string);
-    VERIFY(strcmp(copy, s) == 0);
-
-    free(copy);
 }
 
 void test_string() {
@@ -164,5 +184,5 @@ void test_string() {
     test_append_short();
     test_append_long();
     test_v();
-    test_get_copy();
+    test_raw();
 }

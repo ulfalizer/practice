@@ -17,10 +17,8 @@ static int eval_num(const char **s) {
     if (!isdigit(**s))
         longjmp(err_jmp_buf, 1);
 
-    do {
-        res = 10*res + **s - '0';
-        ++*s;
-    }
+    do
+        res = 10*res + *(*s)++ - '0';
     while (isdigit(**s));
 
     return res;

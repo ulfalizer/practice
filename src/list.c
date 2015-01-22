@@ -78,6 +78,7 @@ void list_remove(List *list, int val) {
     for (Node **cur = &list->start; *cur; cur = &(*cur)->next)
         if ((*cur)->val == val) {
             Node *tmp = *cur;
+
             *cur = (*cur)->next;
             free(tmp);
 
@@ -89,6 +90,7 @@ void list_remove_all(List *list, int val) {
     for (Node **cur = &list->start; *cur;)
         if ((*cur)->val == val) {
             Node *tmp = *cur;
+
             *cur = (*cur)->next;
             free(tmp);
         }

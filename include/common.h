@@ -17,11 +17,11 @@
 #include <string.h>
 
 // Exits unsuccessfully with a message.
-_Noreturn void fail(const char *format, ...)
+noreturn void fail(const char *format, ...)
   __attribute__((format(printf, 1, 2)));
 
 // Exits unsuccessfully with errno and a message.
-_Noreturn void err(const char *format, ...)
+noreturn void err(const char *format, ...)
   __attribute__((format(printf, 1, 2)));
 
 // Returns a list of integers parsed from 'argv'. Caller frees list.

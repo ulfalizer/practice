@@ -3,7 +3,7 @@
 
 #pragma GCC diagnostic ignored "-Wformat-security"
 
-static void test_set() {
+static void test_set(void) {
     String string;
     char buf[1024];
 
@@ -28,7 +28,7 @@ static void test_set() {
     string_free(&string);
 }
 
-static void test_append_single_chars() {
+static void test_append_single_chars(void) {
     String string;
     char buf[2];
 
@@ -64,7 +64,7 @@ static void test_append_single_chars() {
     string_free(&string);
 }
 
-static void test_append_short() {
+static void test_append_short(void) {
     String string;
 
     string_init(&string);
@@ -84,7 +84,7 @@ static void test_append_short() {
     string_free(&string);
 }
 
-static void test_append_long() {
+static void test_append_long(void) {
     String string;
 
     string_init(&string);
@@ -118,7 +118,7 @@ static void append_v_helper(String *s, const char *format, ...) {
 
 // Test the *_v() function variants, which take a va_list instead of a variable
 // number of arguments.
-static void test_v() {
+static void test_v(void) {
     String string;
 
     string_init(&string);
@@ -139,7 +139,7 @@ static void test_v() {
     string_free(&string);
 }
 
-static void test_get_copy() {
+static void test_get_copy(void) {
     String string;
     char *copy;
     const char *s = "0123456789";
@@ -158,7 +158,7 @@ static void test_get_copy() {
     free(copy);
 }
 
-void test_string() {
+void test_string(void) {
     test_set();
     test_append_single_chars();
     test_append_short();

@@ -12,7 +12,7 @@
 // due to 'buf' being a flexible array member.
 #define DATA(ptr) ((Compact_vector_data*)((char*)ptr - HEADER_SIZE))
 
-Compact_vector compact_vector_make() {
+Compact_vector compact_vector_make(void) {
     Compact_vector_data *vec_data =
       emalloc(HEADER_SIZE + sizeof(*vec_data->buf)*INITIAL_BUF_LEN,
               "compact vector init");

@@ -34,7 +34,7 @@ static void test_sort_fn(void sort_fn(int *nums, size_t n_nums)) {
     #undef VERIFY_SORT
 }
 
-void test_sort() {
+void test_sort(void) {
     test_sort_fn(insertion_sort);
     test_sort_fn(bubble_sort);
     test_sort_fn(mergesort);

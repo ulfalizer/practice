@@ -8,7 +8,7 @@
 // Helper for specifying the lack of a node with tree_make().
 static const int _ = 0xDEAD;
 
-static void test_structure() {
+static void test_structure(void) {
     // White-box testing of the internal structure after various operations.
 
     // Set the tree to use for the following tests.
@@ -335,7 +335,7 @@ static void test_set_get_helper(bool keys_exist) {
     rot_tree_free(&tree);
 }
 
-static void test_remove() {
+static void test_remove(void) {
     Rot_tree tree;
 
     rot_tree_init(&tree);
@@ -375,12 +375,12 @@ static void test_remove() {
     rot_tree_free(&tree);
 }
 
-static void test_set_get() {
+static void test_set_get(void) {
     test_set_get_helper(false);
     test_set_get_helper(true);
 }
 
-void test_rot_tree() {
+void test_rot_tree(void) {
     test_structure();
     test_set_get();
     test_remove();

@@ -15,7 +15,7 @@ static int _ = 0xDEAD;
   tree_make(N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
 // Tests both tree_equals() and trees_equal().
-static void test_equals() {
+static void test_equals(void) {
     // Specifies the tree to use for the following tests.
     #define TEST_EQUALS_TREE(...)                                   \
       do {                                                          \
@@ -174,7 +174,7 @@ static void test_equals() {
     #undef TEST_EQUALS_END
 }
 
-static void test_rotations() {
+static void test_rotations(void) {
     #define TEST_ROTATION_TREE(...)                                      \
       do {                                                               \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__)                       \
@@ -255,7 +255,7 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
   }                                             \
   while (0)
 
-static void test_dfs() {
+static void test_dfs(void) {
     // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_dfs);
     TRAVERSE_TEST_RES();
@@ -299,7 +299,7 @@ static void test_dfs() {
     TRAVERSE_TEST_RES(3, 6, 1, 4, 7, 0, 2, 8, 5, 9);
 }
 
-static void test_bfs() {
+static void test_bfs(void) {
     // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_bfs);
     TRAVERSE_TEST_RES();
@@ -343,7 +343,7 @@ static void test_bfs() {
     TRAVERSE_TEST_RES(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 }
 
-static void test_iter_preorder() {
+static void test_iter_preorder(void) {
     // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder);
     TRAVERSE_TEST_RES();
@@ -387,7 +387,7 @@ static void test_iter_preorder() {
     TRAVERSE_TEST_RES(0, 1, 3, 6, 4, 7, 2, 5, 8, 9);
 }
 
-static void test_iter_inorder() {
+static void test_iter_inorder(void) {
     // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder);
     TRAVERSE_TEST_RES();
@@ -431,7 +431,7 @@ static void test_iter_inorder() {
     TRAVERSE_TEST_RES(3, 6, 1, 4, 7, 0, 2, 8, 5, 9);
 }
 
-static void test_iter_postorder() {
+static void test_iter_postorder(void) {
     // Empty tree.
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder);
     TRAVERSE_TEST_RES();
@@ -478,7 +478,7 @@ static void test_iter_postorder() {
 #undef TRAVERSE_TEST_TREE
 #undef TRAVERSE_TEST_RES
 
-static void test_dfs_iter() {
+static void test_dfs_iter(void) {
     #define TEST_DFS_ITER_TREE(...)                 \
       do {                                          \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__); \
@@ -550,7 +550,7 @@ static void test_dfs_iter() {
     #undef TEST_DFS_ITER_END
 }
 
-static void test_valid_bin_search_tree() {
+static void test_valid_bin_search_tree(void) {
     #define VERIFY_BIN_SEARCH_TREE(valid, ...)          \
       {                                                 \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__);     \
@@ -626,7 +626,7 @@ static void test_valid_bin_search_tree() {
     #undef VERIFY_BIN_SEARCH_TREE
 }
 
-void test_tree() {
+void test_tree(void) {
     test_equals();
     test_rotations();
     test_dfs();

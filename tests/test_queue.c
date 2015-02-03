@@ -1,7 +1,7 @@
 #include "common.h"
 #include "queue.h"
 
-void test_queue() {
+void test_queue(void) {
     // Try to exercise corner cases related to growing the buffer.
     for (intptr_t n = 0; n < 512; ++n) {
         Queue queue;

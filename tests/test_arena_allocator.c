@@ -17,7 +17,7 @@ static size_t chunk_size(Chunk *chunk) {
     return chunk->end - chunk->storage;
 }
 
-static void test_empty() {
+static void test_empty(void) {
     Arena arena;
 
     arena_init(&arena);
@@ -27,7 +27,7 @@ static void test_empty() {
     arena_free(&arena);
 }
 
-static void test_one_byte_allocs() {
+static void test_one_byte_allocs(void) {
     Arena arena;
 
     arena_init(&arena);
@@ -53,7 +53,7 @@ static void test_one_byte_allocs() {
     arena_free(&arena);
 }
 
-static void test_normal_allocs() {
+static void test_normal_allocs(void) {
     Arena arena;
     char *s1, *s2;
 
@@ -80,7 +80,7 @@ static void test_normal_allocs() {
     arena_free(&arena);
 }
 
-static void test_oversized_allocs() {
+static void test_oversized_allocs(void) {
     Arena arena;
     char *s1, *s2;
 
@@ -111,7 +111,7 @@ static void test_oversized_allocs() {
     arena_free(&arena);
 }
 
-static void test_align() {
+static void test_align(void) {
     Arena arena;
 
     arena_init(&arena);
@@ -121,7 +121,7 @@ static void test_align() {
     arena_free(&arena);
 }
 
-static void test_cursor_reuse() {
+static void test_cursor_reuse(void) {
     Arena arena;
     Arena_cursor cursor;
     Chunk *c2, *c3, *c4, *c5;
@@ -208,7 +208,7 @@ static void test_cursor_reuse() {
     arena_free(&arena);
 }
 
-static void test_cursor_no_reuse() {
+static void test_cursor_no_reuse(void) {
     Arena arena;
     Arena_cursor cursor;
     Chunk *c2, *c3;
@@ -257,7 +257,7 @@ static void test_cursor_no_reuse() {
     arena_free(&arena);
 }
 
-static void test_strdup() {
+static void test_strdup(void) {
     Arena arena;
     char *s[4];
 
@@ -279,7 +279,7 @@ static void test_strdup() {
     arena_free(&arena);
 }
 
-static void test_strndup() {
+static void test_strndup(void) {
     Arena arena;
     char *s[11];
 
@@ -315,7 +315,7 @@ static void test_strndup() {
     arena_free(&arena);
 }
 
-void test_arena_allocator() {
+void test_arena_allocator(void) {
     test_empty();
     test_one_byte_allocs();
     test_normal_allocs();

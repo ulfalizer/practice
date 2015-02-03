@@ -12,7 +12,7 @@
 #define VERIFY_NOT_LIST_EQUALS(list, ...)                         \
   VERIFY(!list_equals(&list, N_ARGS(__VA_ARGS__), ##__VA_ARGS__))
 
-static void test_add() {
+static void test_add(void) {
     // Also tests list_equals().
     List list;
 
@@ -32,7 +32,7 @@ static void test_add() {
     list_free(&list);
 }
 
-static void test_make() {
+static void test_make(void) {
     #define VERIFY_MAKE(...)                       \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
@@ -49,7 +49,7 @@ static void test_make() {
     #undef VERIFY_MAKE
 }
 
-static void test_is_sorted() {
+static void test_is_sorted(void) {
     #define VERIFY_SORTED(sorted, ...)             \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
@@ -69,7 +69,7 @@ static void test_is_sorted() {
     #undef VERIFY_SORTED
 }
 
-static void test_remove() {
+static void test_remove(void) {
     #define VERIFY_REMOVE(to_remove, ...)      \
       list_remove(&list, to_remove);           \
       VERIFY_LIST_EQUALS(list, ##__VA_ARGS__);
@@ -88,7 +88,7 @@ static void test_remove() {
     #undef VERIFY_REMOVE
 }
 
-static void test_remove_all() {
+static void test_remove_all(void) {
     #define VERIFY_REMOVE_ALL(to_remove, ...)  \
       list_remove_all(&list, to_remove);       \
       VERIFY_LIST_EQUALS(list, ##__VA_ARGS__);
@@ -106,7 +106,7 @@ static void test_remove_all() {
     #undef VERIFY_REMOVE_ALL
 }
 
-static void test_reverse() {
+static void test_reverse(void) {
     #define VERIFY_REVERSE_SET_LIST(...)           \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
@@ -167,7 +167,7 @@ static void test_sort(void sort_fn(List *)) {
     #undef VERIFY_SORT
 }
 
-void test_list() {
+void test_list(void) {
     test_add();
     test_make();
     test_is_sorted();

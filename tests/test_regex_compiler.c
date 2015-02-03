@@ -51,7 +51,7 @@ static void regex_repr(Regex_node *node, String *s) {
 
 #undef A
 
-static void test_valid() {
+static void test_valid(void) {
     Arena arena;
     Arena_cursor arena_start;
 
@@ -192,7 +192,7 @@ static void test_valid() {
     arena_free(&arena);
 }
 
-static void test_invalid() {
+static void test_invalid(void) {
     Arena arena;
     Arena_cursor arena_start;
 
@@ -252,7 +252,7 @@ static void test_invalid() {
     arena_free(&arena);
 }
 
-void test_regex() {
+void test_regex(void) {
     test_valid();
     test_invalid();
 }

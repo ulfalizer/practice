@@ -2,7 +2,7 @@
 #include "stack.h"
 #include "min_max_stack.h"
 
-void test_min_max_stack() {
+void test_min_max_stack(void) {
     Min_max_stack stack;
     min_max_stack_init(&stack);
 

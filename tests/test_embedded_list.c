@@ -43,7 +43,7 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
 #define VERIFY_VECTOR_EQUALS(v, ...) \
   verify_vector_equals_helper(&v, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
-void test_embedded_list() {
+void test_embedded_list(void) {
     Data_node data_nodes[10];
     List_node head;
     Vector res;

@@ -15,7 +15,7 @@ typedef struct Compact_vector_data {
     int buf[];
 } Compact_vector_data;
 
-Compact_vector compact_vector_make();
+Compact_vector compact_vector_make(void);
 void compact_vector_free(Compact_vector vector);
 
 // Returns the number of elements stored in 'vector'.

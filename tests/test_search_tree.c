@@ -68,7 +68,7 @@ static void test_set_get_helper(bool keys_exist) {
     #undef VERIFY_SET_GET_DOUBLE
 }
 
-static void test_remove() {
+static void test_remove(void) {
     Search_tree tree;
 
     search_tree_init(&tree);
@@ -106,12 +106,12 @@ static void test_remove() {
     #undef VERIFY_REMOVE_EXISTS
 }
 
-static void test_set_get() {
+static void test_set_get(void) {
     test_set_get_helper(false);
     test_set_get_helper(true);
 }
 
-void test_search_tree() {
+void test_search_tree(void) {
     test_set_get();
     test_remove();
 }

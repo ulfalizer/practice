@@ -3,7 +3,7 @@
 
 #define TEST_LEN 512
 
-void test_vector() {
+void test_vector(void) {
     Vector vector;
 
     vector_init(&vector);

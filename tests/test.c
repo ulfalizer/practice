@@ -1,26 +1,26 @@
 #include "common.h"
 
-void test_algo();
-void test_arena_allocator();
-void test_common();
-void test_compact_vector();
-void test_embedded_list();
-void test_eval();
-void test_hash_table();
-void test_list();
-void test_min_heap();
-void test_min_max_stack();
-void test_queue();
-void test_regex();
-void test_rot_tree();
-void test_search_tree();
-void test_string();
-void test_sort();
-void test_tree();
-void test_utf8();
-void test_vector();
+void test_algo(void);
+void test_arena_allocator(void);
+void test_common(void);
+void test_compact_vector(void);
+void test_embedded_list(void);
+void test_eval(void);
+void test_hash_table(void);
+void test_list(void);
+void test_min_heap(void);
+void test_min_max_stack(void);
+void test_queue(void);
+void test_regex(void);
+void test_rot_tree(void);
+void test_search_tree(void);
+void test_string(void);
+void test_sort(void);
+void test_tree(void);
+void test_utf8(void);
+void test_vector(void);
 
-int main() {
+int main(void) {
     test_algo();
     test_arena_allocator();
     test_common();

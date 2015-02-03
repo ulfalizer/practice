@@ -1,7 +1,7 @@
 #include "common.h"
 #include "utf8.h"
 
-static void test_len() {
+static void test_len(void) {
     // ONE, TWO, etc. are the smallest code points that get encoded with that
     // many bytes (skipping the null character for the ONE case). <N>_MAX are
     // the largest code points encoded with <N> bytes.
@@ -81,7 +81,7 @@ static void test_len() {
     #undef FOUR_MAX
 }
 
-static void test_reverse() {
+static void test_reverse(void) {
     // Various characters with three-byte UTF-8 encodings.
     #define T1 u8"\u0800"
     #define T2 u8"\u0911"
@@ -155,7 +155,7 @@ static void test_reverse() {
     #undef F5
 }
 
-void test_utf8() {
+void test_utf8(void) {
     test_len();
     test_reverse();
 }

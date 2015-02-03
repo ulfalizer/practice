@@ -66,12 +66,12 @@ static void test_set_get_helper(bool keys_exist) {
     hash_table_free(&table);
 }
 
-static void test_set_get() {
+static void test_set_get(void) {
     test_set_get_helper(false);
     test_set_get_helper(true);
 }
 
-static void test_remove() {
+static void test_remove(void) {
     Hash_table table;
 
     hash_table_init(&table);
@@ -133,7 +133,7 @@ static const char *gen_key(int i) {
     return buf;
 }
 
-static void test_resize() {
+static void test_resize(void) {
     Hash_table table;
 
     hash_table_init(&table);
@@ -148,7 +148,7 @@ static void test_resize() {
     hash_table_free(&table);
 }
 
-void test_hash_table() {
+void test_hash_table(void) {
     test_set_get();
     test_remove();
     test_resize();

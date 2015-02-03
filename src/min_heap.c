@@ -9,7 +9,7 @@ void min_heap_init(Min_heap *heap) {
     heap->len = 0;
 }
 
-void min_heap_free(Min_heap *heap) {}
+void min_heap_free(UNUSED Min_heap *heap) {}
 
 size_t min_heap_len(Min_heap *heap) {
     return heap->len;

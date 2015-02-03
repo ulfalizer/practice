@@ -14,7 +14,9 @@ static void test_sort_fn(void sort_fn(int *nums, size_t n_nums)) {
               VERIFY(a1[i] == a2[i]);                         \
       }
 
+    #pragma GCC diagnostic ignored "-Wtype-limits"
     VERIFY_SORT();
+    #pragma GCC diagnostic pop
     VERIFY_SORT(1);
     VERIFY_SORT(1, 1);
     VERIFY_SORT(1, 2);

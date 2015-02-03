@@ -18,9 +18,6 @@ void string_free(String *s) {
 static_assert(sizeof(unsigned long long) >= sizeof(size_t),
   "ge_pow_2() argument might overflow");
 
-void string_append_v(String *s, const char *format, va_list ap);
-void string_set_v(String *s, const char *format, va_list ap);
-
 void string_set(String *s, const char *format, ...) {
     va_list ap;
 

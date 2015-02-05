@@ -84,5 +84,5 @@ unsigned long long ge_pow_2(unsigned long long n) {
     //
     // A version based on e.g. log2() is more than 10 times slower than this
     // version.
-    return 1ULL << (CHAR_BIT*sizeof n - __builtin_clzll(n - 1));
+    return n < 2 ? n : 1ULL << (CHAR_BIT*sizeof n - __builtin_clzll(n - 1));
 }

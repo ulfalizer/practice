@@ -16,18 +16,21 @@
 #include <stdnoreturn.h>
 #include <string.h>
 
-// Exits unsuccessfully with a message.
-noreturn void fail(const char *format, ...)
+// Prints a message together with errno (with a newline appended) to stderr and
+// exits with EXIT_FAILURE.
+noreturn void err_exit(const char *format, ...)
   __attribute__((format(printf, 1, 2)));
 
-// Exits unsuccessfully with errno and a message.
-noreturn void err(const char *format, ...)
+// Prints a message to stderr (with a newline appended) and exits with
+// EXIT_FAILURE.
+noreturn void fail_exit(const char *format, ...)
   __attribute__((format(printf, 1, 2)));
 
 // Returns a list of integers parsed from 'argv'. Caller frees list.
 int *parse_int_args(int argc, char *argv[]);
 
-// Checked allocation functions.
+// These functions print 'desc' and exit with EXIT_FAILURE if the allocation
+// fails.
 void *emalloc(size_t size, const char *desc);
 void *emalloc_align(size_t size, size_t align, const char *desc);
 void *erealloc(void *ptr, size_t size, const char *desc);
@@ -70,9 +73,9 @@ typedef unsigned char uc;
           UNREACHABLE; \
   while (0)
 
-#define VERIFY(cond)                                                  \
-  if (!(cond))                                                        \
-      fail(__FILE__":"STRINGIFY(__LINE__)": "#cond" should be true");
+#define VERIFY(cond)                                                       \
+  if (!(cond))                                                             \
+      fail_exit(__FILE__":"STRINGIFY(__LINE__)": "#cond" should be true");
 
 // Returns the number of arguments in the variable argument list. Supports zero
 // arguments via a GCC extension.

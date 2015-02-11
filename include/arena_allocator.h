@@ -49,7 +49,7 @@ typedef struct Arena {
 } Arena;
 
 typedef struct Arena_cursor {
-    struct Chunk *chunk;
+    Chunk *chunk;
     char *start;
 } Arena_cursor;
 

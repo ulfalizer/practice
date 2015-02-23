@@ -14,9 +14,12 @@ headers := $(addprefix include/, algo.h arena_allocator.h common.h \
   min_max_stack.h queue.h regex_compiler.h rot_tree.h search_tree.h sort.h \
   stack.h dynamic_string.h tree.h utf8.h vector.h)
 
+warnings := -Wall -Wextra -Wno-sign-compare -Wredundant-decls \
+  -Wstrict-prototypes
+
 test: $(sources) $(tests) $(headers)
 # We strictly only need -fno-strict-aliasing for test_embedded_list.c.
-	gcc -std=gnu11 -g -Og -fno-strict-aliasing -Wall -Wextra -Wno-sign-compare -Wredundant-decls -Wstrict-prototypes -Iinclude -o $@ $(sources) $(tests) -lm
+	gcc -std=gnu11 -g -Og -fno-strict-aliasing $(warnings) -Iinclude -o $@ $(sources) $(tests) -lm
 
 .PHONY: clean
 clean:

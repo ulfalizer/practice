@@ -22,7 +22,7 @@ warnings := -Wall -Wextra -Wno-sign-compare -Wredundant-decls \
 
 $(EXECUTABLE): $(sources) $(tests) $(headers)
 # We strictly only need -fno-strict-aliasing for test_embedded_list.c.
-	$(CC) -std=gnu11 -g -fno-strict-aliasing $(warnings) -Iinclude $(sources) $(tests) -lm -o $@
+	$(CC) -std=gnu11 -g -Og -fno-strict-aliasing $(warnings) -Iinclude $(sources) $(tests) -lm -o $@
 
 .PHONY: clean
 clean:

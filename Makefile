@@ -1,3 +1,6 @@
+CC := gcc
+EXECUTABLE := test
+
 sources := $(addprefix src/, algo.c arena_allocator.c common.c \
   compact_vector.c eval.c hash_table.c list.c min_heap.c min_max_stack.c \
   queue.c regex_compiler.c rot_tree.c search_tree.c sort.c stack.c \
@@ -17,10 +20,10 @@ headers := $(addprefix include/, algo.h arena_allocator.h common.h \
 warnings := -Wall -Wextra -Wno-sign-compare -Wredundant-decls \
   -Wstrict-prototypes
 
-test: $(sources) $(tests) $(headers)
+$(EXECUTABLE): $(sources) $(tests) $(headers)
 # We strictly only need -fno-strict-aliasing for test_embedded_list.c.
-	gcc -std=gnu11 -g -Og -fno-strict-aliasing $(warnings) -Iinclude -o $@ $(sources) $(tests) -lm
+	$(CC) -std=gnu11 -g -fno-strict-aliasing $(warnings) -Iinclude $(sources) $(tests) -lm -o $@
 
 .PHONY: clean
 clean:
-	rm test
+	rm $(EXECUTABLE)

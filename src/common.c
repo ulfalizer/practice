@@ -51,7 +51,11 @@ void *emalloc_align(size_t size, size_t align, const char *desc) {
     if (posix_memalign(&res, align, size) != 0)
         err_exit("posix_memalign failed: %s", desc);
 
+// Silences bogus -Wmaybe-uninitialized warning with -Og in GCC 4.9.1.
+#pragma GCC diagnostic push // Avoids clang warning.
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
     return res;
+#pragma GCC diagnostic pop
 }
 
 void *erealloc(void *ptr, size_t size, const char *desc) {

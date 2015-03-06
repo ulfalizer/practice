@@ -29,11 +29,8 @@ size_t utf8_len(const char *s) {
 }
 
 static void reverse(char *start, char *end) {
-    while (start < end) {
+    for (; start < end; ++start, --end)
         swap(*start, *end);
-        ++start;
-        --end;
-    }
 }
 
 void utf8_reverse(char *s) {

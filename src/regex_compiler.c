@@ -24,15 +24,18 @@ static const uint8_t char_properties[1 << CHAR_BIT] =
     ['(']  = META,
     [')']  = META };
 
-static bool is_literal(char c) {
+static bool is_literal(char c)
+{
     return !(char_properties[(uc)c] & META);
 }
 
-static bool is_quant(char c) {
+static bool is_quant(char c)
+{
     return char_properties[(uc)c] & QUANT;
 }
 
-static Regex_node *make_node(Regex_node_type type, Arena *arena) {
+static Regex_node *make_node(Regex_node_type type, Arena *arena)
+{
     Regex_node *node = arena_alloc(arena, sizeof *node);
 
     node->next = NULL;
@@ -43,13 +46,14 @@ static Regex_node *make_node(Regex_node_type type, Arena *arena) {
 
 // Parses and returns a (possibly escaped) literal character. Works both
 // outside and inside brackets.
-static char parse_literal(const char **pat) {
+static char parse_literal(const char **pat)
+{
     char res;
 
     if (**pat == '\\') {
-        ++*pat; // Eat "\".
+        ++*pat; // Eat "\"
         if (**pat == '\0')
-            // "\" at end of line.
+            // "\" at end of line
             longjmp(err_jmp_buf, 1);
     }
     res = **pat;
@@ -61,7 +65,8 @@ static char parse_literal(const char **pat) {
 // parse_literals() helper. If the input starts with a non-quantified literal
 // (a literal not followed by '?', '*', or '+'), move 'pat' past it and return
 // true. Otherwise, return false without modifying 'pat'.
-static bool skip_nq_literal(const char **pat) {
+static bool skip_nq_literal(const char **pat)
+{
     const char *tmp;
 
     if (!is_literal(**pat))
@@ -76,8 +81,9 @@ static bool skip_nq_literal(const char **pat) {
     return true;
 }
 
-// Removes backslashes before escaped characters in 's' in-place.
-static void deescape(char *s) {
+// Removes backslashes before escaped characters in 's' in-place
+static void deescape(char *s)
+{
     char *write_pos;
 
     for (write_pos = s;; ++s, ++write_pos) {
@@ -92,7 +98,8 @@ static void deescape(char *s) {
 // If the input has two or more non-quantified literals in a row, returns a
 // SPAN node with the literals. Otherwise, returns a CHAR node with the initial
 // literal. We must be careful to handle escaped literals correctly.
-static Regex_node *parse_literals(const char **pat, Arena *arena) {
+static Regex_node *parse_literals(const char **pat, Arena *arena)
+{
     const char *start;
     char first_literal;
     Regex_node *node;
@@ -104,13 +111,13 @@ static Regex_node *parse_literals(const char **pat, Arena *arena) {
 
     first_literal = parse_literal(pat);
     if (!skip_nq_literal(pat)) {
-        // Single character. Use a CHAR node.
+        // Single character - use a CHAR node
 
         node = make_node(CHAR, arena);
         node->c = first_literal;
     }
     else {
-        // Many characters. Use a SPAN node.
+        // Many characters - use a SPAN node
 
         while (skip_nq_literal(pat));
 
@@ -122,31 +129,33 @@ static Regex_node *parse_literals(const char **pat, Arena *arena) {
     return node;
 }
 
-static Regex_node *parse_set(const char **pat, Arena *arena) {
+static Regex_node *parse_set(const char **pat, Arena *arena)
+{
     Regex_node *node = make_node(SET, arena);
 
-    ++*pat; // Eat "[".
+    ++*pat; // Eat "["
 
-    // Create a look-up table for the set.
+    // Create a look-up table for the set
     node->set = arena_alloc(arena, sizeof(bool)*(1 << CHAR_BIT));
     for (unsigned i = 0; i < 1 << CHAR_BIT; ++i)
         node->set[i] = false;
 
     // An initial "]" is considered to be part of the set, so we always include
-    // the first character.
+    // the first character
     do {
         if (**pat == '\0')
             longjmp(err_jmp_buf, 1);
         node->set[(uc)parse_literal(pat)] = true;
     } while (**pat != ']');
 
-    ++*pat; // Eat "]".
+    ++*pat; // Eat "]"
 
     return node;
 }
 
-// Modifies the node type according to the quantifier (if any).
-static void quantify(const char **pat, Regex_node *node) {
+// Modifies the node type according to the quantifier (if any)
+static void quantify(const char **pat, Regex_node *node)
+{
     switch (**pat) {
     case '?': ++*pat; node->type += 1; break; // X -> X_ZERO_OR_ONE.
     case '*': ++*pat; node->type += 2; break; // X -> X_ZERO_OR_MORE.
@@ -156,12 +165,13 @@ static void quantify(const char **pat, Regex_node *node) {
 
 static Regex_node *parse_regex(const char **pat, Arena *arena);
 
-static Regex_node *parse_node(const char **pat, Arena *arena) {
+static Regex_node *parse_node(const char **pat, Arena *arena)
+{
     Regex_node *node;
 
     switch (**pat) {
     case '.':
-        ++*pat; // Eat ".".
+        ++*pat; // Eat "."
         node = make_node(CHAR_ANY, arena);
         break;
 
@@ -170,12 +180,12 @@ static Regex_node *parse_node(const char **pat, Arena *arena) {
         break;
 
     case '(':
-        ++*pat; // Eat "(".
+        ++*pat; // Eat "("
         node = make_node(SUB, arena);
         node->sub = parse_regex(pat, arena);
         if (**pat != ')')
             longjmp(err_jmp_buf, 1);
-        ++*pat; // Eat ")".
+        ++*pat; // Eat ")"
         break;
 
     default:
@@ -187,7 +197,8 @@ static Regex_node *parse_node(const char **pat, Arena *arena) {
     return node;
 }
 
-static Regex_node *parse_regex(const char **pat, Arena *arena) {
+static Regex_node *parse_regex(const char **pat, Arena *arena)
+{
     Regex_node *start, **cur;
 
     for (cur = &start; **pat != '\0' && **pat != ')'; cur = &(*cur)->next)
@@ -197,13 +208,14 @@ static Regex_node *parse_regex(const char **pat, Arena *arena) {
     return start;
 }
 
-bool regex_compile(const char *pat, Regex *regex, Arena *arena) {
+bool regex_compile(const char *pat, Regex *regex, Arena *arena)
+{
     if (setjmp(err_jmp_buf) == 1)
         return false;
 
     regex->start = parse_regex(&pat, arena);
     if (*pat != '\0')
-        // Found extra trailing characters.
+        // Found extra trailing characters
         return false;
 
     return true;

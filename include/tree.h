@@ -1,4 +1,4 @@
-// Binary tree stuff.
+// Binary tree stuff
 
 typedef struct Vector Vector;
 
@@ -8,7 +8,7 @@ typedef struct Tree_node {
     int val;
 } Tree_node;
 
-// Helper function for creating a new node.
+// Helper function for creating a new node
 Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right);
 
 // Builds a tree out of the variable argument list (with 'len' entries). 0xDEAD
@@ -28,16 +28,16 @@ Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right);
 Tree_node *tree_make(size_t len, ...);
 void tree_free(Tree_node *root);
 
-// Returns a new tree with copies of all nodes.
+// Returns a new tree with copies of all nodes
 Tree_node *tree_copy(Tree_node *root);
 
-// Returns the number of levels in the tree -- zero for an empty tree, one
-// for a tree with one node, etc.
+// Returns the number of levels in the tree - zero for an empty tree, one for a
+// tree with one node, etc.
 unsigned tree_depth(Tree_node *root);
 
-// Does a right rotation at 'node', bringing up its left child.
+// Does a right rotation at 'node', bringing up its left child
 void tree_rot_right(Tree_node **node);
-// Does a left rotation at 'node', bringing up its right child.
+// Does a left rotation at 'node', bringing up its right child
 void tree_rot_left(Tree_node **node);
 
 // Performs a binary search tree removal of 'node'. Replaces with predecessor
@@ -49,22 +49,22 @@ void tree_remove(Tree_node **node);
 // variable argument list, which is intuitive.
 bool tree_equals(Tree_node *root, size_t len, ...);
 
-// Returns true if the trees rooted at 'r1' and 'r2' are equal.
+// Returns true if the trees rooted at 'r1' and 'r2' are equal
 bool trees_equal(Tree_node *r1, Tree_node *r2);
 
-// Adds all tree nodes in-order into the vector.
+// Adds all tree nodes in-order into the vector
 void tree_nodes_to_vector_dfs(Tree_node *root, Vector *vector);
 
-// Adds all tree nodes level-order into the vector.
+// Adds all tree nodes level-order into the vector
 void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector);
 
-// Adds all tree nodes pre-order into the vector (non-recursive).
+// Adds all tree nodes pre-order into the vector (non-recursive)
 void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector);
 
-// Adds all tree nodes in-order into the vector (non-recursive).
+// Adds all tree nodes in-order into the vector (non-recursive)
 void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector);
 
-// Adds all tree nodes post-order into the vector (non-recursive).
+// Adds all tree nodes post-order into the vector (non-recursive)
 void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector);
 
 // If 'key' exists in the tree, sets 'val' to its value (if 'val' is not NULL)
@@ -73,7 +73,7 @@ void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector);
 bool tree_dfs_iter(Tree_node *node, int key, int *val);
 
 // Returns true if the tree is a valid binary search tree
-// (<left subtree nodes> < <node> < <right subtree nodes>, for all nodes).
+// (<left subtree nodes> < <node> < <right subtree nodes>, for all nodes)
 bool valid_bin_search_tree(Tree_node *root);
 
 // Prints a tree to stdout. The format is similar to the input format in the

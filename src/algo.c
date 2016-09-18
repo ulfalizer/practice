@@ -3,7 +3,8 @@
 #include "stack.h"
 #include "vector.h"
 
-bool substr(const char *find, const char *s) {
+bool substr(const char *find, const char *s)
+{
     for (size_t i = 0; s[i] != '\0'; ++i) {
         for (size_t j = 0; find[j] != '\0'; ++j)
             if (s[i + j] != find[j])
@@ -16,7 +17,8 @@ bool substr(const char *find, const char *s) {
     return *find == '\0';
 }
 
-size_t max_ones(char *s) {
+size_t max_ones(char *s)
+{
     size_t i;
     size_t max = 0;
     size_t uninitialized_var(max_i);
@@ -40,11 +42,12 @@ size_t max_ones(char *s) {
 // Returns the index of the smallest element greater than or equal (hence "ge")
 // to 'find', or 'right' if no such element exists. The values in 'nums' are
 // assumed to be in strictly ascending sorted order.
-static size_t find_ge(int find, int *nums, size_t left, size_t right) {
+static size_t find_ge(int find, int *nums, size_t left, size_t right)
+{
     size_t middle;
 
     // The index we're looking for will always be in the range [left, right],
-    // which eventually shrinks down to a single index.
+    // which eventually shrinks down to a single index
     while (left != right) {
         middle = left + (right - left)/2;
         if (nums[middle] >= find)
@@ -57,7 +60,8 @@ static size_t find_ge(int find, int *nums, size_t left, size_t right) {
 }
 
 void sorted_intersect(int *a1, size_t a1_len,
-                      int *a2, size_t a2_len, Vector *res) {
+                      int *a2, size_t a2_len, Vector *res)
+{
     size_t i1 = 0, i2 = 0;
 
     while (i1 < a1_len && i2 < a2_len)
@@ -77,7 +81,8 @@ void sorted_intersect(int *a1, size_t a1_len,
             i1 = find_ge(a2[i2], a1, i1, a1_len);
 }
 
-static void print_balanced_rec(int i, int remain, int level, char *res) {
+static void print_balanced_rec(int i, int remain, int level, char *res)
+{
     if (remain == 0) {
         // No opening parentheses remain to be placed. Place remaining closing
         // parentheses and return result.
@@ -88,30 +93,32 @@ static void print_balanced_rec(int i, int remain, int level, char *res) {
         return;
     }
 
-    // Place left parenthesis and recurse.
+    // Place left parenthesis and recurse
     res[i] = '(';
     print_balanced_rec(i + 1, remain - 1, level + 1, res);
-    // Place right parenthesis and recurse, if possible.
+    // Place right parenthesis and recurse, if possible
     if (level > 0) {
         res[i] = ')';
         print_balanced_rec(i + 1, remain, level - 1, res);
     }
 }
 
-void print_balanced(int n) {
+void print_balanced(int n)
+{
     if (n == 0)
         return;
 
-    char res[2*n + 1]; // Variable-length array.
+    char res[2*n + 1]; // Variable-length array
 
-    // Lets us check for the end of the string using null termination.
+    // Lets us check for the end of the string using null termination
     memset(res, 1, 2*n);
     res[2*n] = '\0';
     print_balanced_rec(0, n, 0, res);
 }
 
-bool is_balanced(const char *s) {
-    // Remaining entries are implicitly zero-initialized.
+bool is_balanced(const char *s)
+{
+    // Remaining entries are implicitly zero-initialized
     static const char paren_table[1 << CHAR_BIT] =
       { [')'] = '(', [']'] = '[', ['}'] = '{' };
     bool res;
@@ -137,7 +144,8 @@ bool is_balanced(const char *s) {
     return res;
 }
 
-static void print_perms_rec(char *s, size_t i) {
+static void print_perms_rec(char *s, size_t i)
+{
     if (s[i] == '\0')
         puts(s);
     for (size_t j = i; s[j] != '\0'; ++j) {
@@ -147,7 +155,8 @@ static void print_perms_rec(char *s, size_t i) {
     }
 }
 
-void print_perms(char *s) {
+void print_perms(char *s)
+{
     if (*s == '\0')
         return;
     print_perms_rec(s, 0);
@@ -157,7 +166,8 @@ void print_perms(char *s) {
 // things up by a little less than 2x compared to no base case on my machine.
 // Base case with three elements is ~15% slower than with four elements. (All
 // tests run with an empty 'fn'.)
-static void permute_4(char *s, void fn(char *perm)) {
+static void permute_4(char *s, void fn(char *perm))
+{
     char a = s[0], b = s[1], c = s[2], d = s[3];
     fn(s); s[0] = b; s[1] = a; fn(s); s[0] = c; s[2] = b;
     fn(s); s[0] = a; s[1] = c; fn(s); s[0] = b; s[2] = a;
@@ -173,16 +183,17 @@ static void permute_4(char *s, void fn(char *perm)) {
     fn(s); s[0] = b; s[1] = c; fn(s);
 }
 
-void perm_heaps(char *s, void fn(char *perm)) {
+void perm_heaps(char *s, void fn(char *perm))
+{
     // The current level. The valid indices at level 'lev' are
-    // 0, 1, ..., lev.
+    // 0, 1, ..., lev
     size_t lev;
-    // Length of string to permute.
+    // Length of string to permute
     size_t len = strlen(s);
 
     assert(len >= 4);
-    // indices[lev] holds the current index for level 'lev'.
-    size_t indices[len]; // Variable-length array.
+    // indices[lev] holds the current index for level 'lev'
+    size_t indices[len]; // Variable-length array
     for (size_t i = 0; i < len; ++i)
         indices[i] = 0;
 
@@ -190,12 +201,12 @@ void perm_heaps(char *s, void fn(char *perm)) {
     for (lev = 4; lev < len;)
         if (indices[lev] < lev) {
             // Select an element and swap it for the last element using Heap's
-            // strategy.
+            // strategy
             size_t swap_pos = (lev & 1) ? indices[lev] : 0;
             swap(s[swap_pos], s[lev]);
-            // Increase the index at this level.
+            // Increase the index at this level
             ++indices[lev];
-            // "Recurse" all the way down to the unrolled base case.
+            // "Recurse" all the way down to the unrolled base case
             lev = 4;
             permute_4(s, fn);
         }
@@ -206,17 +217,18 @@ void perm_heaps(char *s, void fn(char *perm)) {
             indices[lev++] = 0;
 }
 
-bool next_lex(char *s) {
+bool next_lex(char *s)
+{
     size_t i, swap_i;
     size_t len = strlen(s);
 
     if (len == 0)
         return false;
 
-    // Go left while elements are monotonically increasing.
+    // Go left while elements are monotonically increasing
     for (i = len - 1; i > 0 && (uc)s[i - 1] >= (uc)s[i]; --i);
     if (i == 0)
-        // Already lexicographically sorted.
+        // Already lexicographically sorted
         return false;
     swap_i = i - 1;
 
@@ -226,19 +238,20 @@ bool next_lex(char *s) {
     for (++i; (uc)s[i] > (uc)s[swap_i]; ++i);
     swap(s[swap_i], s[i - 1]);
 
-    // Reverse the sequence on the right of swap_i.
+    // Reverse the sequence on the right of swap_i
     for (i = 0; i < (len - swap_i)/2; ++i)
         swap(s[swap_i + 1 + i], s[len - 1 - i]);
 
     return true;
 }
 
-bool binsearch(int find, int *nums, size_t len) {
-    // The search range is [left,right[.
+bool binsearch(int find, int *nums, size_t len)
+{
+    // The search range is [left,right[
     size_t left = 0, middle, right = len;
 
     while (left != right) {
-        middle = left + (right - left)/2; // Overflow safe.
+        middle = left + (right - left)/2; // Overflow safe
         if (nums[middle] > find)
             right = middle;
         else if (nums[middle] < find)
@@ -250,7 +263,8 @@ bool binsearch(int find, int *nums, size_t len) {
     return false;
 }
 
-void print_num(int num, int base) {
+void print_num(int num, int base)
+{
     // Enough space to hold the digits of INT_MIN in binary plus a minus sign
     // and a terminating null.
     #define MAX_SIZE (1 + CHAR_BIT*sizeof(num) + 1)
@@ -266,7 +280,7 @@ void print_num(int num, int base) {
     buf[i] = '\0';
     do {
         // Handles negative numbers in a way that supports INT_MIN (which has
-        // no representable inverse in two's complement).
+        // no representable inverse in two's complement)
         buf[--i] = digits[abs(num%base)];
         num /= base;
     }
@@ -277,7 +291,8 @@ void print_num(int num, int base) {
     #undef MAX_SIZE
 }
 
-int rev_num(int num, int base) {
+int rev_num(int num, int base)
+{
     int res = 0;
 
     while (num != 0) {

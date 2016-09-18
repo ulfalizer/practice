@@ -2,7 +2,8 @@
 #include "algo.h"
 #include "vector.h"
 
-static void test_substr(void) {
+static void test_substr(void)
+{
     VERIFY(substr("", ""));
     VERIFY(substr("", "a"));
     VERIFY(!substr("a", ""));
@@ -19,7 +20,8 @@ static void test_substr(void) {
     VERIFY(substr("foo", "xxfooxx"));
 }
 
-static void test_max_ones(void) {
+static void test_max_ones(void)
+{
     VERIFY(max_ones("") == (size_t)-1);
     VERIFY(max_ones("0") == 0);
     VERIFY(max_ones("1") == (size_t)-1);
@@ -106,7 +108,8 @@ static void test_max_ones(void) {
     VERIFY(max_ones("1100101110111") == 9);
 }
 
-static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
+static void verify_vector_equals_helper(Vector *v, size_t len, ...)
+{
     va_list ap;
 
     VERIFY(vector_len(v) == len);
@@ -120,7 +123,8 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
 #define VERIFY_VECTOR_EQUALS(v, ...) \
   verify_vector_equals_helper(&v, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
-static void test_sorted_intersect(void) {
+static void test_sorted_intersect(void)
+{
     #define ARRAY_1(...)                                                \
       do {                                                              \
           int a1[] = { __VA_ARGS__ }
@@ -205,7 +209,8 @@ static void test_sorted_intersect(void) {
     #undef VERIFY_COMMON
 }
 
-static void test_is_balanced(void) {
+static void test_is_balanced(void)
+{
     VERIFY(is_balanced(""));
     VERIFY(is_balanced("()"));
     VERIFY(is_balanced("{}"));
@@ -238,7 +243,8 @@ static void test_is_balanced(void) {
     VERIFY(!is_balanced("(()]"));
 }
 
-static void test_binsearch(void) {
+static void test_binsearch(void)
+{
     #define VERIFY_BINSEARCH(in_list, find, ...)                    \
       {                                                             \
         int a[] = { __VA_ARGS__ };                                  \
@@ -281,7 +287,8 @@ static void test_binsearch(void) {
     #undef VERIFY_BINSEARCH
 }
 
-static void test_next_lex(void) {
+static void test_next_lex(void)
+{
     #define TEST_STRING(str)          \
       do {                            \
           char s[] = str              \
@@ -348,7 +355,8 @@ static void test_next_lex(void) {
     #undef END_TEST
 }
 
-void test_algo(void) {
+void test_algo(void)
+{
     test_substr();
     test_max_ones();
     test_sorted_intersect();

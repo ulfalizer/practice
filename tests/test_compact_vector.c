@@ -3,7 +3,8 @@
 
 #define TEST_LEN 512
 
-void test_compact_vector(void) {
+void test_compact_vector(void)
+{
     Compact_vector vector = compact_vector_make();
 
     for (int i = 0; i < TEST_LEN; ++i) {

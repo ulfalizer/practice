@@ -6,7 +6,7 @@
 // downside is a slightly inconsistent interface (and a slightly trickier
 // implementation).
 
-// Efficiently copyable.
+// Efficiently copyable
 typedef int *Compact_vector;
 
 typedef struct Compact_vector_data {
@@ -18,10 +18,10 @@ typedef struct Compact_vector_data {
 Compact_vector compact_vector_make(void);
 void compact_vector_free(Compact_vector vector);
 
-// Returns the number of elements stored in 'vector'.
+// Returns the number of elements stored in 'vector'
 size_t compact_vector_len(Compact_vector vector);
 
-// Appends 'val' to 'vector', growing it if necessary.
+// Appends 'val' to 'vector', growing it if necessary
 void compact_vector_append(Compact_vector *vector, int val);
 
 // Sets the element at index 'index' in 'vector' to 'val'. 'index' must be a

@@ -19,8 +19,8 @@
 
 typedef enum Regex_node_type {
     // Can be interpreted as the least significant two bits holding the
-    // quantifier and the higher bits the type.
-    CHAR = 0, CHAR_ZERO_OR_ONE    , CHAR_ZERO_OR_MORE    , CHAR_ONE_OR_MORE    ,
+    // quantifier and the higher bits the type
+    CHAR    , CHAR_ZERO_OR_ONE    , CHAR_ZERO_OR_MORE    , CHAR_ONE_OR_MORE    ,
     CHAR_ANY, CHAR_ANY_ZERO_OR_ONE, CHAR_ANY_ZERO_OR_MORE, CHAR_ANY_ONE_OR_MORE,
     SPAN    , SPAN_ZERO_OR_ONE    , SPAN_ZERO_OR_MORE    , SPAN_ONE_OR_MORE    ,
     SET     , SET_ZERO_OR_ONE     , SET_ZERO_OR_MORE     , SET_ONE_OR_MORE     ,
@@ -28,14 +28,14 @@ typedef enum Regex_node_type {
 } Regex_node_type;
 
 typedef struct Regex_node {
-    // A more compact representation without 'next' pointers would be possible.
+    // A more compact representation without 'next' pointers would be possible
     struct Regex_node *next;
     Regex_node_type type;
     union {
-        char c; // CHAR.
-        char *s; // SPAN.
-        bool *set; // SET.
-        struct Regex_node *sub; // SUB.
+        char c; // CHAR
+        char *s; // SPAN
+        bool *set; // SET
+        struct Regex_node *sub; // SUB
     };
 } Regex_node;
 

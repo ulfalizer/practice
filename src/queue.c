@@ -14,42 +14,46 @@
 // in the same range).
 #define INITIAL_BUF_LEN 16
 
-void queue_init(Queue *queue) {
+void queue_init(Queue *queue)
+{
     queue->buf = emalloc(sizeof(*queue->buf)*INITIAL_BUF_LEN, "queue init");
     queue->buf_len = INITIAL_BUF_LEN;
     queue->start = 0;
     queue->end = 0;
 }
 
-void queue_free(Queue *queue) {
+void queue_free(Queue *queue)
+{
     free(queue->buf);
 }
 
-size_t queue_len(Queue *queue) {
-    // This works out even if end < start.
+size_t queue_len(Queue *queue)
+{
+    // This works out even if end < start
     return (queue->end - queue->start) & (queue->buf_len - 1);
 }
 
 // Doubles the size of the buffer. Assumes the buffer is precisely full
 // ('start' == 'end', here interpreted as "full").
 //
-// This grows the buffer as it becomes full -- not at the next insertion after
+// This grows the buffer as it becomes full - not at the next insertion after
 // that. Additional logic would allow the buffer to be precisely full.
-static void grow(Queue *queue) {
+static void grow(Queue *queue)
+{
     void **new_buf =
       emalloc(2*sizeof(*queue->buf)*queue->buf_len, "queue grow");
 
     assert(queue->start == queue->end);
 
-    // Copy from 'start' up to the end of the buffer.
+    // Copy from 'start' up to the end of the buffer
     memcpy(new_buf, queue->buf + queue->start,
            sizeof(*queue->buf)*(queue->buf_len - queue->start));
     // Copy from the beginning of the buffer up to but not including
-    // 'start' (== 'end').
+    // 'start' (== 'end')
     memcpy(new_buf + queue->buf_len - queue->start, queue->buf,
            sizeof(*queue->buf)*queue->start);
 
-    // Free the old buffer.
+    // Free the old buffer
     free(queue->buf);
     queue->buf = new_buf;
     queue->start = 0;
@@ -57,7 +61,8 @@ static void grow(Queue *queue) {
     queue->buf_len *= 2;
 }
 
-void queue_add(Queue *queue, void *val) {
+void queue_add(Queue *queue, void *val)
+{
     queue->buf[queue->end] = val;
     queue->end = (queue->end + 1) & (queue->buf_len - 1);
     // Buffer full?
@@ -65,7 +70,8 @@ void queue_add(Queue *queue, void *val) {
         grow(queue);
 }
 
-void *queue_remove(Queue *queue) {
+void *queue_remove(Queue *queue)
+{
     void *res = queue->buf[queue->start];
 
     assert(queue->start != queue->end);

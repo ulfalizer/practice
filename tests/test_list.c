@@ -12,16 +12,17 @@
 #define VERIFY_NOT_LIST_EQUALS(list, ...)                         \
   VERIFY(!list_equals(&list, N_ARGS(__VA_ARGS__), ##__VA_ARGS__))
 
-static void test_add(void) {
-    // Also tests list_equals().
+static void test_add(void)
+{
+    // Also tests list_equals()
     List list;
 
     list_init(&list);
 
-    // Verify that the list is empty.
+    // Verify that the list is empty
     VERIFY_LIST_EQUALS(list);
     list_add(&list, 10);
-    // Verify that the list is not empty.
+    // Verify that the list is not empty
     VERIFY_NOT_LIST_EQUALS(list);
     VERIFY_LIST_EQUALS(list, 10);
     list_add(&list, 20);
@@ -32,7 +33,8 @@ static void test_add(void) {
     list_free(&list);
 }
 
-static void test_make(void) {
+static void test_make(void)
+{
     #define VERIFY_MAKE(...)                       \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
@@ -49,7 +51,8 @@ static void test_make(void) {
     #undef VERIFY_MAKE
 }
 
-static void test_is_sorted(void) {
+static void test_is_sorted(void)
+{
     #define VERIFY_SORTED(sorted, ...)             \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
@@ -69,7 +72,8 @@ static void test_is_sorted(void) {
     #undef VERIFY_SORTED
 }
 
-static void test_remove(void) {
+static void test_remove(void)
+{
     #define VERIFY_REMOVE(to_remove, ...)      \
       list_remove(&list, to_remove);           \
       VERIFY_LIST_EQUALS(list, ##__VA_ARGS__);
@@ -88,7 +92,8 @@ static void test_remove(void) {
     #undef VERIFY_REMOVE
 }
 
-static void test_remove_all(void) {
+static void test_remove_all(void)
+{
     #define VERIFY_REMOVE_ALL(to_remove, ...)  \
       list_remove_all(&list, to_remove);       \
       VERIFY_LIST_EQUALS(list, ##__VA_ARGS__);
@@ -106,7 +111,8 @@ static void test_remove_all(void) {
     #undef VERIFY_REMOVE_ALL
 }
 
-static void test_reverse(void) {
+static void test_reverse(void)
+{
     #define VERIFY_REVERSE_SET_LIST(...)           \
       {                                            \
           MAKE_LIST(list, ##__VA_ARGS__);          \
@@ -133,9 +139,10 @@ static void test_reverse(void) {
     #undef VERIFY_REVERSE_RESULT
 }
 
-static void test_sort(void sort_fn(List *)) {
+static void test_sort(void sort_fn(List *))
+{
     // Assume selection sort is correct and test other sorting algorithms by
-    // comparing against it.
+    // comparing against it
     #define VERIFY_SORT(...)             \
       {                                  \
           MAKE_LIST(l1, ##__VA_ARGS__);  \
@@ -148,7 +155,7 @@ static void test_sort(void sort_fn(List *)) {
           list_free(&l2);                \
       }
 
-    VERIFY_SORT(); // Empty list should sort correctly too.
+    VERIFY_SORT(); // Empty list should sort correctly too
     VERIFY_SORT(1);
     VERIFY_SORT(1, 1);
     VERIFY_SORT(1, 2);
@@ -167,7 +174,8 @@ static void test_sort(void sort_fn(List *)) {
     #undef VERIFY_SORT
 }
 
-void test_list(void) {
+void test_list(void)
+{
     test_add();
     test_make();
     test_is_sorted();

@@ -1,11 +1,13 @@
 #include "common.h"
 #include "list.h"
 
-void list_init(List *list) {
+void list_init(List *list)
+{
     list->start = NULL;
 }
 
-void list_free(List *list) {
+void list_free(List *list)
+{
     Node *next;
 
     for (Node *node = list->start; node; node = next) {
@@ -14,7 +16,8 @@ void list_free(List *list) {
     }
 }
 
-void list_make(List *list, size_t len, ...) {
+void list_make(List *list, size_t len, ...)
+{
     va_list ap;
     Node **cur;
 
@@ -28,7 +31,8 @@ void list_make(List *list, size_t len, ...) {
     *cur = NULL;
 }
 
-void list_add(List *list, int val) {
+void list_add(List *list, int val)
+{
     Node *new_node = emalloc(sizeof *new_node, "list add");
 
     new_node->next = list->start;
@@ -36,7 +40,8 @@ void list_add(List *list, int val) {
     list->start = new_node;
 }
 
-bool list_equals(List *list, size_t len, ...) {
+bool list_equals(List *list, size_t len, ...)
+{
     va_list ap;
     Node *node;
 
@@ -52,7 +57,8 @@ bool list_equals(List *list, size_t len, ...) {
     return node == NULL && len == 0;
 }
 
-bool lists_equal(List *l1, List *l2) {
+bool lists_equal(List *l1, List *l2)
+{
     for (Node *n1 = l1->start, *n2 = l2->start;;
          n1 = n1->next, n2 = n2->next) {
         if (n1 == NULL)
@@ -64,7 +70,8 @@ bool lists_equal(List *l1, List *l2) {
     }
 }
 
-bool list_is_sorted(List* list) {
+bool list_is_sorted(List* list)
+{
     int prev = INT_MIN;
 
     for (Node *node = list->start; node; prev = node->val, node = node->next)
@@ -74,7 +81,8 @@ bool list_is_sorted(List* list) {
     return true;
 }
 
-void list_remove(List *list, int val) {
+void list_remove(List *list, int val)
+{
     for (Node **cur = &list->start; *cur; cur = &(*cur)->next)
         if ((*cur)->val == val) {
             Node *tmp = *cur;
@@ -86,7 +94,8 @@ void list_remove(List *list, int val) {
         }
 }
 
-void list_remove_all(List *list, int val) {
+void list_remove_all(List *list, int val)
+{
     for (Node **cur = &list->start; *cur;)
         if ((*cur)->val == val) {
             Node *tmp = *cur;
@@ -98,7 +107,8 @@ void list_remove_all(List *list, int val) {
             cur = &(*cur)->next;
 }
 
-void list_reverse(List *list) {
+void list_reverse(List *list)
+{
     Node *next, *prev = NULL;
 
     for (Node *cur = list->start; cur; prev = cur, cur = next) {
@@ -108,25 +118,27 @@ void list_reverse(List *list) {
     list->start = prev;
 }
 
-// Helper function. Removes and returns the minimum elements from the list.
-// Assumes there is at least one element.
-static Node *extract_min(Node **node) {
+// Helper function - removes and returns the minimum elements from the list.
+// Assumes there is at least one element
+static Node *extract_min(Node **node)
+{
     Node **min = node, *res;
 
-    // Locate the minimum element.
+    // Locate the minimum element
     for (; *node; node = &(*node)->next)
         if ((*node)->val < (*min)->val)
             min = node;
     res = *min;
     // Update the pointer to the minimum element to point to the following
-    // element instead.
+    // element instead
     *min = (*min)->next;
 
     return res;
 }
 
-// Assumed correct and used to test other sorting algorithms.
-void list_selection_sort(List *list) {
+// Assumed correct and used to test other sorting algorithms
+void list_selection_sort(List *list)
+{
     for (Node **node = &list->start; *node; node = &(*node)->next) {
         Node *min = extract_min(node);
         min->next = *node;
@@ -134,9 +146,10 @@ void list_selection_sort(List *list) {
     }
 }
 
-// Helper function. Inserts 'node' into 'sorted', which is sorted in ascending
-// order, in a way that preserves sortedness.
-static void list_insert(Node *node, Node **sorted) {
+// Helper function - inserts 'node' into 'sorted', which is sorted in ascending
+// order, in a way that preserves sortedness
+static void list_insert(Node *node, Node **sorted)
+{
     Node **cur;
 
     // Find the pointer to the first element whose value is greater than or
@@ -149,7 +162,8 @@ static void list_insert(Node *node, Node **sorted) {
 }
 
 // Most efficient when the reverse of the list is almost sorted. Not stable.
-void list_insertion_sort(List *list) {
+void list_insertion_sort(List *list)
+{
     Node *cur = list->start, *next;
 
     // list->start points to the sorted list we insert into. It's initially
@@ -163,7 +177,8 @@ void list_insertion_sort(List *list) {
 
 // Merges the (ascendingly) sorted lists 'first' and 'second' into one sorted
 // list. Updates 'first' to point to the resulting list.
-static void merge(Node **first, Node *second) {
+static void merge(Node **first, Node *second)
+{
     for (Node **cur = first;; cur = &(*cur)->next) {
         if (*cur == NULL) {
             // No elements remain in 'first'. Append the rest of 'second' to
@@ -186,7 +201,8 @@ static void merge(Node **first, Node *second) {
 // gets floor(#elements/2) elements. Returns the second list.
 //
 // This would be faster if we explicitly stored the length of lists.
-static Node *split(Node *node) {
+static Node *split(Node *node)
+{
     Node *speedy = node, *tmp;
 
     if (node == NULL)
@@ -205,7 +221,8 @@ static Node *split(Node *node) {
     return tmp;
 }
 
-static void mergesort_rec(Node **node) {
+static void mergesort_rec(Node **node)
+{
     Node *other = split(*node);
 
     if (other == NULL)
@@ -216,12 +233,14 @@ static void mergesort_rec(Node **node) {
     merge(node, other);
 }
 
-void list_mergesort(List *list) {
+void list_mergesort(List *list)
+{
     mergesort_rec(&list->start);
 }
 
-void list_print(List *list) {
-    // Avoid printing an extra space after the last element.
+void list_print(List *list)
+{
+    // Avoid printing an extra space after the last element
     if (list->start) {
         printf("%d", list->start->val);
         for (Node *node = list->start->next; node; node = node->next)

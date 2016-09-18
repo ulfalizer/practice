@@ -1,7 +1,7 @@
 #include "common.h"
 #include "eval.h"
 
-// Used for returning to the main eval() function on syntax errors.
+// Used for returning to the main eval() function on syntax errors
 static jmp_buf err_jmp_buf;
 
 // The parsing functions below consume as much of the input as can be part of
@@ -11,7 +11,8 @@ static jmp_buf err_jmp_buf;
 
 static int eval_sum(const char **s);
 
-static int eval_num(const char **s) {
+static int eval_num(const char **s)
+{
     int res = 0;
 
     if (!isdigit(**s))
@@ -24,28 +25,29 @@ static int eval_num(const char **s) {
     return res;
 }
 
-static int eval_exp(const char **s) {
+static int eval_exp(const char **s)
+{
     int base;
 
     while (isspace(**s))
         ++*s;
 
     switch (**s) {
-    // Unary '+' and '-' operators.
+    // Unary '+' and '-' operators
     case '+': ++*s; base = eval_exp(s); break;
     case '-': ++*s; base = -eval_exp(s); break;
     case '(':
-        ++*s; // Eat "(".
+        ++*s; // Eat "("
         base = eval_sum(s);
         if (**s != ')')
             longjmp(err_jmp_buf, 1);
-        ++*s; // Eat ")".
+        ++*s; // Eat ")"
         break;
     default:
         base = eval_num(s);
     }
 
-    // Check if we have an exponent.
+    // Check if we have an exponent
 
     while (isspace(**s))
         ++*s;
@@ -57,7 +59,8 @@ static int eval_exp(const char **s) {
     return base;
 }
 
-static int eval_product(const char **s) {
+static int eval_product(const char **s)
+{
     bool is_times = true;
     int product = 1;
 
@@ -75,7 +78,8 @@ static int eval_product(const char **s) {
     }
 }
 
-static int eval_sum(const char **s) {
+static int eval_sum(const char **s)
+{
     bool is_plus = true;
     int sum = 0;
 
@@ -93,14 +97,15 @@ static int eval_sum(const char **s) {
     }
 }
 
-bool eval(const char *s, int *res) {
+bool eval(const char *s, int *res)
+{
     int tmp;
 
     if (setjmp(err_jmp_buf) == 1)
         return false;
     tmp = eval_sum(&s);
     if (*s != '\0')
-        // Found extra trailing characters.
+        // Found extra trailing characters
         return false;
     *res = tmp;
 

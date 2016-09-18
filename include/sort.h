@@ -1,4 +1,4 @@
-// Various sorting algorithms.
+// Various sorting algorithms
 
 void selection_sort(int *nums, size_t n);
 void bubble_sort(int *nums, size_t n);

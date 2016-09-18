@@ -2,20 +2,23 @@
 #include "rot_tree.h"
 #include "tree.h"
 
-// TODO: Could factor out some suitable traversal helpers to simplify.
+// TODO: Could factor out some suitable traversal helpers to simplify
 
-void rot_tree_init(Rot_tree *tree) {
+void rot_tree_init(Rot_tree *tree)
+{
     tree->root = NULL;
 }
 
-void rot_tree_free(Rot_tree *tree) {
+void rot_tree_free(Rot_tree *tree)
+{
     tree_free(tree->root);
 }
 
 static void assemble(Rot_tree *tree,
                      Tree_node *new_root,
                      Tree_node **left, Tree_node **right,
-                     Tree_node **left_insert, Tree_node **right_insert) {
+                     Tree_node **left_insert, Tree_node **right_insert)
+{
     tree->root = new_root;
     *left_insert = tree->root->left;
     *right_insert = tree->root->right;
@@ -46,17 +49,18 @@ static void assemble(Rot_tree *tree,
   DECLARE_LEFT_RIGHT;           \
   INIT_LEFT_RIGHT
 
-// Inserts 'tree' below right tree.
+// Inserts 'tree' below right tree
 #define INSERT_RIGHT(tree)     \
   *right_insert = tree;        \
   right_insert = &(tree)->left
 
-// Inserts 'tree' below left tree.
+// Inserts 'tree' below left tree
 #define INSERT_LEFT(tree)       \
   *left_insert = tree;          \
   left_insert = &(tree)->right
 
-bool rot_tree_set(Rot_tree *tree, int key, int val, int *old_val) {
+bool rot_tree_set(Rot_tree *tree, int key, int val, int *old_val)
+{
     DECLARE_INIT_LEFT_RIGHT;
     Tree_node **cur = &tree->root;
 
@@ -82,7 +86,8 @@ bool rot_tree_set(Rot_tree *tree, int key, int val, int *old_val) {
     return false;
 }
 
-bool rot_tree_get(Rot_tree *tree, int key, int *val) {
+bool rot_tree_get(Rot_tree *tree, int key, int *val)
+{
     DECLARE_INIT_LEFT_RIGHT;
     Tree_node *cur = tree->root;
 
@@ -115,7 +120,8 @@ bool rot_tree_get(Rot_tree *tree, int key, int *val) {
     return false;
 }
 
-bool rot_tree_remove(Rot_tree *tree, int key, int *val) {
+bool rot_tree_remove(Rot_tree *tree, int key, int *val)
+{
     DECLARE_LEFT_RIGHT;
     Tree_node *cur;
     Tree_node **rem;
@@ -168,10 +174,12 @@ remove:
     return true;
 }
 
-bool rot_tree_valid(Rot_tree *tree) {
+bool rot_tree_valid(Rot_tree *tree)
+{
     return valid_bin_search_tree(tree->root);
 }
 
-void rot_tree_print(Rot_tree *tree) {
+void rot_tree_print(Rot_tree *tree)
+{
     tree_print(tree->root);
 }

@@ -2,42 +2,43 @@
 #include "tree.h"
 #include "vector.h"
 
-// The trees below are specified in a "visual" breadth-first order; see
+// The trees below are specified in a "visual" breadth-first order - see
 // tree_make().
-
+//
 // Assignments of 234 in the tests below are for verifying that arguments are
 // only modified when they should be.
 
-// Helper for specifying the lack of a node with tree_make().
+// Helper for specifying the lack of a node with tree_make()
 static int _ = 0xDEAD;
 
 #define MAKE_TREE(...) \
   tree_make(N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
-// Tests both tree_equals() and trees_equal().
-static void test_equals(void) {
-    // Specifies the tree to use for the following tests.
+// Tests both tree_equals() and trees_equal()
+static void test_equals(void)
+{
+    // Specifies the tree to use for the following tests
     #define TEST_EQUALS_TREE(...)                                   \
       do {                                                          \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__), *tree2          \
 
     // Verifies that the tree equals (equals == true) or does not equal the
-    // given tree.
+    // given tree
     #define TEST_EQUALS(equals, ...)                                \
-          /* Test tree_equals(). */                                 \
+          /* Test tree_equals() */                                  \
           VERIFY(equals ==                                          \
             tree_equals(tree, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)); \
-          /* Test trees_equal(). */                                 \
+          /* Test trees_equal() */                                  \
           tree2 = MAKE_TREE(__VA_ARGS__);                           \
           VERIFY(equals == trees_equal(tree, tree2));               \
           tree_free(tree2)
-    // Ends the test.
+    // Ends the test
     #define TEST_EQUALS_END                                         \
           tree_free(tree);                                          \
       }                                                             \
       while (0)
 
-    // Empty tree.
+    // Empty tree
     TEST_EQUALS_TREE();
 
     TEST_EQUALS(true);
@@ -57,7 +58,7 @@ static void test_equals(void) {
 
     TEST_EQUALS_END;
 
-    // One-element tree.
+    // One-element tree
     TEST_EQUALS_TREE(
       1);
 
@@ -84,7 +85,7 @@ static void test_equals(void) {
 
     TEST_EQUALS_END;
 
-    // Two-element tree.
+    // Two-element tree
     TEST_EQUALS_TREE(
        1,
       2);
@@ -114,7 +115,7 @@ static void test_equals(void) {
 
     TEST_EQUALS_END;
 
-    // Three-element tree.
+    // Three-element tree
     TEST_EQUALS_TREE(
        1,
       2,3);
@@ -138,7 +139,7 @@ static void test_equals(void) {
 
     TEST_EQUALS_END;
 
-    // Complex tree.
+    // Complex tree
     TEST_EQUALS_TREE(
              0,
          1,      2,
@@ -174,7 +175,8 @@ static void test_equals(void) {
     #undef TEST_EQUALS_END
 }
 
-static void test_rotations(void) {
+static void test_rotations(void)
+{
     #define TEST_ROTATION_TREE(...)                                      \
       do {                                                               \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__)                       \
@@ -186,7 +188,7 @@ static void test_rotations(void) {
       }                                                                  \
       while (0)
 
-    // Right rotation.
+    // Right rotation
 
     TEST_ROTATION_TREE(
        2,
@@ -204,7 +206,7 @@ static void test_rotations(void) {
        2,  5,
       _,_,4,6);
 
-    // Left rotation.
+    // Left rotation
 
     TEST_ROTATION_TREE(
        1,
@@ -226,7 +228,8 @@ static void test_rotations(void) {
     #undef TEST_ROTATION_RESULT
 }
 
-static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
+static void verify_vector_equals_helper(Vector *v, size_t len, ...)
+{
     va_list ap;
 
     VERIFY(vector_len(v) == len);
@@ -255,8 +258,9 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
   }                                             \
   while (0)
 
-static void test_dfs(void) {
-    // Empty tree.
+static void test_dfs(void)
+{
+    // Empty tree
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_dfs);
     TRAVERSE_TEST_RES();
 
@@ -299,8 +303,9 @@ static void test_dfs(void) {
     TRAVERSE_TEST_RES(3, 6, 1, 4, 7, 0, 2, 8, 5, 9);
 }
 
-static void test_bfs(void) {
-    // Empty tree.
+static void test_bfs(void)
+{
+    // Empty tree
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_bfs);
     TRAVERSE_TEST_RES();
 
@@ -343,8 +348,9 @@ static void test_bfs(void) {
     TRAVERSE_TEST_RES(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 }
 
-static void test_iter_preorder(void) {
-    // Empty tree.
+static void test_iter_preorder(void)
+{
+    // Empty tree
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_preorder);
     TRAVERSE_TEST_RES();
 
@@ -387,8 +393,9 @@ static void test_iter_preorder(void) {
     TRAVERSE_TEST_RES(0, 1, 3, 6, 4, 7, 2, 5, 8, 9);
 }
 
-static void test_iter_inorder(void) {
-    // Empty tree.
+static void test_iter_inorder(void)
+{
+    // Empty tree
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_inorder);
     TRAVERSE_TEST_RES();
 
@@ -431,8 +438,9 @@ static void test_iter_inorder(void) {
     TRAVERSE_TEST_RES(3, 6, 1, 4, 7, 0, 2, 8, 5, 9);
 }
 
-static void test_iter_postorder(void) {
-    // Empty tree.
+static void test_iter_postorder(void)
+{
+    // Empty tree
     TRAVERSE_TEST_TREE(tree_nodes_to_vector_iter_postorder);
     TRAVERSE_TEST_RES();
 
@@ -478,7 +486,8 @@ static void test_iter_postorder(void) {
 #undef TRAVERSE_TEST_TREE
 #undef TRAVERSE_TEST_RES
 
-static void test_dfs_iter(void) {
+static void test_dfs_iter(void)
+{
     #define TEST_DFS_ITER_TREE(...)                 \
       do {                                          \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__); \
@@ -496,7 +505,7 @@ static void test_dfs_iter(void) {
       }                                             \
       while (0)
 
-    // Empty tree.
+    // Empty tree
     TEST_DFS_ITER_TREE();
     VERIFY_NOT_HAS_KEY(1);
     TEST_DFS_ITER_END;
@@ -550,7 +559,8 @@ static void test_dfs_iter(void) {
     #undef TEST_DFS_ITER_END
 }
 
-static void test_valid_bin_search_tree(void) {
+static void test_valid_bin_search_tree(void)
+{
     #define VERIFY_BIN_SEARCH_TREE(valid, ...)          \
       {                                                 \
           Tree_node *tree = MAKE_TREE(__VA_ARGS__);     \
@@ -559,7 +569,7 @@ static void test_valid_bin_search_tree(void) {
           tree_free(tree);                              \
       }
 
-    // Empty trees are valid binary search trees.
+    // Empty trees are valid binary search trees
     VERIFY_BIN_SEARCH_TREE(true);
     VERIFY_BIN_SEARCH_TREE(true,
       1);
@@ -626,7 +636,8 @@ static void test_valid_bin_search_tree(void) {
     #undef VERIFY_BIN_SEARCH_TREE
 }
 
-void test_tree(void) {
+void test_tree(void)
+{
     test_equals();
     test_rotations();
     test_dfs();

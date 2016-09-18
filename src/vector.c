@@ -3,40 +3,48 @@
 
 #define INITIAL_BUF_LEN 16
 
-void vector_init(Vector *vector) {
+void vector_init(Vector *vector)
+{
     vector->buf = emalloc(sizeof(*vector->buf)*INITIAL_BUF_LEN, "vector init");
     vector->buf_len = INITIAL_BUF_LEN;
     vector->len = 0;
 }
 
-void vector_free(Vector *vector) {
+void vector_free(Vector *vector)
+{
     free(vector->buf);
 }
 
-size_t vector_len(Vector *vector) {
+size_t vector_len(Vector *vector)
+{
     return vector->len;
 }
 
-static void grow(Vector *vector) {
+static void grow(Vector *vector)
+{
     vector->buf_len *= 2;
     vector->buf = erealloc(vector->buf, sizeof(*vector->buf)*vector->buf_len,
                            "vector grow");
 }
 
-void vector_append(Vector *vector, void *val) {
+void vector_append(Vector *vector, void *val)
+{
     if (vector->len == vector->buf_len)
         grow(vector);
     vector->buf[vector->len++] = val;
 }
 
-void vector_set(Vector *vector, size_t index, void *val) {
+void vector_set(Vector *vector, size_t index, void *val)
+{
     vector->buf[index] = val;
 }
 
-void *vector_get(Vector *vector, size_t index) {
+void *vector_get(Vector *vector, size_t index)
+{
     return vector->buf[index];
 }
 
-void **vector_storage(Vector *vector) {
+void **vector_storage(Vector *vector)
+{
     return vector->buf;
 }

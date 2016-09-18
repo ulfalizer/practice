@@ -4,7 +4,7 @@
 typedef struct String {
     char *buf;
     size_t buf_len;
-    // The length of the string, excluding the terminating null.
+    // The length of the string, excluding the terminating null
     size_t len;
 } String;
 
@@ -18,8 +18,8 @@ void string_free(String *s);
 void string_set(String *s, const char *format, ...)
   __attribute__((format(printf, 2, 3)));
 
-// Equivalent to string_set() but takes a va_list instead of a variable number
-// of arguments.
+// Equivalent to string_set(), but takes a va_list instead of a variable number
+// of arguments
 void string_set_v(String *s, const char *format, va_list ap)
   __attribute__((format(printf, 2, 0)));
 
@@ -27,8 +27,8 @@ void string_set_v(String *s, const char *format, va_list ap)
 void string_append(String *s, const char *format, ...)
   __attribute__((format(printf, 2, 3)));
 
-// Equivalent to string_append() but takes a va_list instead of a variable
-// number of arguments.
+// Equivalent to string_append(), but takes a va_list instead of a variable
+// number of arguments
 void string_append_v(String *s, const char *format, va_list ap)
   __attribute__((format(printf, 2, 0)));
 
@@ -42,5 +42,5 @@ char *string_get(String *s);
 // free()d by the caller.
 char *string_get_copy(String *s);
 
-// Returns the length of the string (excluding the terminating null byte).
+// Returns the length of the string (excluding the terminating null byte)
 size_t string_len(String *s);

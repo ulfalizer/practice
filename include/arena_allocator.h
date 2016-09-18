@@ -26,11 +26,11 @@
 //                      |
 //                     cur
 
-// The values below are silly for testing purposes.
+// The values below are silly for testing purposes
 
 // Default chunk size. This includes the Chunk header.
 #define DEFAULT_CHUNK_SIZE 128
-// Memory returned by the allocator will be aligned to this many bytes.
+// Memory returned by the allocator will be aligned to this many bytes
 #define ALIGN 32
 
 typedef struct Chunk {
@@ -54,10 +54,10 @@ typedef struct Arena_cursor {
 } Arena_cursor;
 
 void arena_init(Arena *arena);
-// Frees all memory allocated from the arena.
+// Frees all memory allocated from the arena
 void arena_free(Arena *arena);
 
-// Allocates 'size' bytes from the arena.
+// Allocates 'size' bytes from the arena
 void *arena_alloc(Arena *arena, size_t size);
 
 // Records the current position in the arena in 'cursor'. Later allocations can
@@ -69,8 +69,8 @@ void arena_get_cursor(Arena *arena, Arena_cursor *cursor);
 // immediately free()d.
 void arena_set_cursor(Arena *arena, Arena_cursor *cursor, bool reuse_chunks);
 
-// Like strdup(), allocating out of the arena.
+// Like strdup(), allocating out of the arena
 char *arena_strdup(Arena *arena, const char *s);
 
-// Like strndup(), allocating out of the arena.
+// Like strndup(), allocating out of the arena
 char *arena_strndup(Arena *arena, const char *s, size_t n);

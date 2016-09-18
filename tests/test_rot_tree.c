@@ -3,15 +3,16 @@
 #include "tree.h"
 
 // Assignments of 234 in the tests below are for verifying that arguments are
-// only modified when they should be.
+// only modified when they should be
 
-// Helper for specifying the lack of a node with tree_make().
+// Helper for specifying the lack of a node with tree_make()
 static const int _ = 0xDEAD;
 
-static void test_structure(void) {
-    // White-box testing of the internal structure after various operations.
+static void test_structure(void)
+{
+    // White-box testing of the internal structure after various operations
 
-    // Set the tree to use for the following tests.
+    // Set the tree to use for the following tests
     #define SET_TREE(...)                                                     \
       do {                                                                    \
           Rot_tree tree;                                                      \
@@ -19,13 +20,13 @@ static void test_structure(void) {
                                                                               \
           tmp = tree_make(N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
     // Apply 'op' to (a copy of) the tree and verify that the structure of the
-    // resulting tree matches the remaining arguments.
+    // resulting tree matches the remaining arguments
     #define VERIFY_STRUCT(op, ...)                                            \
           tree.root = tree_copy(tmp);                                         \
           op;                                                                 \
           VERIFY(tree_equals(tree.root, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)); \
           rot_tree_free(&tree)
-    // End the test (so we can set a new tree to test).
+    // End the test (so we can set a new tree to test)
     #define END_TEST                                                          \
           tree_free(tmp);                                                     \
       }                                                                       \
@@ -35,7 +36,7 @@ static void test_structure(void) {
     #define GET(x) rot_tree_get(&tree, x, NULL)
     #define REM(x) rot_tree_remove(&tree, x, NULL)
 
-    // Empty tree.
+    // Empty tree
     SET_TREE();
 
     VERIFY_STRUCT(SET(1),
@@ -45,7 +46,7 @@ static void test_structure(void) {
 
     END_TEST;
 
-    // One-level tree.
+    // One-level tree
     SET_TREE(
       2);
 
@@ -67,7 +68,7 @@ static void test_structure(void) {
 
     END_TEST;
 
-    // Two-level tree.
+    // Two-level tree
     SET_TREE(
        4,
       2,6);
@@ -164,13 +165,13 @@ static void test_structure(void) {
 
     END_TEST;
 
-    // Three-level tree.
+    // Three-level tree
     SET_TREE(
          6,
        2,  10,
       0,4,8,12);
 
-    // Root.
+    // Root
     VERIFY_STRUCT(SET(6),
          6,
        2,  10,
@@ -189,7 +190,7 @@ static void test_structure(void) {
     //  2   10
     // 0 4 8 12
 
-    // Middle level nodes.
+    // Middle level nodes
     VERIFY_STRUCT(SET(2),
              2,
          0,      6,
@@ -224,7 +225,7 @@ static void test_structure(void) {
     //  2   10
     // 0 4 8 12
 
-    // Existing node on last level.
+    // Existing node on last level
     VERIFY_STRUCT(SET(4),
              4,
          2,      6,
@@ -246,7 +247,7 @@ static void test_structure(void) {
     //  2   10
     // 0 4 8 12
 
-    // Non-existing node on last level.
+    // Non-existing node on last level
     VERIFY_STRUCT(SET(5),
              5,
          2,      6,
@@ -273,10 +274,11 @@ static void test_structure(void) {
     #undef REM
 }
 
-static void populate(Rot_tree *tree) {
-    #define ADD_DOUBLE(n)                  \
+static void populate(Rot_tree *tree)
+{
+    #define ADD_DOUBLE(n)               \
       rot_tree_set(tree, n, 2*n, NULL); \
-      VERIFY(rot_tree_valid(tree));
+      VERIFY(rot_tree_valid(tree))
 
     ADD_DOUBLE(5);
     ADD_DOUBLE(9);
@@ -297,7 +299,8 @@ static void populate(Rot_tree *tree) {
     #undef ADD_DOUBLE
 }
 
-static void test_set_get_helper(bool keys_exist) {
+static void test_set_get_helper(bool keys_exist)
+{
     Rot_tree tree;
 
     rot_tree_init(&tree);
@@ -335,7 +338,8 @@ static void test_set_get_helper(bool keys_exist) {
     rot_tree_free(&tree);
 }
 
-static void test_remove(void) {
+static void test_remove(void)
+{
     Rot_tree tree;
 
     rot_tree_init(&tree);
@@ -375,12 +379,14 @@ static void test_remove(void) {
     rot_tree_free(&tree);
 }
 
-static void test_set_get(void) {
+static void test_set_get(void)
+{
     test_set_get_helper(false);
     test_set_get_helper(true);
 }
 
-void test_rot_tree(void) {
+void test_rot_tree(void)
+{
     test_structure();
     test_set_get();
     test_remove();

@@ -1,18 +1,21 @@
 #include "common.h"
 #include "arena_allocator.h"
 
-// Returns the next number greater than 'size' aligned modulo ALIGN.
-static size_t g_aligned(size_t size) {
+// Returns the next number greater than 'size' aligned modulo ALIGN
+static size_t g_aligned(size_t size)
+{
     return (size + ALIGN) & ~(ALIGN - 1);
 }
 
 // Returns the amount of data that fits in 'chunk', ignoring how much data it
-// currently holds.
-static size_t storage_size(Chunk *chunk) {
+// currently holds
+static size_t storage_size(Chunk *chunk)
+{
     return chunk->end - chunk->storage;
 }
 
-void arena_init(Arena *arena) {
+void arena_init(Arena *arena)
+{
     arena->cur = emalloc_align(DEFAULT_CHUNK_SIZE, ALIGN, "arena chunk init");
     arena->cur->next = NULL;
     arena->cur->start = arena->cur->storage;
@@ -20,7 +23,8 @@ void arena_init(Arena *arena) {
     arena->first = arena->cur;
 }
 
-void arena_free(Arena *arena) {
+void arena_free(Arena *arena)
+{
     Chunk *next;
 
     assume(arena->first != NULL);
@@ -30,14 +34,15 @@ void arena_free(Arena *arena) {
     }
 }
 
-void *arena_alloc(Arena *arena, size_t size) {
+void *arena_alloc(Arena *arena, size_t size)
+{
     // Assume 'start' + 'g_aligned(size)' won't overflow, which is reasonable
     // in most situations involving small- to medium-sized allocations (as high
     // addresses are usually reserved for the stack and kernel). More robust
     // size checking would compare against 'end' - 'start' and never let
     // 'start' move past 'end'.
     if (arena->cur->start + size <= arena->cur->end) {
-        // The allocation fits within the head chunk.
+        // The allocation fits within the head chunk
         void *res = arena->cur->start;
 
         arena->cur->start += g_aligned(size);
@@ -45,7 +50,7 @@ void *arena_alloc(Arena *arena, size_t size) {
         return res;
     }
 
-    // We need a new chunk.
+    // We need a new chunk
 
     if (arena->cur->next != NULL && size <= storage_size(arena->cur->next))
         // The allocation fits within the next chunk (allocated before
@@ -77,12 +82,14 @@ void *arena_alloc(Arena *arena, size_t size) {
     return arena->cur->storage;
 }
 
-void arena_get_cursor(Arena *arena, Arena_cursor *cursor) {
+void arena_get_cursor(Arena *arena, Arena_cursor *cursor)
+{
     cursor->chunk = arena->cur;
     cursor->start = arena->cur->start;
 }
 
-void arena_set_cursor(Arena *arena, Arena_cursor *cursor, bool reuse_chunks) {
+void arena_set_cursor(Arena *arena, Arena_cursor *cursor, bool reuse_chunks)
+{
     arena->cur = cursor->chunk;
     arena->cur->start = cursor->start;
     if (!reuse_chunks) {
@@ -97,13 +104,15 @@ void arena_set_cursor(Arena *arena, Arena_cursor *cursor, bool reuse_chunks) {
     }
 }
 
-char *arena_strdup(Arena *arena, const char *s) {
+char *arena_strdup(Arena *arena, const char *s)
+{
     size_t len = strlen(s) + 1;
 
     return memcpy(arena_alloc(arena, len), s, len);
 }
 
-char *arena_strndup(Arena *arena, const char *s, size_t n) {
+char *arena_strndup(Arena *arena, const char *s, size_t n)
+{
     size_t len = strnlen(s, n);
     char *res = arena_alloc(arena, len + 1);
 

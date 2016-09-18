@@ -1,7 +1,8 @@
 #include "common.h"
 #include "min_heap.h"
 
-void test_min_heap(void) {
+void test_min_heap(void)
+{
     Min_heap heap;
 
     min_heap_init(&heap);

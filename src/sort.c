@@ -1,8 +1,9 @@
 #include "common.h"
 #include "sort.h"
 
-// Assumed correct and used to test other sorting algorithms.
-void selection_sort(int *nums, size_t n) {
+// Assumed correct and used to test other sorting algorithms
+void selection_sort(int *nums, size_t n)
+{
     if (n == 0)
         return;
 
@@ -15,7 +16,8 @@ void selection_sort(int *nums, size_t n) {
     }
 }
 
-void bubble_sort(int *nums, size_t n) {
+void bubble_sort(int *nums, size_t n)
+{
     bool sorted;
 
     if (n == 0)
@@ -32,7 +34,8 @@ void bubble_sort(int *nums, size_t n) {
     while (!sorted);
 }
 
-void insertion_sort(int *nums, size_t n) {
+void insertion_sort(int *nums, size_t n)
+{
     for (size_t i = 1; i < n; ++i) {
         int cur = nums[i];
         size_t j;
@@ -42,7 +45,8 @@ void insertion_sort(int *nums, size_t n) {
     }
 }
 
-static void mergesort_rec(int *nums, size_t n, int *scratch) {
+static void mergesort_rec(int *nums, size_t n, int *scratch)
+{
     size_t i1, i2, mid;
 
     if (n <= 1)
@@ -53,7 +57,7 @@ static void mergesort_rec(int *nums, size_t n, int *scratch) {
     mergesort_rec(nums, mid, scratch);
     mergesort_rec(nums + mid, n - mid, scratch);
 
-    // Merge.
+    // Merge
     for (size_t i = 0;; ++i) {
         if (i1 == mid) {
             memcpy(scratch + i, nums + i2, sizeof(*nums)*(n - i2));
@@ -68,20 +72,22 @@ static void mergesort_rec(int *nums, size_t n, int *scratch) {
     memcpy(nums, scratch, sizeof(*nums)*n);
 }
 
-void mergesort(int *nums, size_t n) {
+void mergesort(int *nums, size_t n)
+{
     int *scratch = emalloc(sizeof(*scratch)*n, "mergesort scratch");
 
     mergesort_rec(nums, n, scratch);
     free(scratch);
 }
 
-void quicksort(int *nums, size_t n) {
+void quicksort(int *nums, size_t n)
+{
     size_t store_i;
 
     if (n <= 1)
         return;
 
-    // Partition using the last element as the pivot.
+    // Partition using the last element as the pivot
     store_i = 0;
     for (size_t i = 0; i < n - 1; ++i)
         if (nums[i] < nums[n - 1]) {
@@ -101,7 +107,8 @@ static size_t parent(size_t i) { return (i - 1)/2; }
 static size_t left_child(size_t i) { return 2*i + 1; }
 static size_t right_child(size_t i) { return 2*i + 2; }
 
-static void trickle_down(int *nums, size_t p, size_t n) {
+static void trickle_down(int *nums, size_t p, size_t n)
+{
     while (left_child(p) < n) {
         size_t max_index = p;
 
@@ -118,7 +125,8 @@ static void trickle_down(int *nums, size_t p, size_t n) {
     }
 }
 
-static void heapify(int *nums, size_t n) {
+static void heapify(int *nums, size_t n)
+{
     size_t p = parent(n - 1);
 
     do
@@ -126,7 +134,8 @@ static void heapify(int *nums, size_t n) {
     while (p-- != 0);
 }
 
-void heapsort(int *nums, size_t n) {
+void heapsort(int *nums, size_t n)
+{
     size_t i;
 
     if (n <= 1)

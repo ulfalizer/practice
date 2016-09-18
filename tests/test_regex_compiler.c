@@ -9,16 +9,18 @@
 #define A(...) string_append(s, ##__VA_ARGS__)
 
 // Appends the characters from the (assumed) set node 'node' to 's', in sorted
-// order.
-static void set_repr(Regex_node *node, String *s) {
+// order
+static void set_repr(Regex_node *node, String *s)
+{
     for (int i = 0; i < 1 << CHAR_BIT; ++i)
         if (node->set[i])
             A("%c", i);
 }
 
 // Transforms a list of regex nodes into a string representation for testing,
-// appending the result to 's'.
-static void regex_repr(Regex_node *node, String *s) {
+// appending the result to 's'
+static void regex_repr(Regex_node *node, String *s)
+{
     for (; node != NULL; node = node->next) {
         switch (node->type) {
         case CHAR:              A("(C %c)", node->c); break;
@@ -51,7 +53,8 @@ static void regex_repr(Regex_node *node, String *s) {
 
 #undef A
 
-static void test_valid(void) {
+static void test_valid(void)
+{
     Arena arena;
     Arena_cursor arena_start;
 
@@ -74,7 +77,7 @@ static void test_valid(void) {
           string_free(&s);                              \
       }
 
-    // Literals.
+    // Literals
     VERIFY_REPR("", "");
     VERIFY_REPR("a", "(C a)");
     VERIFY_REPR("ab", "(S ab)");
@@ -82,7 +85,7 @@ static void test_valid(void) {
     VERIFY_REPR("a b, c d!", "(S a b, c d!)");
     VERIFY_REPR("]", "(C ])");
 
-    // Escaped literals.
+    // Escaped literals
     VERIFY_REPR("\\\\", "(C \\)");
     VERIFY_REPR("\\.", "(C .)");
     VERIFY_REPR("\\?", "(C ?)");
@@ -96,7 +99,7 @@ static void test_valid(void) {
     VERIFY_REPR("a\\?\\*b\\+c", "(S a?*b+c)");
     VERIFY_REPR("\\\\\\\\", "(S \\\\)");
 
-    // "Any" characters and literals.
+    // "Any" characters and literals
     VERIFY_REPR(".", "(.)");
     VERIFY_REPR("..", "(.)(.)");
     VERIFY_REPR("a.", "(C a)(.)");
@@ -105,7 +108,7 @@ static void test_valid(void) {
     VERIFY_REPR("ab.", "(S ab)(.)");
     VERIFY_REPR(".ab", "(.)(S ab)");
 
-    // Literals and quantifiers.
+    // Literals and quantifiers
     VERIFY_REPR("a?", "(C? a)");
     VERIFY_REPR("a*", "(C* a)");
     VERIFY_REPR("a+", "(C+ a)");
@@ -118,7 +121,7 @@ static void test_valid(void) {
     VERIFY_REPR("a\\b+", "(C a)(C+ b)");
     VERIFY_REPR("\\a\\b\\c+", "(S ab)(C+ c)");
 
-    // "Any" characters, literals, and quantifiers.
+    // "Any" characters, literals, and quantifiers
     VERIFY_REPR(".?", "(.?)");
     VERIFY_REPR(".*", "(.*)");
     VERIFY_REPR(".+", "(.+)");
@@ -129,7 +132,7 @@ static void test_valid(void) {
     VERIFY_REPR("ab.*", "(S ab)(.*)");
     VERIFY_REPR("ab.+", "(S ab)(.+)");
 
-    // Sets.
+    // Sets
     VERIFY_REPR("[a]", "(Z a)");
     VERIFY_REPR("[.]", "(Z .)");
     VERIFY_REPR("[?]", "(Z ?)");
@@ -148,13 +151,13 @@ static void test_valid(void) {
     VERIFY_REPR("a[b]c", "(C a)(Z b)(C c)");
     VERIFY_REPR("ab[c]de", "(S ab)(Z c)(S de)");
 
-    // Escaping in sets.
+    // Escaping in sets
     VERIFY_REPR("[\\]]", "(Z ])");
     VERIFY_REPR("[a\\]]", "(Z ]a)");
     VERIFY_REPR("[\\\\]", "(Z \\)");
     VERIFY_REPR("[\\a]", "(Z a)");
 
-    // Simple subexpressions.
+    // Simple subexpressions
     VERIFY_REPR("()", "(P )");
     VERIFY_REPR("(a)?", "(P? (C a))");
     VERIFY_REPR("(a)*", "(P* (C a))");
@@ -169,7 +172,7 @@ static void test_valid(void) {
     VERIFY_REPR("([ab])*", "(P* (Z ab))");
     VERIFY_REPR("([ab])+", "(P+ (Z ab))");
 
-    // Subexpressions with quantifiers and many nodes.
+    // Subexpressions with quantifiers and many nodes
     VERIFY_REPR("(a*)?", "(P? (C* a))");
     VERIFY_REPR("(.*)?", "(P? (.*))");
     VERIFY_REPR("([a]*)?", "(P? (Z* a))");
@@ -183,7 +186,7 @@ static void test_valid(void) {
     VERIFY_REPR("([a]b)?", "(P? (Z a)(C b))");
     VERIFY_REPR("(aa*)?", "(P? (C a)(C* a))");
 
-    // Deeper nesting.
+    // Deeper nesting
     VERIFY_REPR("a(b(c(d?)?e)*f)+g",
       "(C a)(P+ (C b)(P* (C c)(P? (C? d))(C e))(C f))(C g)");
 
@@ -192,7 +195,8 @@ static void test_valid(void) {
     arena_free(&arena);
 }
 
-static void test_invalid(void) {
+static void test_invalid(void)
+{
     Arena arena;
     Arena_cursor arena_start;
 
@@ -252,7 +256,8 @@ static void test_invalid(void) {
     arena_free(&arena);
 }
 
-void test_regex(void) {
+void test_regex(void)
+{
     test_valid();
     test_invalid();
 }

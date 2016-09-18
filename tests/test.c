@@ -20,7 +20,8 @@ void test_tree(void);
 void test_utf8(void);
 void test_vector(void);
 
-int main(void) {
+int main(void)
+{
     test_algo();
     test_arena_allocator();
     test_common();

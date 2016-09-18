@@ -11,7 +11,7 @@
 //
 // This is not strict-aliasing safe.
 
-// Structs that want to be part of a linked list include this.
+// Structs that want to be part of a linked list include this
 typedef struct List_node {
     struct List_node *next;
     struct List_node *prev;
@@ -38,7 +38,7 @@ typedef struct List_node {
     &cur->list_node != (head);                                            \
     cur = container_of(cur->list_node.next, list_node, container))
 
-// Like list_for_each, but iterates backwards.
+// Like list_for_each, but iterates backwards
 #define list_for_each_backwards(head, container)                          \
   for (container *cur = container_of((head)->prev, list_node, container); \
     &cur->list_node != (head);                                            \

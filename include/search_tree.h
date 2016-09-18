@@ -1,4 +1,4 @@
-// Non-self-balancing binary search tree.
+// Non-self-balancing binary search tree
 
 typedef struct Tree_node Tree_node;
 
@@ -23,7 +23,7 @@ bool search_tree_get(Search_tree *tree, int key, int *val);
 // 'val'.
 bool search_tree_remove(Search_tree *tree, int key, int *val);
 
-// Prints the representation of the search tree to stdout.
+// Prints the representation of the search tree to stdout
 void search_tree_print(Search_tree *tree);
 
 // Test helper. Returns true if the internal representation is a valid binary

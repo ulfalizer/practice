@@ -4,7 +4,8 @@
 #include "tree.h"
 #include "vector.h"
 
-Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right) {
+Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right)
+{
     Tree_node *node = emalloc(sizeof *node, "create tree node");
 
     node->key = key;
@@ -15,7 +16,8 @@ Tree_node *create_node(int key, int val, Tree_node *left, Tree_node *right) {
     return node;
 }
 
-Tree_node *tree_make(size_t len, ...) {
+Tree_node *tree_make(size_t len, ...)
+{
     va_list ap;
 
     if (len == 0)
@@ -23,14 +25,14 @@ Tree_node *tree_make(size_t len, ...) {
 
     // Build an array of node pointers (like in a heap) and use it to construct
     // the tree.
-    Tree_node *nodes[len]; // Variable-length array.
+    Tree_node *nodes[len]; // Variable-length array
 
     va_start(ap, len);
     for (size_t i = 0; i < len; ++i) {
         int node_key = va_arg(ap, int);
         if (node_key == 0xDEAD) {
             // Makes e.g. tree_make(1, 0xDEAD) work too for creating an empty
-            // tree, and means we crash reliably for malformed trees.
+            // tree, and means we crash reliably for malformed trees
             nodes[i] = NULL;
 
             continue;
@@ -38,7 +40,7 @@ Tree_node *tree_make(size_t len, ...) {
         nodes[i] = create_node(node_key, node_key + 1, NULL, NULL);
         // Is this the root node?
         if (i != 0) {
-            // Nope, so point the correct child pointer in the parent to it.
+            // Nope, so point the correct child pointer in the parent to it
             Tree_node *parent = nodes[(i - 1)/2];
 
             if (i % 2 == 1)
@@ -52,7 +54,8 @@ Tree_node *tree_make(size_t len, ...) {
     return nodes[0];
 }
 
-void tree_free(Tree_node *root) {
+void tree_free(Tree_node *root)
+{
     if (root == NULL)
         return;
     tree_free(root->left);
@@ -60,20 +63,23 @@ void tree_free(Tree_node *root) {
     free(root);
 }
 
-Tree_node *tree_copy(Tree_node *root) {
+Tree_node *tree_copy(Tree_node *root)
+{
     if (root == NULL)
         return NULL;
     return create_node(root->key, root->val,
       tree_copy(root->left), tree_copy(root->right));
 }
 
-unsigned tree_depth(Tree_node *root) {
+unsigned tree_depth(Tree_node *root)
+{
     if (root == NULL)
         return 0;
     return 1 + max(tree_depth(root->left), tree_depth(root->right));
 }
 
-void tree_rot_right(Tree_node **node) {
+void tree_rot_right(Tree_node **node)
+{
     Tree_node *left = (*node)->left;
 
     (*node)->left = left->right;
@@ -81,7 +87,8 @@ void tree_rot_right(Tree_node **node) {
     *node = left;
 }
 
-void tree_rot_left(Tree_node **node) {
+void tree_rot_left(Tree_node **node)
+{
     Tree_node *right = (*node)->right;
 
     (*node)->right = right->left;
@@ -89,7 +96,8 @@ void tree_rot_left(Tree_node **node) {
     *node = right;
 }
 
-static Tree_node *unlink_max(Tree_node **cur) {
+static Tree_node *unlink_max(Tree_node **cur)
+{
     Tree_node *res;
 
     while ((*cur)->right != NULL)
@@ -100,7 +108,8 @@ static Tree_node *unlink_max(Tree_node **cur) {
     return res;
 }
 
-void tree_remove(Tree_node **node) {
+void tree_remove(Tree_node **node)
+{
     Tree_node *rem;
 
     if ((*node)->left == NULL) {
@@ -119,7 +128,8 @@ void tree_remove(Tree_node **node) {
     free(rem);
 }
 
-bool tree_equals(Tree_node *root, size_t len, ...) {
+bool tree_equals(Tree_node *root, size_t len, ...)
+{
     va_list ap;
     // Number of yet-to-be-expanded nodes. Zero means we've reached the end of
     // the tree.
@@ -168,8 +178,9 @@ not_equal:
     return false;
 }
 
-// Bit silly not to implement tree_equals() in terms of this, but just for fun.
-bool trees_equal(Tree_node *r1, Tree_node *r2) {
+// Bit silly not to implement tree_equals() in terms of this, but just for fun
+bool trees_equal(Tree_node *r1, Tree_node *r2)
+{
     if (r1 == NULL)
         return r2 == NULL;
     if (r2 == NULL)
@@ -179,7 +190,8 @@ bool trees_equal(Tree_node *r1, Tree_node *r2) {
       trees_equal(r1->right, r2->right);
 }
 
-void tree_nodes_to_vector_dfs(Tree_node *node, Vector *vector) {
+void tree_nodes_to_vector_dfs(Tree_node *node, Vector *vector)
+{
     if (node == NULL)
         return;
     tree_nodes_to_vector_dfs(node->left, vector);
@@ -187,7 +199,8 @@ void tree_nodes_to_vector_dfs(Tree_node *node, Vector *vector) {
     tree_nodes_to_vector_dfs(node->right, vector);
 }
 
-void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector) {
+void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector)
+{
     if (root != NULL)
         vector_append(vector, root);
     for (size_t i = vector_len(vector) - 1; i < vector_len(vector); ++i) {
@@ -199,7 +212,8 @@ void tree_nodes_to_vector_bfs(Tree_node *root, Vector *vector) {
     }
 }
 
-void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector) {
+void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector)
+{
     Stack stack;
 
     stack_init(&stack);
@@ -217,7 +231,8 @@ void tree_nodes_to_vector_iter_preorder(Tree_node *node, Vector *vector) {
     stack_free(&stack);
 }
 
-void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector) {
+void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector)
+{
     Stack stack;
 
     stack_init(&stack);
@@ -235,7 +250,8 @@ void tree_nodes_to_vector_iter_inorder(Tree_node *node, Vector *vector) {
     stack_free(&stack);
 }
 
-void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector) {
+void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector)
+{
     Stack stack;
 
     stack_init(&stack);
@@ -246,13 +262,13 @@ void tree_nodes_to_vector_iter_postorder(Tree_node *node, Vector *vector) {
             stack_push(&stack, node);
 
         // We know the parent has no left child at this point, which makes the
-        // code below work out for all cases.
+        // code below work out for all cases
 
 move_up:
         if (stack_len(&stack) == 0)
             break;
 
-        // 'parent' is the parent of 'node'.
+        // 'parent' is the parent of 'node'
         parent = stack_peek(&stack);
         if (node == parent->right) {
             // We arrived from the right (or skipped an empty right tree). Pop
@@ -270,7 +286,8 @@ move_up:
     stack_free(&stack);
 }
 
-bool tree_dfs_iter(Tree_node *node, int key, int *val) {
+bool tree_dfs_iter(Tree_node *node, int key, int *val)
+{
     Stack stack;
 
     stack_init(&stack);
@@ -302,7 +319,8 @@ bool tree_dfs_iter(Tree_node *node, int key, int *val) {
 // [], [INT_MIN], [INT_MIN, INT_MIN+1], ..., [INT_MIN, ..., INT_MAX],
 // which is one more than the number of representable values. NULL indicates
 // "anything goes".
-static bool valid_bin_search_tree_rec(Tree_node *root, int *max, int *min) {
+static bool valid_bin_search_tree_rec(Tree_node *root, int *max, int *min)
+{
     if (root == NULL)
         return true;
     if ((max != NULL && root->key >= *max) ||
@@ -313,15 +331,18 @@ static bool valid_bin_search_tree_rec(Tree_node *root, int *max, int *min) {
       valid_bin_search_tree_rec(root->right, max, &root->key);
 }
 
-bool valid_bin_search_tree(Tree_node *root) {
+bool valid_bin_search_tree(Tree_node *root)
+{
     return valid_bin_search_tree_rec(root, NULL, NULL);
 }
 
-static void print_n_spaces(int n) {
+static void print_n_spaces(int n)
+{
     printf("%*s", n, "");
 }
 
-void tree_print(Tree_node *root) {
+void tree_print(Tree_node *root)
+{
     unsigned depth = tree_depth(root);
     Queue queue;
 

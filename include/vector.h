@@ -1,4 +1,4 @@
-// A dynamically-resized array.
+// A dynamically-resized array
 
 typedef struct Vector {
     void **buf;
@@ -9,10 +9,10 @@ typedef struct Vector {
 void vector_init(Vector *vector);
 void vector_free(Vector *vector);
 
-// Returns the number of elements stored in 'vector'.
+// Returns the number of elements stored in 'vector'
 size_t vector_len(Vector *vector);
 
-// Appends 'val' to 'vector', growing it if necessary.
+// Appends 'val' to 'vector', growing it if necessary
 void vector_append(Vector *vector, void *val);
 
 // Sets the element at index 'index' in 'vector' to 'val'. 'index' must be a

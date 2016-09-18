@@ -2,18 +2,21 @@
 #include "search_tree.h"
 #include "tree.h"
 
-void search_tree_init(Search_tree *tree) {
+void search_tree_init(Search_tree *tree)
+{
     tree->root = NULL;
 }
 
-void search_tree_free(Search_tree *tree) {
+void search_tree_free(Search_tree *tree)
+{
     tree_free(tree->root);
 }
 
 // Returns the address of the pointer to the node holding 'key'. If 'key' does
 // not exist in the tree, returns the address of the (NULL) pointer that could
 // be updated to insert it.
-static Tree_node **get_node_ptr(Search_tree *tree, int key) {
+static Tree_node **get_node_ptr(Search_tree *tree, int key)
+{
     Tree_node **cur = &tree->root;
 
     while (*cur && key != (*cur)->key)
@@ -22,7 +25,8 @@ static Tree_node **get_node_ptr(Search_tree *tree, int key) {
     return cur;
 }
 
-bool search_tree_set(Search_tree *tree, int key, int val, int *old_val) {
+bool search_tree_set(Search_tree *tree, int key, int val, int *old_val)
+{
     Tree_node **node = get_node_ptr(tree, key);
 
     if (*node == NULL) {
@@ -38,7 +42,8 @@ bool search_tree_set(Search_tree *tree, int key, int val, int *old_val) {
     return true;
 }
 
-bool search_tree_get(Search_tree *tree, int key, int *val) {
+bool search_tree_get(Search_tree *tree, int key, int *val)
+{
     Tree_node *node = *get_node_ptr(tree, key);
 
     if (node == NULL)
@@ -50,7 +55,8 @@ bool search_tree_get(Search_tree *tree, int key, int *val) {
     return true;
 }
 
-bool search_tree_remove(Search_tree *tree, int key, int *val) {
+bool search_tree_remove(Search_tree *tree, int key, int *val)
+{
     Tree_node **node = get_node_ptr(tree, key);
 
     if (*node == NULL)
@@ -63,10 +69,12 @@ bool search_tree_remove(Search_tree *tree, int key, int *val) {
     return true;
 }
 
-bool search_tree_valid(Search_tree *tree) {
+bool search_tree_valid(Search_tree *tree)
+{
     return valid_bin_search_tree(tree->root);
 }
 
-void search_tree_print(Search_tree *tree) {
+void search_tree_print(Search_tree *tree)
+{
     tree_print(tree->root);
 }

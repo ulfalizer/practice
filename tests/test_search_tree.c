@@ -2,9 +2,10 @@
 #include "search_tree.h"
 
 // Assignments of 234 in the tests below are for verifying that arguments are
-// only modified when they should be.
+// only modified when they should be
 
-static void populate(Search_tree *tree) {
+static void populate(Search_tree *tree)
+{
     #define ADD_DOUBLE(n)                  \
       search_tree_set(tree, n, 2*n, NULL); \
       VERIFY(search_tree_valid(tree));
@@ -28,7 +29,8 @@ static void populate(Search_tree *tree) {
     VERIFY(search_tree_valid(tree));
 }
 
-static void test_set_get_helper(bool keys_exist) {
+static void test_set_get_helper(bool keys_exist)
+{
     #define VERIFY_SET_GET(key, val)                         \
       {                                                      \
           int v = 234;                                       \
@@ -68,7 +70,8 @@ static void test_set_get_helper(bool keys_exist) {
     #undef VERIFY_SET_GET_DOUBLE
 }
 
-static void test_remove(void) {
+static void test_remove(void)
+{
     Search_tree tree;
 
     search_tree_init(&tree);
@@ -106,12 +109,14 @@ static void test_remove(void) {
     #undef VERIFY_REMOVE_EXISTS
 }
 
-static void test_set_get(void) {
+static void test_set_get(void)
+{
     test_set_get_helper(false);
     test_set_get_helper(true);
 }
 
-void test_search_tree(void) {
+void test_search_tree(void)
+{
     test_set_get();
     test_remove();
 }

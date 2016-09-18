@@ -1,4 +1,4 @@
-// A min-heap implementing a priority queue.
+// A min-heap implementing a priority queue
 
 #define HEAP_MAX_SIZE 255
 
@@ -12,11 +12,11 @@ typedef struct Min_heap {
 void min_heap_init(Min_heap *heap);
 void min_heap_free(Min_heap *heap);
 
-// Returns the number of elements stored in 'heap'.
+// Returns the number of elements stored in 'heap'
 size_t min_heap_len(Min_heap *heap);
 
-// Adds 'val' to 'heap'.
+// Adds 'val' to 'heap'
 void min_heap_add(Min_heap *heap, int val);
 
-// Removes and returns the smallest element from 'heap'.
+// Removes and returns the smallest element from 'heap'
 int min_heap_remove(Min_heap *heap);

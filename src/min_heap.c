@@ -5,17 +5,20 @@ static size_t parent(size_t i) { return (i - 1)/2; }
 static size_t left_child(size_t i) { return 2*i + 1; }
 static size_t right_child(size_t i) { return 2*i + 2; }
 
-void min_heap_init(Min_heap *heap) {
+void min_heap_init(Min_heap *heap)
+{
     heap->len = 0;
 }
 
 void min_heap_free(UNUSED Min_heap *heap) {}
 
-size_t min_heap_len(Min_heap *heap) {
+size_t min_heap_len(Min_heap *heap)
+{
     return heap->len;
 }
 
-void min_heap_add(Min_heap *heap, int val) {
+void min_heap_add(Min_heap *heap, int val)
+{
     size_t i;
 
     assert(heap->len < HEAP_MAX_SIZE);
@@ -28,7 +31,8 @@ void min_heap_add(Min_heap *heap, int val) {
     ++heap->len;
 }
 
-int min_heap_remove(Min_heap *heap) {
+int min_heap_remove(Min_heap *heap)
+{
     size_t i;
     int res = heap->storage[0];
     int val = heap->storage[--heap->len];
@@ -55,7 +59,8 @@ int min_heap_remove(Min_heap *heap) {
     return res;
 }
 
-static bool valid_min_heap_rec(Min_heap *heap, size_t i) {
+static bool valid_min_heap_rec(Min_heap *heap, size_t i)
+{
     bool left_valid;
 
     if (left_child(i) >= heap->len)
@@ -67,6 +72,7 @@ static bool valid_min_heap_rec(Min_heap *heap, size_t i) {
     return left_valid && valid_min_heap_rec(heap, right_child(i));
 }
 
-bool valid_min_heap(Min_heap *heap) {
+bool valid_min_heap(Min_heap *heap)
+{
     return valid_min_heap_rec(heap, 0);
 }

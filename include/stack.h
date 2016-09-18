@@ -1,4 +1,4 @@
-// A dynamically-resized stack.
+// A dynamically-resized stack
 
 typedef struct Stack {
     void **buf;
@@ -9,10 +9,10 @@ typedef struct Stack {
 void stack_init(Stack *stack);
 void stack_free(Stack *stack);
 
-// Returns the number of elements stored in 'stack'.
+// Returns the number of elements stored in 'stack'
 size_t stack_len(Stack *stack);
 
-// Pushes a new element onto 'stack'.
+// Pushes a new element onto 'stack'
 void stack_push(Stack *stack, void *val);
 
 // Returns the top element of 'stack' without modifying 'stack'. Must not be

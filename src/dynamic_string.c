@@ -3,22 +3,25 @@
 
 #define INITIAL_BUF_LEN 16
 
-void string_init(String *s) {
+void string_init(String *s)
+{
     s->buf = emalloc(INITIAL_BUF_LEN, "string init");
     s->buf_len = INITIAL_BUF_LEN;
     s->len = 0;
     s->buf[0] = '\0';
 }
 
-void string_free(String *s) {
+void string_free(String *s)
+{
     free(s->buf);
 }
 
-// For ge_pow_2(), just to be pedantic.
+// For ge_pow_2(), just to be pedantic
 static_assert(sizeof(unsigned long long) >= sizeof(size_t),
   "ge_pow_2() argument might overflow");
 
-void string_set(String *s, const char *format, ...) {
+void string_set(String *s, const char *format, ...)
+{
     va_list ap;
 
     va_start(ap, format);
@@ -26,12 +29,14 @@ void string_set(String *s, const char *format, ...) {
     va_end(ap);
 }
 
-void string_set_v(String *s, const char *format, va_list ap) {
+void string_set_v(String *s, const char *format, va_list ap)
+{
     s->len = 0;
     string_append_v(s, format, ap);
 }
 
-void string_append(String *s, const char *format, ...) {
+void string_append(String *s, const char *format, ...)
+{
     va_list ap;
 
     va_start(ap, format);
@@ -39,12 +44,13 @@ void string_append(String *s, const char *format, ...) {
     va_end(ap);
 }
 
-void string_append_v(String *s, const char *format, va_list ap) {
+void string_append_v(String *s, const char *format, va_list ap)
+{
     va_list ap_copy;
     size_t new_len;
 
     // The first vsnprintf() will trash 'ap', so keep a copy in case we need to
-    // repeat the operation.
+    // repeat the operation
     va_copy(ap_copy, ap);
 
     new_len = s->len +
@@ -66,14 +72,17 @@ void string_append_v(String *s, const char *format, va_list ap) {
     va_end(ap_copy);
 }
 
-char *string_get(String *s) {
+char *string_get(String *s)
+{
     return s->buf;
 }
 
-char *string_get_copy(String *s) {
+char *string_get_copy(String *s)
+{
     return memcpy(emalloc(s->len + 1, "string copy"), s->buf, s->len + 1);
 }
 
-size_t string_len(String *s) {
+size_t string_len(String *s)
+{
     return s->len;
 }

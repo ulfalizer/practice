@@ -4,13 +4,14 @@
 
 typedef struct Data_node {
     int val;
-    // Put the links last as it exercises container_of() better.
+    // Put the links last as it exercises container_of() better
     List_node list_node;
 } Data_node;
 
 // Turns 'nodes' into a circular list with 'head' holding the head pointers.
 // Uses 0, 1, 2, ..., 'len' for values.
-static void init_nodes(List_node *head, Data_node *nodes, size_t len) {
+static void init_nodes(List_node *head, Data_node *nodes, size_t len)
+{
     head->next = &nodes[0].list_node;
     head->prev = &nodes[len - 1].list_node;
 
@@ -29,7 +30,8 @@ static void init_nodes(List_node *head, Data_node *nodes, size_t len) {
     }
 }
 
-static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
+static void verify_vector_equals_helper(Vector *v, size_t len, ...)
+{
     va_list ap;
 
     VERIFY(vector_len(v) == len);
@@ -43,7 +45,8 @@ static void verify_vector_equals_helper(Vector *v, size_t len, ...) {
 #define VERIFY_VECTOR_EQUALS(v, ...) \
   verify_vector_equals_helper(&v, N_ARGS(__VA_ARGS__), ##__VA_ARGS__)
 
-void test_embedded_list(void) {
+void test_embedded_list(void)
+{
     Data_node data_nodes[10];
     List_node head;
     Vector res;

@@ -1,9 +1,10 @@
 #include "common.h"
 #include "sort.h"
 
-static void test_sort_fn(void sort_fn(int *nums, size_t n_nums)) {
+static void test_sort_fn(void sort_fn(int *nums, size_t n_nums))
+{
     // Assume selection sort is correct and test other sorting algorithms by
-    // comparing against it.
+    // comparing against it
     #define VERIFY_SORT(...)                                  \
       {                                                       \
           int a1[] = { __VA_ARGS__ }, a2[] = { __VA_ARGS__ }; \
@@ -14,7 +15,7 @@ static void test_sort_fn(void sort_fn(int *nums, size_t n_nums)) {
               VERIFY(a1[i] == a2[i]);                         \
       }
 
-    #pragma GCC diagnostic push // Avoids clang warning.
+    #pragma GCC diagnostic push // Avoid clang warning
     #pragma GCC diagnostic ignored "-Wtype-limits"
     VERIFY_SORT();
     #pragma GCC diagnostic pop
@@ -35,7 +36,8 @@ static void test_sort_fn(void sort_fn(int *nums, size_t n_nums)) {
     #undef VERIFY_SORT
 }
 
-void test_sort(void) {
+void test_sort(void)
+{
     test_sort_fn(insertion_sort);
     test_sort_fn(bubble_sort);
     test_sort_fn(mergesort);

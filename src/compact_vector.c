@@ -12,7 +12,8 @@
 // due to 'buf' being a flexible array member.
 #define DATA(ptr) ((Compact_vector_data*)((char*)ptr - HEADER_SIZE))
 
-Compact_vector compact_vector_make(void) {
+Compact_vector compact_vector_make(void)
+{
     Compact_vector_data *vec_data =
       emalloc(HEADER_SIZE + sizeof(*vec_data->buf)*INITIAL_BUF_LEN,
               "compact vector init");
@@ -23,18 +24,21 @@ Compact_vector compact_vector_make(void) {
     return vec_data->buf;
 }
 
-void compact_vector_free(Compact_vector vector) {
+void compact_vector_free(Compact_vector vector)
+{
     free(DATA(vector));
 }
 
-size_t compact_vector_len(Compact_vector vector) {
+size_t compact_vector_len(Compact_vector vector)
+{
     return DATA(vector)->cur - vector;
 }
 
 // Doubles the size of the buffer (excluding the header). Assumes the buffer is
 // precisely full.
-static Compact_vector_data *grow(Compact_vector_data *vec_data) {
-    // Old length in int's.
+static Compact_vector_data *grow(Compact_vector_data *vec_data)
+{
+    // Old length in int's
     size_t old_buf_len = vec_data->end - vec_data->buf;
 
     vec_data = erealloc(vec_data,
@@ -46,7 +50,8 @@ static Compact_vector_data *grow(Compact_vector_data *vec_data) {
     return vec_data;
 }
 
-void compact_vector_append(Compact_vector *vector, int val) {
+void compact_vector_append(Compact_vector *vector, int val)
+{
     Compact_vector_data *vec_data = DATA(*vector);
 
     if (vec_data->cur == vec_data->end) {
@@ -56,14 +61,17 @@ void compact_vector_append(Compact_vector *vector, int val) {
     *vec_data->cur++ = val;
 }
 
-void compact_vector_set(Compact_vector vector, size_t index, int val) {
+void compact_vector_set(Compact_vector vector, size_t index, int val)
+{
     vector[index] = val;
 }
 
-int compact_vector_get(Compact_vector vector, size_t index) {
+int compact_vector_get(Compact_vector vector, size_t index)
+{
     return vector[index];
 }
 
-int *compact_vector_storage(Compact_vector vector) {
+int *compact_vector_storage(Compact_vector vector)
+{
     return vector;
 }

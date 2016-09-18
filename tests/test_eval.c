@@ -1,7 +1,8 @@
 #include "common.h"
 #include "eval.h"
 
-void test_eval(void) {
+void test_eval(void)
+{
     // Verifies that 'str' is not malformed and that it evaluates to 'res'.
     #define V(str, res)               \
       {                               \

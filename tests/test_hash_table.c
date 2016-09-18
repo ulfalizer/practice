@@ -2,9 +2,10 @@
 #include "hash_table.h"
 
 // Assignments of 234 in the tests below are for verifying that arguments are
-// only modified when they should be.
+// only modified when they should be
 
-static void populate(Hash_table *table) {
+static void populate(Hash_table *table)
+{
     hash_table_set(table, "negative one", -1, NULL);
     hash_table_set(table, "zero", 0, NULL);
     hash_table_set(table, "one", 1, NULL);
@@ -20,7 +21,8 @@ static void populate(Hash_table *table) {
     hash_table_set(table, "", 123, NULL);
 }
 
-static void test_set_get_helper(bool keys_exist) {
+static void test_set_get_helper(bool keys_exist)
+{
     Hash_table table;
 
     hash_table_init(&table);
@@ -66,12 +68,14 @@ static void test_set_get_helper(bool keys_exist) {
     hash_table_free(&table);
 }
 
-static void test_set_get(void) {
+static void test_set_get(void)
+{
     test_set_get_helper(false);
     test_set_get_helper(true);
 }
 
-static void test_remove(void) {
+static void test_remove(void)
+{
     Hash_table table;
 
     hash_table_init(&table);
@@ -118,14 +122,15 @@ static void test_remove(void) {
     #undef VERIFY_REMOVE_NOT_EXISTS
     #undef VERIFY_REMOVE_EXISTS
 
-    // The case where the key exists and val is NULL.
+    // The case where the key exists and val is NULL
     hash_table_set(&table, "foo", 3, NULL);
     VERIFY(hash_table_remove(&table, "foo", NULL));
 
     hash_table_free(&table);
 }
 
-static const char *gen_key(int i) {
+static const char *gen_key(int i)
+{
     static char buf[32];
 
     sprintf(buf, "%d", i);
@@ -133,7 +138,8 @@ static const char *gen_key(int i) {
     return buf;
 }
 
-static void test_resize(void) {
+static void test_resize(void)
+{
     Hash_table table;
 
     hash_table_init(&table);
@@ -148,7 +154,8 @@ static void test_resize(void) {
     hash_table_free(&table);
 }
 
-void test_hash_table(void) {
+void test_hash_table(void)
+{
     test_set_get();
     test_remove();
     test_resize();

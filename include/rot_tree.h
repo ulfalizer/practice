@@ -1,5 +1,5 @@
-// Top-down implementation of rotate-to-root tree -- simpler than splay tree
-// but no worst-case amortized O(log(n)) bound.
+// Top-down implementation of rotate-to-root tree - simpler than splay tree but
+// no worst-case amortized O(log(n)) bound
 
 typedef struct Tree_node Tree_node;
 
@@ -24,9 +24,9 @@ bool rot_tree_get(Rot_tree *tree, int key, int *val);
 // 'val'.
 bool rot_tree_remove(Rot_tree *tree, int key, int *val);
 
-// Prints the representation of the rotate-to-root tree to stdout.
+// Prints the representation of the rotate-to-root tree to stdout
 void rot_tree_print(Rot_tree *tree);
 
-// Test helper. Returns true if the internal representation is a valid binary
-// search tree.
+// Test helper - returns true if the internal representation is a valid binary
+// search tree
 bool rot_tree_valid(Rot_tree *tree);

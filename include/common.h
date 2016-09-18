@@ -17,12 +17,12 @@
 #include <string.h>
 
 // Prints a message together with errno (with a newline appended) to stderr and
-// exits with EXIT_FAILURE.
+// exits with EXIT_FAILURE
 noreturn void err_exit(const char *format, ...)
   __attribute__((format(printf, 1, 2)));
 
 // Prints a message to stderr (with a newline appended) and exits with
-// EXIT_FAILURE.
+// EXIT_FAILURE
 noreturn void fail_exit(const char *format, ...)
   __attribute__((format(printf, 1, 2)));
 
@@ -30,7 +30,7 @@ noreturn void fail_exit(const char *format, ...)
 int *parse_int_args(int argc, char *argv[]);
 
 // These functions print 'desc' and exit with EXIT_FAILURE if the allocation
-// fails.
+// fails
 void *emalloc(size_t size, const char *desc);
 void *emalloc_align(size_t size, size_t align, const char *desc);
 void *erealloc(void *ptr, size_t size, const char *desc);
@@ -56,7 +56,7 @@ typedef unsigned char uc;
 
 #define ARRAY_LEN(a) (sizeof (a)/sizeof *(a))
 
-// Returns its argument as a string literal.
+// Returns its argument as a string literal
 #define STRINGIFY(x) STRINGIFY_(x)
 #define STRINGIFY_(x) #x
 
@@ -90,5 +90,5 @@ typedef unsigned char uc;
   ...) N
 
 // Returns the least power of two greater than or equal to 'n', except for
-// returning 0 for n = 0 (which makes sense given "doubling" semantics).
+// returning 0 for n = 0 (which makes sense given "doubling" semantics)
 unsigned long long ge_pow_2(unsigned long long n);

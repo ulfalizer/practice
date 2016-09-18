@@ -1,4 +1,4 @@
-// A dynamically-resized hash table using separate chaining.
+// A dynamically-resized hash table using separate chaining
 
 typedef struct Hash_node {
     struct Hash_node *next;
@@ -9,9 +9,9 @@ typedef struct Hash_node {
 typedef struct Hash_table {
     Hash_node **buckets;
     size_t n_buckets;
-    // Number of elements stored in the hash table.
+    // Number of elements stored in the hash table
     size_t n_elements;
-    // The table is grown when the number of elements exceeds 'max_load'.
+    // The table is grown when the number of elements exceeds 'max_load'
     size_t max_load;
 } Hash_table;
 
@@ -34,5 +34,5 @@ bool hash_table_get(Hash_table *table, const char *key, int *val);
 // 'val'.
 bool hash_table_remove(Hash_table *table, const char *key, int *val);
 
-// Prints the representation of the hash table to stdout.
+// Prints the representation of the hash table to stdout
 void hash_table_print(Hash_table *table);

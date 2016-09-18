@@ -12,8 +12,9 @@
 #define MAX_LOAD 0.7
 #define GROWTH_FACTOR 2
 
-static unsigned long hash(const char *s) {
-    // djb2 algorithm.
+static unsigned long hash(const char *s)
+{
+    // djb2 algorithm
     unsigned long hash;
 
     for (hash = 5381; *s != '\0'; ++s)
@@ -21,29 +22,33 @@ static unsigned long hash(const char *s) {
     return hash;
 }
 
-// Returns a pointer to the start of the bucket for 'key' in 'table'.
-static Hash_node **get_bucket(Hash_table *table, const char *key) {
+// Returns a pointer to the start of the bucket for 'key' in 'table'
+static Hash_node **get_bucket(Hash_table *table, const char *key)
+{
     return table->buckets + (hash(key) & (table->n_buckets - 1));
 }
 
 // Creates and initializes a new set of 'n_buckets' empty buckets in 'table'.
 // Does not update 'n_elements'.
-static void init_buckets(Hash_table *table, size_t n_buckets) {
+static void init_buckets(Hash_table *table, size_t n_buckets)
+{
     table->buckets = emalloc(sizeof(*table->buckets)*n_buckets,
                              "hash buckets init");
     for (size_t i = 0; i < n_buckets; ++i)
         table->buckets[i] = NULL;
     table->n_buckets = n_buckets;
-    // Calculate maximum load from the bucket count.
+    // Calculate maximum load from the bucket count
     table->max_load = MAX_LOAD*n_buckets;
 }
 
-void hash_table_init(Hash_table *table) {
+void hash_table_init(Hash_table *table)
+{
     init_buckets(table, INITIAL_BUCKETS);
     table->n_elements = 0;
 }
 
-void hash_table_free(Hash_table *table) {
+void hash_table_free(Hash_table *table)
+{
     for (size_t i = 0; i < table->n_buckets; ++i) {
         Hash_node *next;
         for (Hash_node *node = table->buckets[i]; node; node = next) {
@@ -56,15 +61,16 @@ void hash_table_free(Hash_table *table) {
     free(table->buckets);
 }
 
-// Resizes the hash table (changes the number of buckets).
-static void resize(Hash_table *table, size_t new_n_buckets) {
+// Resizes the hash table (changes the number of buckets)
+static void resize(Hash_table *table, size_t new_n_buckets)
+{
     Hash_node **old_buckets = table->buckets;
     size_t old_n_buckets = table->n_buckets;
 
-    // Allocate new set of initially empty buckets.
+    // Allocate new set of initially empty buckets
     init_buckets(table, new_n_buckets);
 
-    // Re-insert the old elements, re-hashing their keys.
+    // Re-insert the old elements, re-hashing their keys
     for (size_t i = 0; i < old_n_buckets; ++i) {
         Hash_node *next;
         for (Hash_node *node = old_buckets[i]; node; node = next) {
@@ -72,7 +78,7 @@ static void resize(Hash_table *table, size_t new_n_buckets) {
 
             next = node->next;
 
-            // Move node to new bucket.
+            // Move node to new bucket
             bucket = get_bucket(table, node->key);
             node->next = *bucket;
             *bucket = node;
@@ -81,7 +87,8 @@ static void resize(Hash_table *table, size_t new_n_buckets) {
     free(old_buckets);
 }
 
-bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val) {
+bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val)
+{
     Hash_node *new_node, **bucket;
 
     bucket = get_bucket(table, key);
@@ -89,7 +96,7 @@ bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val) {
     // Is there already a node with the key?
     for (Hash_node *node = *bucket; node; node = node->next)
         if (strcmp(key, node->key) == 0) {
-            // Yes, so just replace its value and return.
+            // Yes, so just replace its value and return
             if (old_val != NULL)
                 *old_val = node->val;
             node->val = val;
@@ -113,7 +120,8 @@ bool hash_table_set(Hash_table *table, const char *key, int val, int *old_val) {
     return false;
 }
 
-bool hash_table_get(Hash_table *table, const char *key, int *val) {
+bool hash_table_get(Hash_table *table, const char *key, int *val)
+{
     for (Hash_node *node = *get_bucket(table, key); node; node = node->next)
         if (strcmp(key, node->key) == 0) {
             if (val != NULL)
@@ -125,7 +133,8 @@ bool hash_table_get(Hash_table *table, const char *key, int *val) {
     return false;
 }
 
-bool hash_table_remove(Hash_table *table, const char *key, int *val) {
+bool hash_table_remove(Hash_table *table, const char *key, int *val)
+{
     for (Hash_node **node = get_bucket(table, key); *node;
          node = &(*node)->next)
         if (strcmp(key, (*node)->key) == 0) {
@@ -134,7 +143,7 @@ bool hash_table_remove(Hash_table *table, const char *key, int *val) {
             if (val != NULL)
                 *val = (*node)->val;
 
-            // Remove node.
+            // Remove node
             tmp = *node;
             *node = (*node)->next;
             free(tmp->key);
@@ -148,7 +157,8 @@ bool hash_table_remove(Hash_table *table, const char *key, int *val) {
     return false;
 }
 
-void hash_table_print(Hash_table *table) {
+void hash_table_print(Hash_table *table)
+{
     for (size_t i = 0; i < table->n_buckets; ++i) {
         printf("%zu:", i);
         for (Hash_node *node = table->buckets[i]; node; node = node->next)

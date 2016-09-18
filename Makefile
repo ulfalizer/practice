@@ -1,29 +1,78 @@
-CC ?= gcc
-EXECUTABLE = test
+ifeq ($(origin CC), default)
+  CC = gcc
+endif
+CFLAGS ?= -g -Og
+# We strictly only need -fno-strict-aliasing for test_embedded_list.c
+override CFLAGS += -std=gnu11 -fno-strict-aliasing -Wall -Wextra \
+  -Wno-sign-compare -Wredundant-decls -Wstrict-prototypes
+override CPPFLAGS += -Iinclude
+override LDLIBS += -lm
 
-sources = $(addprefix src/, algo.c arena_allocator.c common.c \
-  compact_vector.c eval.c hash_table.c list.c min_heap.c min_max_stack.c \
-  queue.c regex_compiler.c rot_tree.c search_tree.c sort.c stack.c \
-  dynamic_string.c tree.c utf8.c vector.c)
+src_files = src/algo.c \
+            src/arena_allocator.c \
+            src/common.c \
+            src/compact_vector.c \
+            src/dynamic_string.c \
+            src/eval.c \
+            src/hash_table.c \
+            src/list.c \
+            src/min_heap.c \
+            src/min_max_stack.c \
+            src/queue.c \
+            src/regex_compiler.c \
+            src/rot_tree.c \
+            src/search_tree.c \
+            src/sort.c \
+            src/stack.c \
+            src/tree.c \
+            src/utf8.c \
+            src/vector.c \
+            tests/test.c \
+            tests/test_algo.c \
+            tests/test_arena_allocator.c \
+            tests/test_common.c \
+            tests/test_compact_vector.c \
+            tests/test_dynamic_string.c \
+            tests/test_embedded_list.c \
+            tests/test_eval.c \
+            tests/test_hash_table.c \
+            tests/test_list.c \
+            tests/test_min_heap.c \
+            tests/test_min_max_stack.c \
+            tests/test_queue.c \
+            tests/test_regex_compiler.c \
+            tests/test_rot_tree.c \
+            tests/test_search_tree.c \
+            tests/test_sort.c \
+            tests/test_tree.c \
+            tests/test_utf8.c \
+            tests/test_vector.c
 
-tests = $(addprefix tests/, test.c test_algo.c test_arena_allocator.c \
-  test_common.c test_compact_vector.c test_embedded_list.c test_eval.c \
-  test_hash_table.c test_list.c test_min_heap.c test_min_max_stack.c \
-  test_queue.c test_regex_compiler.c test_rot_tree.c test_search_tree.c \
-  test_sort.c test_dynamic_string.c test_tree.c test_utf8.c test_vector.c)
+headers = include/algo.h \
+          include/arena_allocator.h \
+          include/common.h \
+          include/compact_vector.h \
+          include/dynamic_string.h \
+          include/embedded_list.h \
+          include/eval.h \
+          include/hash_table.h \
+          include/list.h \
+          include/min_heap.h \
+          include/min_max_stack.h \
+          include/queue.h \
+          include/regex_compiler.h \
+          include/rot_tree.h \
+          include/search_tree.h \
+          include/sort.h \
+          include/stack.h \
+          include/tree.h \
+          include/utf8.h \
+          include/vector.h
 
-headers = $(addprefix include/, algo.h arena_allocator.h common.h \
-  compact_vector.h embedded_list.h hash_table.h list.h min_heap.h \
-  min_max_stack.h queue.h regex_compiler.h rot_tree.h search_tree.h sort.h \
-  stack.h dynamic_string.h tree.h utf8.h vector.h)
-
-warnings = -Wall -Wextra -Wno-sign-compare -Wredundant-decls \
-  -Wstrict-prototypes
-
-$(EXECUTABLE): $(sources) $(tests) $(headers)
-# We strictly only need -fno-strict-aliasing for test_embedded_list.c.
-	$(CC) -std=gnu11 -g -Og -fno-strict-aliasing $(warnings) -Iinclude $(sources) $(tests) -lm -o $@
+# This is a quick compile. Keep it simple.
+test: $(src_files) $(headers)
+	$(CC) -o $@ $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(src_files) $(LDLIBS)
 
 .PHONY: clean
 clean:
-	rm $(EXECUTABLE)
+	$(RM) test

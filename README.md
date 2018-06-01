@@ -16,9 +16,3 @@ Running:
     $ ./test
 
 The entry point is in [tests/test.c](tests/test.c)</b>.
-
-Many of the interfaces would be neater in C++, but I started out in C for some
-reason.
-
-The initial lengths for data structures are excessively small
-for testing purposes.
